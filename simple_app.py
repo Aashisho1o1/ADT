@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 import chardet
 from geopy.distance import geodesic
 import time
-from utils.japan_locations import get_prefecture_coordinates
 
 # Configure page
 st.set_page_config(
@@ -28,107 +27,48 @@ def clean_address_field(field):
         field = str(int(field)) if float(field).is_integer() else str(field)
     return str(field).strip()
 
-def get_coordinates_for_japanese_address(address_components):
-    """Get coordinates using Japanese prefecture mapping"""
-    # For Japanese addresses, use prefecture mapping
-    address_str = ' '.join(clean_address_field(v) for v in address_components.values() if v)
-    lat, lon = get_prefecture_coordinates(address_str)
-
-    # Check if we got default Tokyo coordinates
-    is_default = (lat == 35.6762 and lon == 139.6503)
-    return lat, lon, is_default
-
 def load_alumni_data():
-    """Load and process alumni data using both geocoded and raw data"""
+    """Load and process alumni data from geocoded CSV"""
     try:
         st.write("📂 Loading alumni data...")
+        file_path = 'attached_assets/combo.csv'
 
-        # Load geocoded data first
-        geocoded_file = 'attached_assets/Sohokai_List_20240726_geocodio_33dbd69d66d31a7292d132f4da9384855fb65a4e.csv'
-        with open(geocoded_file, 'rb') as file:
+        # Read and detect file encoding
+        with open(file_path, 'rb') as file:
             raw_data = file.read()
             result = chardet.detect(raw_data)
-            st.info(f"📝 Detected geocoded file encoding: {result['encoding']}")
+            st.info(f"📝 Detected file encoding: {result['encoding']}")
 
-        # Read geocoded CSV
-        geocoded_df = pd.read_csv(geocoded_file, encoding=result['encoding'])
-        st.success(f"✅ Loaded {len(geocoded_df)} geocoded records")
-
-        # Load original data
-        original_file = 'attached_assets/Sohokai_List_20240726(Graduated).csv'
-        with open(original_file, 'rb') as file:
-            raw_data = file.read()
-            result = chardet.detect(raw_data)
-
-        # Read original CSV
-        original_df = pd.read_csv(original_file, encoding=result['encoding'])
+        # Read CSV file
+        df = pd.read_csv(file_path, encoding=result['encoding'])
+        st.success(f"✅ Successfully read {len(df)} records")
 
         # Process alumni data
         alumni_data = []
         progress_bar = st.progress(0)
-        total_records = len(original_df)
+        total_records = len(df)
 
-        us_canada_count = 0
-        japan_count = 0
-        other_count = 0
-
-        for idx, row in original_df.iterrows():
+        for idx, row in df.iterrows():
             progress = (idx + 1) / total_records
             progress_bar.progress(progress, f"Processing alumni {idx + 1}/{total_records}")
 
             # Get name components
-            name = f"{clean_address_field(row.get('First Name', ''))} {clean_address_field(row.get('Prim_Last', ''))}".strip()
+            name = f"{clean_address_field(row['original_First Name'])} {clean_address_field(row['original_Prim_Last'])}".strip()
 
-            # Get country and clean it
-            country = clean_address_field(row.get('Country', '')).lower()
+            # Get formatted location (use pre-formatted address if available, otherwise compose from components)
+            location = (clean_address_field(row.get('formatted', '')) or 
+                       ', '.join(clean_address_field(v) for v in [
+                           row['original_City'],
+                           row['original_State'],
+                           row['original_Country']
+                       ] if v))
 
-            # Format location string
-            location = ', '.join(
-                clean_address_field(v) for v in [
-                    row.get('City', ''),
-                    row.get('State', ''),
-                    row.get('Country', '')
-                ] if v
-            )
+            # Get coordinates
+            lat = float(row['lat']) if pd.notna(row['lat']) else 35.6762
+            lon = float(row['lon']) if pd.notna(row['lon']) else 139.6503
 
-            # Initialize coordinates
-            lat, lon = None, None
-            is_default = True
-
-            # Check if US or Canada
-            if 'usa' in country or 'united states' in country or 'canada' in country:
-                # Try to get geocoded data
-                geocoded_match = geocoded_df[
-                    (geocoded_df['First Name'] == row['First Name']) & 
-                    (geocoded_df['Prim_Last'] == row['Prim_Last'])
-                ]
-
-                if not geocoded_match.empty and 'Latitude' in geocoded_match.columns:
-                    lat = float(geocoded_match.iloc[0]['Latitude'])
-                    lon = float(geocoded_match.iloc[0]['Longitude'])
-                    is_default = False
-                    us_canada_count += 1
-
-            # Check if Japanese address
-            elif 'japan' in country or 'jpn' in country:
-                # Use Japanese prefecture mapping
-                address_components = {
-                    'Address 1': row.get('Address 1', ''),
-                    'Address 2': row.get('Address 2', ''),
-                    'City': row.get('City', ''),
-                    'State': row.get('State', ''),
-                    'Postal': row.get('Postal', ''),
-                    'Country': row.get('Country', '')
-                }
-                lat, lon, is_default = get_coordinates_for_japanese_address(address_components)
-                japan_count += 1
-            else:
-                other_count += 1
-
-            # Use Tokyo coordinates as default if no coordinates found
-            if lat is None or lon is None:
-                lat, lon = 35.6762, 139.6503
-                is_default = True
+            # Check if using default coordinates
+            is_default = pd.isna(row['lat']) or pd.isna(row['lon'])
 
             alumni_data.append({
                 'Name': name,
@@ -139,15 +79,6 @@ def load_alumni_data():
             })
 
         progress_bar.empty()
-
-        # Show processing statistics
-        st.success(f"""
-        ✅ Processing complete:
-        - US/Canada (Geocoded): {us_canada_count}
-        - Japan (Prefecture Mapped): {japan_count}
-        - Other Countries: {other_count}
-        """)
-
         return pd.DataFrame(alumni_data)
 
     except Exception as e:
@@ -236,7 +167,7 @@ try:
     st.info(f"""
     📍 Location Statistics:
     - Total Alumni: {len(alumni_df)}
-    - Geocoded/Mapped Locations: {len(alumni_df) - default_locations}
+    - Geocoded Locations: {len(alumni_df) - default_locations}
     - Default Locations: {default_locations}
     """)
 
