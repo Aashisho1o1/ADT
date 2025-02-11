@@ -27,27 +27,33 @@ def main():
     proximity_threshold = st.sidebar.slider(
         "Proximity Alert Threshold (km)",
         min_value=50,
-        max_value=500,
-        value=100,
+        max_value=1000,  # Increased max value for global coverage
+        value=200,  # Increased default value
         step=50
     )
 
-    # Load only Sohokai alumni data
-    with st.spinner('Loading Sohokai alumni data...'):
+    # Load alumni data
+    with st.spinner('Loading alumni data...'):
         try:
-            alumni_df = load_alumni_data('attached_assets/Sohokai_List_20240726(Graduated).csv')
+            alumni_df = load_alumni_data()
             if alumni_df is None or alumni_df.empty:
-                st.error("Could not load Sohokai alumni data. Please check the file and try again.")
+                st.error("Could not load alumni data. Please check the database connection.")
                 return
+            st.success(f"Loaded {len(alumni_df)} alumni records")
         except Exception as e:
-            st.error(f"Error loading Sohokai alumni data: {str(e)}")
+            st.error(f"Error loading alumni data: {str(e)}")
             return
 
     # Fetch disaster data
     with st.spinner('Fetching disaster data...'):
         try:
             disaster_data = fetch_eonet_data()
+            if not disaster_data:
+                st.warning("No current disaster data available")
+                return
+
             filtered_disasters = filter_disasters_by_type(disaster_data, selected_types)
+            st.success(f"Found {len(filtered_disasters)} disasters matching selected types")
         except Exception as e:
             st.error(f"Error fetching disaster data: {str(e)}")
             return
@@ -57,6 +63,7 @@ def main():
 
     with col1:
         st.subheader("Disaster Monitoring Map")
+        st.info("Blue markers: Alumni locations | Red markers: Natural disasters")
         map_obj = create_map(alumni_df, filtered_disasters)
         st_folium(map_obj, width=800)
 
@@ -65,15 +72,16 @@ def main():
         alerts = calculate_proximity_alerts(alumni_df, filtered_disasters, proximity_threshold)
 
         if alerts:
+            st.warning(f"⚠️ Found {len(alerts)} alerts within {proximity_threshold}km")
             for alert in alerts:
                 with st.expander(f"🚨 {alert['alumni_name']} - {alert['disaster_type']}"):
-                    st.write(f"Distance: {alert['distance']:.1f} km")
+                    st.write(f"Distance: {alert['distance']} km")
                     st.write(f"Location: {alert['location']}")
                     st.write(f"Disaster: {alert['disaster_description']}")
         else:
-            st.info("No alerts within the specified threshold.")
+            st.info("✅ No alerts within the specified threshold.")
 
-        st.subheader("Sohokai Alumni Overview")
+        st.subheader("Alumni Overview")
         if not alumni_df.empty:
             st.dataframe(
                 alumni_df[['Name', 'Location', 'Latitude', 'Longitude']].dropna(),
