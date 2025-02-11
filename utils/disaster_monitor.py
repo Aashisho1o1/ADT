@@ -8,87 +8,77 @@ import streamlit as st
 
 @st.cache_data(ttl=300)  # Cache for 5 minutes
 def fetch_eonet_data():
-    """Fetch natural disaster data from NASA's EONET API with improved caching and performance."""
+    """Fetch natural disaster data from NASA's EONET API with improved error handling."""
     api_key = "hjp6PQBMN7kiHJf28k6EuTLIowh0AOcxPtxLkk1c"
     base_url = "https://eonet.gsfc.nasa.gov/api/v3/events"
 
+    # Query parameters with default values that work well
     params = {
-        "api_key": api_key,
         "status": "open",
-        "days": 30,
-        "limit": 100  # Limit to most recent events
+        "days": 60,
+        "api_key": api_key
     }
 
-    session = next(db.get_db())
-
     try:
-        # First try to get recent events from database
-        cached_events = session.query(DisasterEvent).all()
-        if cached_events:
-            events = []
-            for event in cached_events:
-                events.append({
-                    'id': event.eonet_id,
-                    'title': event.title,
-                    'categories': [{'title': event.disaster_type}],
-                    'geometry': [{
-                        'coordinates': [event.longitude, event.latitude],
-                        'date': event.start_date.strftime("%Y-%m-%dT%H:%M:%SZ")
-                    }]
-                })
-            return events
+        st.info("Fetching disaster data from EONET...")
+        response = requests.get(base_url, params=params, timeout=10)
+        st.debug(f"API Response Status: {response.status_code}")
+        st.debug(f"API URL: {response.url}")
 
-        # If no cached data, fetch from API
-        response = requests.get(base_url, params=params, timeout=5)
         response.raise_for_status()
         data = response.json()
 
         if 'events' not in data:
+            st.warning("No events found in API response")
             return []
 
-        # Batch process events
         events = data['events']
-        disaster_objects = []
+        st.success(f"Retrieved {len(events)} events from EONET API")
 
+        processed_events = []
         for event in events:
             try:
-                coords = event['geometry'][0]['coordinates']
-                disaster = DisasterEvent(
-                    eonet_id=event['id'],
-                    title=event['title'],
-                    disaster_type=event['categories'][0]['title'],
-                    latitude=coords[1],
-                    longitude=coords[0],
-                    start_date=datetime.strptime(event['geometry'][0]['date'], "%Y-%m-%dT%H:%M:%SZ")
-                )
-                disaster_objects.append(disaster)
-            except (KeyError, IndexError):
+                # Extract and validate required fields
+                if not event.get('geometry') or not event.get('categories'):
+                    continue
+
+                # Get the most recent geometry
+                geometry = event['geometry'][0]
+                if 'coordinates' not in geometry:
+                    continue
+
+                # Create standardized event structure
+                processed_event = {
+                    'id': event['id'],
+                    'title': event['title'],
+                    'categories': event['categories'],
+                    'geometry': [{
+                        'coordinates': geometry['coordinates'],
+                        'date': geometry.get('date', datetime.now().isoformat())
+                    }]
+                }
+                processed_events.append(processed_event)
+
+            except (KeyError, IndexError) as e:
+                st.debug(f"Skipping malformed event: {str(e)}")
                 continue
 
-        # Batch update database
-        if disaster_objects:
-            session.query(DisasterEvent).delete()
-            session.bulk_save_objects(disaster_objects)
-            session.commit()
-
-        return events
+        st.success(f"Successfully processed {len(processed_events)} disaster events")
+        return processed_events
 
     except requests.exceptions.RequestException as e:
-        st.error(f"Error fetching disaster data: {str(e)}")
-        # Return cached data if available, empty list otherwise
-        return [event.__dict__ for event in cached_events] if cached_events else []
-
-    finally:
-        session.close()
+        st.error(f"Error fetching EONET data: {str(e)}")
+        return []
 
 def filter_disasters_by_type(disasters, selected_types):
-    """Filter disasters based on selected types with improved matching."""
+    """Filter disasters based on selected types with improved type mapping."""
     if not selected_types:
         return disasters
 
+    # Expanded type mapping for better matching
     type_mapping = {
         "Wildfires": ["wildfires", "fire"],
-        "Severe Storms": ["severeStorms", "storm"],
+        "Severe Storms": ["severeStorms", "severe-storms", "storms"],
         "Volcanoes": ["volcanoes", "volcano"],
         "Earthquakes": ["earthquakes", "earthquake"]
     }
@@ -96,14 +86,22 @@ def filter_disasters_by_type(disasters, selected_types):
     filtered = []
     for disaster in disasters:
         try:
-            disaster_category = disaster['categories'][0]['id'].lower()
-            for disaster_type in selected_types:
-                # Check if any of the mapped terms match the category
-                if any(term.lower() in disaster_category 
-                      for term in type_mapping.get(disaster_type, [])):
+            categories = disaster.get('categories', [])
+            if not categories:
+                continue
+
+            category = categories[0].get('id', '').lower()
+            title = categories[0].get('title', '').lower()
+
+            for selected_type in selected_types:
+                mapped_terms = type_mapping.get(selected_type, [])
+                if any(term.lower() in category or term.lower() in title for term in mapped_terms):
                     filtered.append(disaster)
                     break
-        except (KeyError, IndexError):
+
+        except (KeyError, IndexError) as e:
+            st.debug(f"Error filtering disaster: {str(e)}")
             continue
 
+    st.info(f"Filtered to {len(filtered)} relevant disasters")
     return filtered
