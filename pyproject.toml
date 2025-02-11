@@ -16,4 +16,5 @@ dependencies = [
     "flask-sqlalchemy>=3.1.1",
     "trafilatura>=2.0.0",
     "twilio>=9.4.4",
+    "backoff>=2.2.1",
 ]
