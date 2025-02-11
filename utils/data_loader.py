@@ -8,6 +8,7 @@ import streamlit as st
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError
 import time
+from .japan_locations import get_prefecture_coordinates
 
 def detect_encoding(file_path):
     """Detect the encoding of a file."""
@@ -23,47 +24,29 @@ def detect_encoding(file_path):
 
 def format_japanese_address(address_parts):
     """Format Japanese address for better geocoding results."""
+    # Filter out empty or None values
     address = ', '.join(part.strip() for part in address_parts if pd.notna(part) and str(part).strip())
 
-    # Remove specific apartment/building numbers as they can confuse geocoding
-    address = ' '.join(address.split('-')[:-1]) if '-' in address else address
-
-    # Ensure proper country formatting
-    if 'JPN' in address:
-        address = address.replace('JPN', 'Japan')
-    elif 'japan' not in address.lower():
-        address += ', Japan'
+    # Clean up common issues in Japanese addresses
+    address = address.replace('JPN', 'Japan')
+    address = address.replace('-', ' ')
 
     return address
 
-def geocode_address_with_retry(address, max_retries=5):
-    """Geocode address with improved retry logic and timeout."""
-    geolocator = Nominatim(user_agent="sohokai_alumni_monitor")
+def get_coordinates(formatted_address):
+    """Get coordinates using fallback mechanisms."""
+    try:
+        # First try prefecture-level coordinates
+        prefecture_coords = get_prefecture_coordinates(formatted_address)
+        if prefecture_coords:
+            return prefecture_coords
 
-    for attempt in range(max_retries):
-        try:
-            # Increased timeout to 10 seconds
-            location = geolocator.geocode(address, timeout=10)
-            if location:
-                return location.latitude, location.longitude
+        # If no prefecture match, return Tokyo coordinates as final fallback
+        return (35.6762, 139.6503)  # Tokyo coordinates
 
-            # If no result, try with just city and country
-            if attempt == max_retries - 1 and ',' in address:
-                city_country = ', '.join(address.split(',')[-2:])
-                location = geolocator.geocode(city_country, timeout=10)
-                if location:
-                    return location.latitude, location.longitude
-
-            time.sleep(2)  # Respect rate limits
-
-        except (GeocoderTimedOut, GeocoderServiceError) as e:
-            wait_time = 2 * (attempt + 1)  # Exponential backoff
-            st.warning(f"Geocoding attempt {attempt + 1} failed for address: {address}. Retrying in {wait_time} seconds...")
-            time.sleep(wait_time)
-            continue
-
-    st.error(f"Could not geocode address after {max_retries} attempts: {address}")
-    return None
+    except Exception as e:
+        st.error(f"Error getting coordinates: {str(e)}")
+        return (35.6762, 139.6503)  # Tokyo coordinates as fallback
 
 def load_alumni_data(file_path='attached_assets/Sohokai_List_20240726(Graduated).csv'):
     """Load and process Sohokai alumni data from CSV."""
@@ -108,22 +91,20 @@ def load_alumni_data(file_path='attached_assets/Sohokai_List_20240726(Graduated)
                         row.get('Country', '')
                     ]
 
-                    # Format address for geocoding
+                    # Format address
                     formatted_address = format_japanese_address(address_parts)
                     status_text.text(f"Processing {name}: {formatted_address}")
 
-                    # Get coordinates
-                    coords = geocode_address_with_retry(formatted_address)
-                    if coords:
-                        processed_data.append({
-                            'Name': name,
-                            'Location': formatted_address,
-                            'Latitude': coords[0],
-                            'Longitude': coords[1]
-                        })
-                        st.success(f"✓ Successfully geocoded address for {name}")
-                    else:
-                        st.warning(f"⚠ Could not geocode address for {name}")
+                    # Get coordinates using fallback mechanism
+                    coords = get_coordinates(formatted_address)
+
+                    processed_data.append({
+                        'Name': name,
+                        'Location': formatted_address,
+                        'Latitude': coords[0],
+                        'Longitude': coords[1]
+                    })
+                    st.success(f"✓ Processed address for {name}")
 
                 except Exception as e:
                     st.error(f"Error processing record for row {index}: {str(e)}")
@@ -134,7 +115,7 @@ def load_alumni_data(file_path='attached_assets/Sohokai_List_20240726(Graduated)
             status_text.empty()
 
             if not processed_data:
-                st.error("No valid alumni data could be geocoded")
+                st.error("No valid alumni data could be processed")
                 return None
 
             # Convert to DataFrame
