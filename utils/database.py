@@ -2,9 +2,13 @@ from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 import os
+import streamlit as st
 
 # Get database URL from environment variable
 DATABASE_URL = os.getenv('DATABASE_URL')
+if not DATABASE_URL:
+    st.error("Database URL not found in environment variables")
+    raise Exception("Database URL not configured")
 
 # Create engine and session
 engine = create_engine(DATABASE_URL)
@@ -36,7 +40,12 @@ class DisasterEvent(Base):
 
 def init_db():
     """Initialize the database tables"""
-    Base.metadata.create_all(bind=engine)
+    try:
+        Base.metadata.create_all(bind=engine)
+        st.success("Database initialized successfully")
+    except Exception as e:
+        st.error(f"Error initializing database: {str(e)}")
+        raise e
 
 def get_db():
     """Get database session"""
