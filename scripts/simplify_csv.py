@@ -13,13 +13,11 @@ def simplify_csv():
             result = chardet.detect(raw_data)
             print(f"Detected encoding: {result['encoding']}")
 
-        # Read CSV file with more flexible parsing
+        # Skip the first row which contains 'combo'
         df = pd.read_csv(
             'attached_assets/combo 3.csv',
-            encoding=result['encoding'],
-            comment='#',
-            skipinitialspace=True,
-            on_bad_lines='skip'  # Skip problematic lines
+            skiprows=1,  # Skip the 'combo' header
+            encoding=result['encoding']
         )
 
         print("\nProcessing data...")
@@ -28,36 +26,29 @@ def simplify_csv():
         # Create output directory if it doesn't exist
         os.makedirs('assets', exist_ok=True)
 
-        # Map the correct column names
-        column_mapping = {
-            'original_First Name': 'First Name',
-            'original_Prim_Last': 'Last Name',
-            'original_Address 1': 'Address',
-            'original_City': 'City',
-            'original_State': 'State',
-            'original_Country': 'Country',
-            'original_Postal': 'Postal',
-            'lat': 'Latitude',
-            'lon': 'Longitude'
-        }
+        # Create name field by combining first and last names
+        df['Name'] = df['original_First Name'] + ' ' + df['original_Prim_Last']
 
-        # Select only the columns we need
-        needed_columns = list(column_mapping.keys())
-        available_columns = [col for col in needed_columns if col in df.columns]
-
-        if not available_columns:
-            raise ValueError("None of the required columns found in the CSV file")
-
-        simplified_df = df[available_columns].copy()
-
-        # Rename the columns
-        simplified_df.columns = [column_mapping[col] for col in available_columns]
-
-        # Remove any rows where all location fields are empty
-        simplified_df = simplified_df.dropna(
-            subset=['Latitude', 'Longitude'],
-            how='all'
+        # Create location field
+        df['Location'] = df.apply(
+            lambda row: f"{row['original_City']}, {row['original_State']}, {row['original_Country']}",
+            axis=1
         )
+
+        # Create simplified dataframe
+        simplified_df = pd.DataFrame({
+            'Name': df['Name'],
+            'Location': df['Location'],
+            'City': df['original_City'],
+            'State': df['original_State'],
+            'Country': df['original_Country'],
+            'Postal': df['original_Postal'],
+            'Latitude': df['lat'],
+            'Longitude': df['lon']
+        })
+
+        # Remove any rows where coordinates are missing
+        simplified_df = simplified_df.dropna(subset=['Latitude', 'Longitude'])
 
         # Save to new CSV
         output_path = 'assets/simplified_alumni.csv'
@@ -68,8 +59,6 @@ def simplify_csv():
         print("\nFirst few rows:")
         print(simplified_df.head())
 
-    except FileNotFoundError:
-        print("Error: Source file 'attached_assets/combo 3.csv' not found")
     except Exception as e:
         print(f"Error processing file: {str(e)}")
 
