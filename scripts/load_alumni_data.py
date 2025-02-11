@@ -5,10 +5,12 @@ import os
 from datetime import datetime
 import sys
 from pathlib import Path
-from geopy.geocoders import Nominatim
+from geopy.geocoders import Nominatim, GoogleV3
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError
 import time
 import backoff
+import requests
+from ratelimit import limits, sleep_and_retry
 
 # Add the project root to Python path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -16,74 +18,143 @@ sys.path.append(str(Path(__file__).parent.parent))
 from utils.japan_locations import get_prefecture_coordinates
 from utils.database import init_db, Alumni, SessionLocal
 
+# Configure rate limiting to avoid hitting API limits
+CALLS_PER_MINUTE = 60
+RATE_LIMIT_PERIOD = 60
+
+@sleep_and_retry
+@limits(calls=CALLS_PER_MINUTE, period=RATE_LIMIT_PERIOD)
+def geocode_with_rate_limit(geolocator, address):
+    """Rate-limited geocoding function."""
+    return geolocator.geocode(address, timeout=30)
+
+def normalize_country(country):
+    """Normalize country names for better matching."""
+    country_map = {
+        'usa': 'United States',
+        'jpn': 'Japan',
+        'can': 'Canada',
+        'aus': 'Australia',
+        'gbr': 'United Kingdom',
+        'fra': 'France',
+        'deu': 'Germany',
+        'aut': 'Austria',
+        'esp': 'Spain',
+        'ind': 'India',
+        'kor': 'South Korea'
+    }
+    country = country.lower().strip()
+    return country_map.get(country, country.title())
+
 def clean_address_field(field):
     """Clean and validate address field."""
-    if pd.isna(field):
+    if pd.isna(field) or field == '':
         return ""
     # Convert float or int to string if necessary
     if isinstance(field, (float, int)):
-        field = str(field)
+        field = str(int(field)) if float(field).is_integer() else str(field)
     return str(field).strip()
 
 def format_address(address_parts):
-    """Format address for geocoding with improved cleaning."""
+    """Format address for geocoding with enhanced normalization."""
     # Clean and validate each part
-    cleaned_parts = [clean_address_field(part) for part in address_parts]
-    # Filter out empty strings
-    valid_parts = [part for part in cleaned_parts if part]
-    return ', '.join(valid_parts)
+    cleaned_parts = [clean_address_field(part) for part in address_parts if part]
+
+    # Filter out empty strings and invalid values
+    valid_parts = [part for part in cleaned_parts if part and part.lower() != 'nan']
+
+    if not valid_parts:
+        return ""
+
+    # Normalize country name if present
+    if valid_parts[-1]:
+        valid_parts[-1] = normalize_country(valid_parts[-1])
+
+    # Special formatting for different countries
+    country = valid_parts[-1].lower() if valid_parts else ''
+
+    if 'japan' in country:
+        # Japanese address format
+        return ' '.join(valid_parts)
+    elif 'united states' in country:
+        # US address format
+        return ', '.join(valid_parts)
+    else:
+        # Default international format
+        return ', '.join(valid_parts)
 
 @backoff.on_exception(
     backoff.expo,
-    (GeocoderTimedOut, GeocoderServiceError),
+    (GeocoderTimedOut, GeocoderServiceError, requests.exceptions.RequestException),
     max_tries=3
 )
-def geocode_address(geolocator, address):
-    """Geocode address with retry logic."""
-    return geolocator.geocode(address, timeout=30)
+def geocode_address(address):
+    """Geocode address using multiple services with enhanced retry logic."""
+    if not address:
+        return None
+
+    # Try Nominatim first
+    try:
+        geolocator = Nominatim(user_agent="alumni_monitor")
+        location = geocode_with_rate_limit(geolocator, address)
+        if location:
+            return location.latitude, location.longitude
+    except Exception as e:
+        print(f"Primary geocoding failed for {address}: {str(e)}")
+
+    # Try with simplified address (removing apartment numbers, etc.)
+    try:
+        simplified_address = ', '.join([p.split('Apt')[0].split('Unit')[0].strip() 
+                                      for p in address.split(',')]).strip()
+        if simplified_address != address:
+            location = geocode_with_rate_limit(geolocator, simplified_address)
+            if location:
+                return location.latitude, location.longitude
+    except Exception as e:
+        print(f"Simplified address geocoding failed for {address}: {str(e)}")
+
+    return None
 
 def get_coordinates(address_parts, formatted_address):
-    """Get coordinates using geocoding with improved error handling and retry logic."""
-    try:
-        # Skip empty addresses
-        if not formatted_address:
-            print(f"Empty address, skipping geocoding")
-            return (0, 0)
+    """Get coordinates using geocoding with comprehensive fallback strategy."""
+    if not formatted_address:
+        print(f"Empty address, skipping geocoding")
+        return (0, 0)
 
-        # Check if it's a Japanese address
+    # Check if it's a Japanese address
+    country = clean_address_field(address_parts[-1])
+    is_japanese_address = 'japan' in country.lower() or 'jpn' in country.lower()
+
+    # Try prefecture mapping first for Japanese addresses
+    if is_japanese_address:
+        coords = get_prefecture_coordinates(formatted_address)
+        if coords != (0, 0):
+            print(f"Found Japanese prefecture coordinates for: {formatted_address}")
+            return coords
+
+    # Try geocoding with full address
+    coords = geocode_address(formatted_address)
+    if coords:
+        print(f"Successfully geocoded: {formatted_address}")
+        return coords
+
+    # Try with city and country only for international addresses
+    if not is_japanese_address and len(address_parts) >= 2:
+        city = clean_address_field(address_parts[-3]) if len(address_parts) >= 3 else ''
         country = clean_address_field(address_parts[-1])
-        is_japanese_address = 'japan' in country.lower() or 'jpn' in country.lower()
-
-        if is_japanese_address:
-            # Try prefecture mapping first for Japanese addresses
-            coords = get_prefecture_coordinates(formatted_address)
-            if coords != (0, 0):
-                print(f"Found Japanese prefecture coordinates for: {formatted_address}")
+        if city and country:
+            simplified = f"{city}, {country}"
+            coords = geocode_address(simplified)
+            if coords:
+                print(f"Successfully geocoded with simplified address: {simplified}")
                 return coords
 
-        # If not Japanese or prefecture mapping failed, try geocoding
-        geolocator = Nominatim(user_agent="alumni_monitor")
+    # Final fallback to prefecture mapping for Japanese addresses
+    if is_japanese_address:
+        return get_prefecture_coordinates(formatted_address)
 
-        try:
-            location = geocode_address(geolocator, formatted_address)
-            if location:
-                print(f"Successfully geocoded: {formatted_address}")
-                return location.latitude, location.longitude
-        except (GeocoderTimedOut, GeocoderServiceError) as e:
-            print(f"Geocoding service error for {formatted_address}: {str(e)}")
-        except Exception as e:
-            print(f"Unexpected geocoding error for {formatted_address}: {str(e)}")
-
-        # Fallback to prefecture mapping for Japanese addresses
-        if is_japanese_address:
-            return get_prefecture_coordinates(formatted_address)
-
-        print(f"Could not find coordinates for: {formatted_address}")
-        return (0, 0)
-
-    except Exception as e:
-        print(f"Error processing address {formatted_address}: {str(e)}")
-        return (0, 0)
+    print(f"Could not find coordinates for: {formatted_address}")
+    return (0, 0)
 
 def load_csv_to_database(file_path):
     """Load Sohokai alumni data from CSV to PostgreSQL database."""
@@ -115,7 +186,13 @@ def load_csv_to_database(file_path):
                 print(f"Successful geocodes so far: {successful_geocodes}")
 
             # Combine name fields
-            name = f"{clean_address_field(row['First Name'])} {clean_address_field(row['Prim_Last'])}"
+            first_name = clean_address_field(row.get('First Name', ''))
+            last_name = clean_address_field(row.get('Prim_Last', ''))
+            name = f"{first_name} {last_name}".strip()
+
+            if not name:
+                print(f"Skipping record {idx + 1}: Missing name")
+                continue
 
             # Collect and clean address components
             address_parts = [
@@ -129,6 +206,10 @@ def load_csv_to_database(file_path):
 
             # Format address and get coordinates
             formatted_address = format_address(address_parts)
+            if not formatted_address:
+                print(f"Skipping record {idx + 1}: No valid address")
+                continue
+
             coords = get_coordinates(address_parts, formatted_address)
 
             if coords != (0, 0):
@@ -142,11 +223,11 @@ def load_csv_to_database(file_path):
                 'last_updated': datetime.now()
             })
 
-            # Add delay to avoid hitting geocoding rate limits
-            time.sleep(1)
+            # Add small delay to avoid overwhelming geocoding services
+            time.sleep(0.5)
 
         except Exception as e:
-            print(f"Error processing record {idx}: {str(e)}")
+            print(f"Error processing record {idx + 1}: {str(e)}")
             continue
 
     print(f"\nProcessing complete!")
