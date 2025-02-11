@@ -33,6 +33,12 @@ st.markdown("""
     div[data-testid="stSidebar"] {
         z-index: 2;  /* Keep sidebar above map */
     }
+    div[data-testid="column"] {
+        padding: 0.5rem;
+    }
+    .map-container {
+        margin-right: 1rem;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -128,7 +134,7 @@ try:
     st.markdown("---")
 
     # Create layout with more space for the map
-    col1, col2 = st.columns([8, 4])
+    col1, col2 = st.columns([3, 1], gap="large")
 
     with col1:
         st.subheader("🗺️ Disaster Monitoring Map")
@@ -192,8 +198,9 @@ try:
 
             progress_bar.empty()
 
-            # Display map
-            folium_static(m, width=800, height=600)
+            # Display map with responsive width
+            with st.container():
+                folium_static(m, width=700, height=600)
 
     with col2:
         # Collapsible statistics section
