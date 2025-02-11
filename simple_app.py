@@ -67,7 +67,7 @@ def fetch_disasters():
         st.error(f"❌ Error fetching disaster data: {str(e)}")
         return []
 
-def calculate_proximity_alerts(alumni_df, disasters, threshold_km=500):
+def calculate_proximity_alerts(alumni_df, disasters, threshold_km):
     """Optimized proximity calculation"""
     alerts = []
 
@@ -108,6 +108,18 @@ def calculate_proximity_alerts(alumni_df, disasters, threshold_km=500):
 # Main application
 try:
     st.title("🌍 Alumni Natural Disaster Monitor")
+
+    # Add proximity threshold slider in sidebar
+    st.sidebar.title("🎯 Monitoring Settings")
+    proximity_threshold = st.sidebar.slider(
+        "Proximity Alert Threshold (km)",
+        min_value=100,
+        max_value=2000,
+        value=500,
+        step=100,
+        help="Set the distance threshold for disaster proximity alerts"
+    )
+
     st.markdown("---")
 
     # Create layout
@@ -186,19 +198,21 @@ try:
         States/Regions: {alumni_df['State'].nunique():,}
         """)
 
-        # Calculate proximity alerts
+        # Calculate proximity alerts with user-defined threshold
         st.subheader("⚠️ Proximity Alerts")
+        st.caption(f"🎯 Showing alerts within {proximity_threshold:,}km")
+
         with st.spinner("🔍 Analyzing proximities..."):
-            alerts = calculate_proximity_alerts(alumni_df, disasters)
+            alerts = calculate_proximity_alerts(alumni_df, disasters, proximity_threshold)
 
         if alerts:
             for alert in alerts:
                 st.warning(
                     f"🚨 {alert['alumni']} in {alert['location']} is "
-                    f"{alert['distance']}km from {alert['disaster']}"
+                    f"{alert['distance']:,}km from {alert['disaster']}"
                 )
         else:
-            st.info("✅ No alerts within 500km")
+            st.info(f"✅ No alerts within {proximity_threshold:,}km")
 
 except Exception as e:
     st.error(f"❌ Application error: {str(e)}")
