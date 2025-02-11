@@ -8,14 +8,14 @@ def simplify_csv():
         print("Reading source file...")
 
         # Read the original file with encoding detection
-        with open('attached_assets/combo.csv', 'rb') as file:
+        with open('attached_assets/combo 3.csv', 'rb') as file:
             raw_data = file.read()
             result = chardet.detect(raw_data)
             print(f"Detected encoding: {result['encoding']}")
 
         # Read CSV file with more flexible parsing
         df = pd.read_csv(
-            'attached_assets/combo.csv',
+            'attached_assets/combo 3.csv',
             encoding=result['encoding'],
             comment='#',
             skipinitialspace=True,
@@ -69,7 +69,7 @@ def simplify_csv():
         print(simplified_df.head())
 
     except FileNotFoundError:
-        print("Error: Source file 'attached_assets/combo.csv' not found")
+        print("Error: Source file 'attached_assets/combo 3.csv' not found")
     except Exception as e:
         print(f"Error processing file: {str(e)}")
 
