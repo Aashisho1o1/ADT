@@ -23,6 +23,10 @@ args = "streamlit_app"
 task = "workflow.run"
 args = "csv_reader"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "load_alumni_data"
+
 [[workflows.workflow]]
 name = "streamlit_app"
 author = "agent"
@@ -51,6 +55,20 @@ task = "packager.installForAll"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python test_csv_reader.py"
+
+[[workflows.workflow]]
+name = "load_alumni_data"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python scripts/load_alumni_data.py"
 
 [[ports]]
 localPort = 5000
