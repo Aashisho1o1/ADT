@@ -6,7 +6,7 @@ from . import database as db
 from .database import Alumni
 import streamlit as st
 from geopy.geocoders import Nominatim
-from geopy.exc import GeocoderTimedOut
+from geopy.exc import GeocoderTimedOut, GeocoderServiceError
 import time
 
 def detect_encoding(file_path):
@@ -21,25 +21,48 @@ def detect_encoding(file_path):
         st.error(f"Error reading file: {str(e)}")
         return None
 
-def geocode_address_with_retry(address, max_retries=3):
-    """Geocode address with retry logic."""
+def format_japanese_address(address_parts):
+    """Format Japanese address for better geocoding results."""
+    address = ', '.join(part.strip() for part in address_parts if pd.notna(part) and str(part).strip())
+
+    # Remove specific apartment/building numbers as they can confuse geocoding
+    address = ' '.join(address.split('-')[:-1]) if '-' in address else address
+
+    # Ensure proper country formatting
+    if 'JPN' in address:
+        address = address.replace('JPN', 'Japan')
+    elif 'japan' not in address.lower():
+        address += ', Japan'
+
+    return address
+
+def geocode_address_with_retry(address, max_retries=5):
+    """Geocode address with improved retry logic and timeout."""
     geolocator = Nominatim(user_agent="sohokai_alumni_monitor")
 
     for attempt in range(max_retries):
         try:
-            # Add country to improve geocoding accuracy if not present
-            if 'japan' not in address.lower() and 'jpn' not in address.lower():
-                address += ', Japan'
-
-            location = geolocator.geocode(address)
+            # Increased timeout to 10 seconds
+            location = geolocator.geocode(address, timeout=10)
             if location:
                 return location.latitude, location.longitude
-            time.sleep(1)  # Respect rate limits
-        except GeocoderTimedOut:
-            if attempt < max_retries - 1:
-                time.sleep(2 * (attempt + 1))  # Exponential backoff
-                continue
-            st.warning(f"Geocoding timed out for address: {address}")
+
+            # If no result, try with just city and country
+            if attempt == max_retries - 1 and ',' in address:
+                city_country = ', '.join(address.split(',')[-2:])
+                location = geolocator.geocode(city_country, timeout=10)
+                if location:
+                    return location.latitude, location.longitude
+
+            time.sleep(2)  # Respect rate limits
+
+        except (GeocoderTimedOut, GeocoderServiceError) as e:
+            wait_time = 2 * (attempt + 1)  # Exponential backoff
+            st.warning(f"Geocoding attempt {attempt + 1} failed for address: {address}. Retrying in {wait_time} seconds...")
+            time.sleep(wait_time)
+            continue
+
+    st.error(f"Could not geocode address after {max_retries} attempts: {address}")
     return None
 
 def load_alumni_data(file_path='attached_assets/Sohokai_List_20240726(Graduated).csv'):
@@ -75,21 +98,26 @@ def load_alumni_data(file_path='attached_assets/Sohokai_List_20240726(Graduated)
                     # Combine name fields (First Name and Prim_Last)
                     name = f"{row['First Name']} {row['Prim_Last']}"
 
-                    # Combine address fields
-                    address_parts = []
-                    for field in ['Address 1', 'Address 2', 'City', 'State', 'Postal', 'Country']:
-                        if pd.notna(row[field]) and str(row[field]).strip():
-                            address_parts.append(str(row[field]).strip())
+                    # Collect address components
+                    address_parts = [
+                        row.get('Address 1', ''),
+                        row.get('Address 2', ''),
+                        row.get('City', ''),
+                        row.get('State', ''),
+                        row.get('Postal', ''),
+                        row.get('Country', '')
+                    ]
 
-                    full_address = ', '.join(address_parts)
-                    status_text.text(f"Processing {name}: {full_address}")
+                    # Format address for geocoding
+                    formatted_address = format_japanese_address(address_parts)
+                    status_text.text(f"Processing {name}: {formatted_address}")
 
                     # Get coordinates
-                    coords = geocode_address_with_retry(full_address)
+                    coords = geocode_address_with_retry(formatted_address)
                     if coords:
                         processed_data.append({
                             'Name': name,
-                            'Location': full_address,
+                            'Location': formatted_address,
                             'Latitude': coords[0],
                             'Longitude': coords[1]
                         })
