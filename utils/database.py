@@ -4,11 +4,15 @@ from sqlalchemy.orm import sessionmaker, relationship
 import os
 import streamlit as st
 
-# Get database URL from environment variable
+# Get database URL from environment variable and modify for SSL mode
 DATABASE_URL = os.getenv('DATABASE_URL')
 if not DATABASE_URL:
     st.error("Database URL not found in environment variables")
     raise Exception("Database URL not configured")
+
+# Modify URL to disable SSL verification for development
+if "sslmode" not in DATABASE_URL:
+    DATABASE_URL += "?sslmode=prefer"
 
 # Create engine and session
 engine = create_engine(DATABASE_URL)

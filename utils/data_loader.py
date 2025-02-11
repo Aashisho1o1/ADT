@@ -15,7 +15,7 @@ def detect_encoding(file_path):
         with open(file_path, 'rb') as file:
             raw_data = file.read()
             result = chardet.detect(raw_data)
-            st.info(f"Detected encoding: {result['encoding']}")
+            st.info(f"Detected file encoding: {result['encoding']}")
             return result['encoding']
     except Exception as e:
         st.error(f"Error reading file: {str(e)}")
@@ -23,7 +23,7 @@ def detect_encoding(file_path):
 
 def geocode_address_with_retry(address, max_retries=3):
     """Geocode address with retry logic."""
-    geolocator = Nominatim(user_agent="alumni_disaster_monitor")
+    geolocator = Nominatim(user_agent="sohokai_alumni_monitor")
 
     for attempt in range(max_retries):
         try:
@@ -39,28 +39,18 @@ def geocode_address_with_retry(address, max_retries=3):
             if attempt < max_retries - 1:
                 time.sleep(2 * (attempt + 1))  # Exponential backoff
                 continue
+            st.warning(f"Geocoding timed out for address: {address}")
     return None
 
 def load_alumni_data(file_path='attached_assets/Sohokai_List_20240726(Graduated).csv'):
-    """Load and process alumni data from CSV."""
+    """Load and process Sohokai alumni data from CSV."""
     try:
         # Initialize database
         db.init_db()
         session = next(db.get_db())
 
         try:
-            # First try to read from database
-            existing_alumni = session.query(Alumni).all()
-            if existing_alumni:
-                st.success("Loaded alumni data from database")
-                return pd.DataFrame([{
-                    'Name': alumni.name,
-                    'Location': alumni.location,
-                    'Latitude': alumni.latitude,
-                    'Longitude': alumni.longitude
-                } for alumni in existing_alumni])
-
-            # If no data in database, load from CSV
+            # Detect file encoding
             encoding = detect_encoding(file_path)
             if not encoding:
                 st.error("Could not detect file encoding")
@@ -81,30 +71,35 @@ def load_alumni_data(file_path='attached_assets/Sohokai_List_20240726(Graduated)
                 progress = int((index + 1) * 100 / total_records)
                 progress_bar.progress(progress)
 
-                # Combine name fields
-                name = f"{row['First Name']} {row['Prim_Last']}"
+                try:
+                    # Combine name fields (First Name and Prim_Last)
+                    name = f"{row['First Name']} {row['Prim_Last']}"
 
-                # Combine address fields
-                address_parts = []
-                for field in ['Address 1', 'Address 2', 'City', 'State', 'Postal', 'Country']:
-                    if pd.notna(row[field]) and str(row[field]).strip():
-                        address_parts.append(str(row[field]).strip())
+                    # Combine address fields
+                    address_parts = []
+                    for field in ['Address 1', 'Address 2', 'City', 'State', 'Postal', 'Country']:
+                        if pd.notna(row[field]) and str(row[field]).strip():
+                            address_parts.append(str(row[field]).strip())
 
-                full_address = ', '.join(address_parts)
-                status_text.text(f"Processing {name}: {full_address}")
+                    full_address = ', '.join(address_parts)
+                    status_text.text(f"Processing {name}: {full_address}")
 
-                # Get coordinates with retry
-                coords = geocode_address_with_retry(full_address)
-                if coords:
-                    processed_data.append({
-                        'Name': name,
-                        'Location': full_address,
-                        'Latitude': coords[0],
-                        'Longitude': coords[1]
-                    })
-                    st.success(f"✓ Successfully geocoded address for {name}")
-                else:
-                    st.warning(f"⚠ Could not geocode address for {name}")
+                    # Get coordinates
+                    coords = geocode_address_with_retry(full_address)
+                    if coords:
+                        processed_data.append({
+                            'Name': name,
+                            'Location': full_address,
+                            'Latitude': coords[0],
+                            'Longitude': coords[1]
+                        })
+                        st.success(f"✓ Successfully geocoded address for {name}")
+                    else:
+                        st.warning(f"⚠ Could not geocode address for {name}")
+
+                except Exception as e:
+                    st.error(f"Error processing record for row {index}: {str(e)}")
+                    continue
 
             # Clear progress indicators
             progress_bar.empty()
@@ -117,10 +112,8 @@ def load_alumni_data(file_path='attached_assets/Sohokai_List_20240726(Graduated)
             # Convert to DataFrame
             processed_df = pd.DataFrame(processed_data)
 
-            # Clear existing data
-            session.query(Alumni).delete()
-
             # Store in database
+            session.query(Alumni).delete()
             for _, row in processed_df.iterrows():
                 alumni = Alumni(
                     name=row['Name'],
@@ -132,7 +125,7 @@ def load_alumni_data(file_path='attached_assets/Sohokai_List_20240726(Graduated)
                 session.add(alumni)
 
             session.commit()
-            st.success(f"Successfully loaded {len(processed_df)} alumni records")
+            st.success(f"Successfully processed {len(processed_df)} alumni records")
             return processed_df
 
         except Exception as e:
