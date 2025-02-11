@@ -28,6 +28,10 @@ st.markdown("""
         border: 2px solid #ddd;
         border-radius: 10px;
         padding: 1rem;
+        z-index: 1;  /* Ensure map stays above other elements */
+    }
+    div[data-testid="stSidebar"] {
+        z-index: 2;  /* Keep sidebar above map */
     }
     </style>
 """, unsafe_allow_html=True)
@@ -110,20 +114,21 @@ try:
     st.title("🌍 Alumni Natural Disaster Monitor")
 
     # Add proximity threshold slider in sidebar
-    st.sidebar.title("🎯 Monitoring Settings")
-    proximity_threshold = st.sidebar.slider(
-        "Proximity Alert Threshold (km)",
-        min_value=100,
-        max_value=2000,
-        value=500,
-        step=100,
-        help="Set the distance threshold for disaster proximity alerts"
-    )
+    with st.sidebar:
+        st.title("🎯 Monitoring Settings")
+        proximity_threshold = st.slider(
+            "Proximity Alert Threshold (km)",
+            min_value=100,
+            max_value=2000,
+            value=500,
+            step=100,
+            help="Set the distance threshold for disaster proximity alerts"
+        )
 
     st.markdown("---")
 
-    # Create layout
-    col1, col2 = st.columns([7, 3])
+    # Create layout with more space for the map
+    col1, col2 = st.columns([8, 4])
 
     with col1:
         st.subheader("🗺️ Disaster Monitoring Map")
@@ -191,28 +196,29 @@ try:
             folium_static(m, width=800, height=600)
 
     with col2:
-        st.subheader("📊 Location Statistics")
-        st.info(f"""
-        Total Alumni: {len(alumni_df):,}
-        Countries: {alumni_df['Country'].nunique():,}
-        States/Regions: {alumni_df['State'].nunique():,}
-        """)
+        # Collapsible statistics section
+        with st.expander("📊 Location Statistics", expanded=True):
+            st.info(f"""
+            Total Alumni: {len(alumni_df):,}
+            Countries: {alumni_df['Country'].nunique():,}
+            States/Regions: {alumni_df['State'].nunique():,}
+            """)
 
-        # Calculate proximity alerts with user-defined threshold
-        st.subheader("⚠️ Proximity Alerts")
-        st.caption(f"🎯 Showing alerts within {proximity_threshold:,}km")
+        # Collapsible proximity alerts section
+        with st.expander("⚠️ Proximity Alerts", expanded=True):
+            st.caption(f"🎯 Showing alerts within {proximity_threshold:,}km")
 
-        with st.spinner("🔍 Analyzing proximities..."):
-            alerts = calculate_proximity_alerts(alumni_df, disasters, proximity_threshold)
+            with st.spinner("🔍 Analyzing proximities..."):
+                alerts = calculate_proximity_alerts(alumni_df, disasters, proximity_threshold)
 
-        if alerts:
-            for alert in alerts:
-                st.warning(
-                    f"🚨 {alert['alumni']} in {alert['location']} is "
-                    f"{alert['distance']:,}km from {alert['disaster']}"
-                )
-        else:
-            st.info(f"✅ No alerts within {proximity_threshold:,}km")
+            if alerts:
+                for alert in alerts:
+                    st.warning(
+                        f"🚨 {alert['alumni']} in {alert['location']} is "
+                        f"{alert['distance']:,}km from {alert['disaster']}"
+                    )
+            else:
+                st.info(f"✅ No alerts within {proximity_threshold:,}km")
 
 except Exception as e:
     st.error(f"❌ Application error: {str(e)}")
