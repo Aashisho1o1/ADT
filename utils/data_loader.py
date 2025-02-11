@@ -39,70 +39,55 @@ def load_alumni_data(file_path='attached_assets/Sohokai_List_20240726(Graduated)
 
             # If no data in database, load from CSV
             try:
-                # Try main CSV first
-                df = pd.read_csv(file_path)
-                st.success(f"Successfully read CSV file: {file_path}")
-                st.write("Available columns:", df.columns.tolist())
-            except Exception as main_file_error:
-                st.warning(f"Could not read main CSV file: {str(main_file_error)}")
-                st.info("Loading sample alumni data instead")
-                # Fall back to sample data
-                df = pd.read_csv('assets/sample_alumni.csv')
+                # Try main CSV first with detected encoding
+                encoding = detect_encoding(file_path)
+                if encoding:
+                    df = pd.read_csv(file_path, encoding=encoding)
+                    st.success(f"Successfully read CSV file: {file_path}")
+                    st.write("Available columns:", df.columns.tolist())
+                else:
+                    raise Exception("Could not detect file encoding")
 
-            # Check and rename columns if needed
-            required_columns = ['Name', 'Location', 'Latitude', 'Longitude']
+                # Map specific columns from your CSV file
+                column_mapping = {
+                    'Name/氏名': 'Name',
+                    'Current Location/現住所': 'Location',
+                    'Latitude': 'Latitude',
+                    'Longitude': 'Longitude',
+                    'Current Address/現住所': 'Location'
+                }
 
-            # Map actual columns to required columns if they exist with different names
-            column_mapping = {
-                'name': 'Name',
-                'location': 'Location',
-                'latitude': 'Latitude',
-                'longitude': 'Longitude',
-                # Add mappings for possible column names in your CSV
-                'Full Name': 'Name',
-                'Address': 'Location',
-                'Lat': 'Latitude',
-                'Long': 'Longitude'
-            }
+                # Rename columns if they exist
+                df.rename(columns=column_mapping, inplace=True, errors='ignore')
 
-            # Rename columns if they exist
-            df.rename(columns=column_mapping, inplace=True, errors='ignore')
+                # Clear existing data
+                session.query(Alumni).delete()
 
-            if not all(col in df.columns for col in required_columns):
-                st.warning("Required columns not found in CSV.")
-                st.write("Available columns:", df.columns.tolist())
-                st.warning("Using sample data instead")
-                df = pd.DataFrame({
-                    'Name': ['John Doe', 'Jane Smith', 'Bob Johnson'],
-                    'Location': ['Tokyo, Japan', 'New York, USA', 'London, UK'],
-                    'Latitude': [35.6762, 40.7128, 51.5074],
-                    'Longitude': [139.6503, -74.0060, -0.1278]
-                })
+                # Filter out rows with missing location data
+                df = df.dropna(subset=['Latitude', 'Longitude'])
 
-            # Filter out rows with missing location data
-            df = df.dropna(subset=['Latitude', 'Longitude'])
+                if len(df) == 0:
+                    st.error("No valid alumni data found with location information")
+                    return None
 
-            if len(df) == 0:
-                st.error("No valid alumni data found with location information")
+                # Store data in database
+                for _, row in df.iterrows():
+                    alumni = Alumni(
+                        name=row['Name'],
+                        location=row['Location'],
+                        latitude=float(row['Latitude']),
+                        longitude=float(row['Longitude']),
+                        last_updated=datetime.now()
+                    )
+                    session.add(alumni)
+
+                session.commit()
+                st.success(f"Successfully loaded {len(df)} alumni records")
+                return df
+
+            except Exception as e:
+                st.error(f"Error reading CSV: {str(e)}")
                 return None
-
-            # Clear existing data
-            session.query(Alumni).delete()
-
-            # Store data in database
-            for _, row in df.iterrows():
-                alumni = Alumni(
-                    name=row['Name'],
-                    location=row['Location'],
-                    latitude=float(row['Latitude']),
-                    longitude=float(row['Longitude']),
-                    last_updated=datetime.now()
-                )
-                session.add(alumni)
-
-            session.commit()
-            st.success(f"Successfully loaded {len(df)} alumni records")
-            return df
 
         except Exception as e:
             session.rollback()
