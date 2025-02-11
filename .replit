@@ -1,0 +1,93 @@
+modules = ["python-3.11"]
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["sh", "-c", "streamlit run simple_app.py"]
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "streamlit_app"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "csv_reader"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "load_alumni_data"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "simplify_csv"
+
+[[workflows.workflow]]
+name = "streamlit_app"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run simple_app.py"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "csv_reader"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python test_csv_reader.py"
+
+[[workflows.workflow]]
+name = "load_alumni_data"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python scripts/load_alumni_data.py"
+
+[[workflows.workflow]]
+name = "simplify_csv"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "mkdir -p assets && python scripts/simplify_csv.py"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
