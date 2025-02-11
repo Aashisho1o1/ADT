@@ -12,66 +12,67 @@ def create_map(alumni_df, disasters):
     # Create base map
     m = folium.Map(location=[center_lat, center_lon], zoom_start=2)
 
-    # Add alumni markers
+    # Add alumni markers with different styles based on coordinate validity
     for _, row in alumni_df.iterrows():
+        # Different styling for valid vs default coordinates
+        if row.get('Has_Valid_Coords', True):
+            # Valid coordinates - blue marker
+            color = 'blue'
+            fill_opacity = 0.7
+            popup_prefix = "Alumni"
+        else:
+            # Default coordinates - grey marker with warning
+            color = 'gray'
+            fill_opacity = 0.4
+            popup_prefix = "Alumni (Approximate Location)"
+
         folium.CircleMarker(
             location=[row['Latitude'], row['Longitude']],
             radius=8,
-            popup=f"Alumni: {row['Name']}<br>Location: {row['Location']}",
-            color='blue',
+            popup=f"{popup_prefix}: {row['Name']}<br>Location: {row['Location']}",
+            color=color,
             fill=True,
-            fill_color='blue'
+            fill_color=color,
+            fill_opacity=fill_opacity
         ).add_to(m)
 
-    # Add disaster markers with improved visibility
+    # Add disaster markers
     for disaster in disasters:
         try:
             coordinates = disaster['geometry'][0]['coordinates']
-            # Log disaster details for debugging
-            st.info(f"Processing disaster: {disaster['title']} at coordinates {coordinates}")
 
             folium.CircleMarker(
                 location=[coordinates[1], coordinates[0]],
-                radius=15,  # Increased size for better visibility
+                radius=15,
                 popup=f"Disaster: {disaster['title']}<br>Type: {disaster['categories'][0]['title']}",
                 color='red',
                 fill=True,
                 fill_color='red',
                 fill_opacity=0.7,
-                weight=2  # Increased border weight
+                weight=2
             ).add_to(m)
-        except (KeyError, IndexError, TypeError) as e:
-            st.error(f"Error plotting disaster marker: {str(e)}")
+        except (KeyError, IndexError) as e:
             continue
 
     return m
 
 def calculate_proximity_alerts(alumni_df, disasters, threshold_km):
-    """Calculate proximity alerts between alumni and disasters with improved accuracy."""
+    """Calculate proximity alerts between alumni and disasters."""
     alerts = []
-    st.info(f"Calculating alerts for {len(alumni_df)} alumni and {len(disasters)} disasters...")
-
-    # Log the first few disasters for debugging
-    for i, disaster in enumerate(disasters[:3]):
-        st.info(f"Sample disaster {i+1}: {disaster.get('title', 'Unknown')} - Type: {disaster.get('categories', [{}])[0].get('title', 'Unknown')}")
 
     for _, alumni in alumni_df.iterrows():
         alumni_coords = (alumni['Latitude'], alumni['Longitude'])
 
-        # Skip invalid alumni coordinates
-        if not all(isinstance(x, (int, float)) for x in alumni_coords) or alumni_coords == (0, 0):
+        # Skip processing for alumni with default coordinates
+        if not alumni.get('Has_Valid_Coords', True):
             continue
 
         for disaster in disasters:
             try:
                 disaster_coords = (
-                    disaster['geometry'][0]['coordinates'][1],  # Latitude
-                    disaster['geometry'][0]['coordinates'][0]   # Longitude
+                    disaster['geometry'][0]['coordinates'][1],
+                    disaster['geometry'][0]['coordinates'][0]
                 )
-
-                # Skip invalid disaster coordinates
-                if not all(isinstance(x, (int, float)) for x in disaster_coords):
-                    continue
 
                 distance = geodesic(alumni_coords, disaster_coords).km
 
@@ -84,21 +85,14 @@ def calculate_proximity_alerts(alumni_df, disasters, threshold_km):
                         'distance': round(distance, 1)
                     }
                     alerts.append(alert)
-                    st.warning(
-                        f"⚠️ ALERT: {alert['alumni_name']} is {alert['distance']}km from "
-                        f"{alert['disaster_description']} ({alert['disaster_type']})"
-                    )
 
-            except (KeyError, IndexError, TypeError) as e:
-                st.error(f"Error processing disaster data: {str(e)}")
+            except (KeyError, IndexError):
                 continue
 
     # Sort alerts by distance
     alerts = sorted(alerts, key=lambda x: x['distance'])
 
     if alerts:
-        st.warning(f"🚨 Found {len(alerts)} alerts within {threshold_km}km threshold")
-    else:
-        st.info("No alerts found within the specified threshold")
+        st.warning(f"🚨 Found {len(alerts)} proximity alerts")
 
     return alerts

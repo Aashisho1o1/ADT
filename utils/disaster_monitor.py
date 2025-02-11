@@ -16,78 +16,58 @@ def fetch_eonet_data():
     # Optimize query parameters for faster response
     params = {
         "status": "open",
-        "days": 7,  # Reduced to last week for faster response
-        "limit": 50,  # Limit results for better performance
+        "days": 3,  # Reduced to last 3 days for faster response
+        "limit": 25,  # Further limited results for better performance
+        "categories": "wildfires,severeStorms,volcanoes,earthquakes",  # Pre-filter categories
         "api_key": api_key
     }
 
     try:
-        with st.spinner('🌍 Fetching disaster data...'):
-            # Progress indicator for API request
-            progress_bar = st.progress(0)
-            progress_bar.progress(25, 'Connecting to EONET API...')
+        # Progress indicator for API request
+        progress_bar = st.progress(0)
+        progress_bar.progress(25, 'Connecting to EONET API...')
 
-            response = requests.get(base_url, params=params, timeout=5)  # Reduced timeout
-            progress_bar.progress(50, 'Processing response...')
+        response = requests.get(base_url, params=params, timeout=5)  # Reduced timeout
+        progress_bar.progress(50, 'Processing response...')
 
-            if response.status_code != 200:
-                st.error("⚠️ Unable to fetch disaster data")
-                return []
+        if response.status_code != 200:
+            st.error("⚠️ Unable to fetch disaster data")
+            return []
 
-            data = response.json()
-            if not isinstance(data, dict) or 'events' not in data:
-                return []
+        data = response.json()
+        if not data.get('events'):
+            return []
 
-            events = data['events']
-            if not events:
-                return []
-
-            progress_bar.progress(75, 'Processing events...')
-
-            # Process events with minimal data structure
-            processed_events = []
-            for event in events:
-                try:
-                    if not event.get('geometry'):
-                        continue
-
-                    # Only process relevant disasters
-                    category_id = event.get('categories', [{}])[0].get('id', '').lower()
-                    if not any(term in category_id for term in ['wildfires', 'severstorms', 'volcanoes', 'earthquakes']):
-                        continue
-
-                    geometry = event['geometry'][0]
-                    if not geometry.get('coordinates'):
-                        continue
-
-                    # Minimal event structure for better performance
-                    processed_event = {
-                        'id': event['id'],
-                        'title': event['title'],
-                        'categories': [{'title': cat['title'], 'id': cat['id']}
-                                     for cat in event['categories'][:1]],
-                        'geometry': [{
-                            'coordinates': geometry['coordinates']
-                        }]
-                    }
-                    processed_events.append(processed_event)
-
-                except (KeyError, IndexError):
+        # Process events with minimal data structure
+        processed_events = []
+        for event in data['events']:
+            try:
+                if not (geometry := event.get('geometry', [{}])[0]):
                     continue
 
-            progress_bar.progress(100, 'Complete!')
-            time.sleep(0.5)  # Brief pause to show completion
-            progress_bar.empty()
+                coords = geometry.get('coordinates')
+                if not coords:
+                    continue
 
-            if processed_events:
-                st.success(f"✅ Found {len(processed_events)} active disasters")
-            return processed_events
+                # Minimal event structure
+                processed_events.append({
+                    'id': event['id'],
+                    'title': event['title'],
+                    'categories': [{'title': event['categories'][0]['title'], 
+                                  'id': event['categories'][0]['id']}],
+                    'geometry': [{'coordinates': coords}]
+                })
 
-    except requests.exceptions.RequestException:
-        st.error("🚫 Connection error - please try again")
-        return []
+            except (KeyError, IndexError):
+                continue
+
+        progress_bar.progress(100, 'Complete!')
+        progress_bar.empty()
+
+        return processed_events
+
     except Exception:
-        st.error("🚫 Unexpected error fetching disaster data")
+        st.error("🚫 Connection error")
         return []
 
 def filter_disasters_by_type(disasters, selected_types):
@@ -95,20 +75,17 @@ def filter_disasters_by_type(disasters, selected_types):
     if not disasters or not selected_types:
         return []
 
-    # Use sets for faster lookups
-    type_mapping = {
+    # Pre-computed type sets for faster lookup
+    type_sets = {
         "Wildfires": {"wildfires", "fire"},
         "Severe Storms": {"severestorms", "severe-storms", "storms"},
         "Volcanoes": {"volcanoes", "volcano"},
         "Earthquakes": {"earthquakes", "earthquake"}
     }
 
-    selected_terms = set()
-    for type_name in selected_types:
-        selected_terms.update(type_mapping.get(type_name, set()))
+    # Create single set of terms for faster matching
+    selected_terms = set().union(*(type_sets[t] for t in selected_types if t in type_sets))
 
-    return [
-        disaster for disaster in disasters
-        if any(term in disaster['categories'][0]['id'].lower()
-               for term in selected_terms)
-    ]
+    # Use generator expression for memory efficiency
+    return [d for d in disasters 
+            if d['categories'][0]['id'].lower().split('-')[0] in selected_terms]

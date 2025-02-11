@@ -5,6 +5,9 @@ import os
 from datetime import datetime
 import sys
 from pathlib import Path
+from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderTimedOut
+import time
 
 # Add the project root to Python path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -17,19 +20,35 @@ def format_address(address_parts):
     return ', '.join(part.strip() for part in address_parts if pd.notna(part) and str(part).strip())
 
 def get_coordinates(address_parts, formatted_address):
-    """Get coordinates using prefecture mapping for Japanese addresses."""
+    """Get coordinates using geocoding with fallback to prefecture mapping."""
     try:
         # Check if it's a Japanese address
         country = address_parts[-1].strip() if address_parts else ''
         is_japanese_address = 'japan' in country.lower() or 'jpn' in country.lower()
 
         if is_japanese_address:
+            # Try prefecture mapping first for Japanese addresses
+            coords = get_prefecture_coordinates(formatted_address)
+            if coords != (0, 0):
+                return coords
+
+        # If not Japanese or prefecture mapping failed, try geocoding
+        geolocator = Nominatim(user_agent="alumni_monitor")
+        location = geolocator.geocode(formatted_address, timeout=10)
+
+        if location:
+            print(f"Found coordinates for {formatted_address}: {location.latitude}, {location.longitude}")
+            return location.latitude, location.longitude
+
+        # Fallback to prefecture mapping for Japanese addresses
+        if is_japanese_address:
             return get_prefecture_coordinates(formatted_address)
 
-        # For non-Japanese addresses, return (0, 0) temporarily
+        print(f"Could not find coordinates for: {formatted_address}")
         return (0, 0)
+
     except Exception as e:
-        print(f"Error getting coordinates: {str(e)}")
+        print(f"Error getting coordinates for {formatted_address}: {str(e)}")
         return (0, 0)
 
 def load_csv_to_database(file_path):
@@ -56,8 +75,15 @@ def load_csv_to_database(file_path):
 
     # Process each record
     processed_data = []
+    total_records = len(df)
+
+    print("Processing records...")
     for idx, row in df.iterrows():
         try:
+            # Progress update
+            if idx % 10 == 0:
+                print(f"Processing record {idx + 1}/{total_records}")
+
             # Combine name fields
             name = f"{row['First Name']} {row['Prim_Last']}"
 
@@ -83,13 +109,14 @@ def load_csv_to_database(file_path):
                 'last_updated': datetime.now()
             })
 
-            print(f"Processed {idx + 1}/{len(df)}: {name}")
+            # Add delay to avoid hitting geocoding rate limits
+            time.sleep(1)
 
         except Exception as e:
             print(f"Error processing record {idx}: {str(e)}")
             continue
 
-    print(f"Saving {len(processed_data)} records to database...")
+    print(f"\nSaving {len(processed_data)} records to database...")
     # Create session and save to database
     session = SessionLocal()
     try:
