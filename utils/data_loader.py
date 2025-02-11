@@ -22,31 +22,62 @@ def detect_encoding(file_path):
         st.error(f"Error reading file: {str(e)}")
         return None
 
-def format_japanese_address(address_parts):
-    """Format Japanese address for better geocoding results."""
+def format_address(address_parts):
+    """Format address for geocoding."""
     # Filter out empty or None values
     address = ', '.join(part.strip() for part in address_parts if pd.notna(part) and str(part).strip())
 
-    # Clean up common issues in Japanese addresses
+    # Clean up common issues
     address = address.replace('JPN', 'Japan')
-    address = address.replace('-', ' ')
 
     return address
 
-def get_coordinates(formatted_address):
-    """Get coordinates using fallback mechanisms."""
-    try:
-        # First try prefecture-level coordinates
-        prefecture_coords = get_prefecture_coordinates(formatted_address)
-        if prefecture_coords:
-            return prefecture_coords
+def geocode_address_with_retry(address, max_retries=3):
+    """Geocode address with retry logic."""
+    geolocator = Nominatim(user_agent="sohokai_alumni_monitor")
 
-        # If no prefecture match, return Tokyo coordinates as final fallback
-        return (35.6762, 139.6503)  # Tokyo coordinates
+    for attempt in range(max_retries):
+        try:
+            location = geolocator.geocode(address, timeout=10)
+            if location:
+                return location.latitude, location.longitude
+            time.sleep(1)
+        except (GeocoderTimedOut, GeocoderServiceError):
+            if attempt < max_retries - 1:
+                time.sleep(2 * (attempt + 1))
+                continue
+    return None
+
+def get_coordinates(address_parts, formatted_address):
+    """Get coordinates using multiple methods."""
+    try:
+        # Check if it's a Japanese address
+        country = address_parts[-1].strip() if address_parts else ''
+        is_japanese_address = 'japan' in country.lower() or 'jpn' in country.lower()
+
+        # First try regular geocoding
+        coords = geocode_address_with_retry(formatted_address)
+        if coords:
+            return coords
+
+        # For Japanese addresses, fall back to prefecture mapping
+        if is_japanese_address:
+            prefecture_coords = get_prefecture_coordinates(formatted_address)
+            if prefecture_coords:
+                return prefecture_coords
+
+        # Last resort: try geocoding with just city and country
+        if ',' in formatted_address:
+            city_country = ', '.join(formatted_address.split(',')[-2:])
+            coords = geocode_address_with_retry(city_country)
+            if coords:
+                return coords
 
     except Exception as e:
         st.error(f"Error getting coordinates: {str(e)}")
-        return (35.6762, 139.6503)  # Tokyo coordinates as fallback
+
+    # Default fallback coordinates (0, 0 for international addresses)
+    return (0, 0) if not is_japanese_address else (35.6762, 139.6503)
 
 def load_alumni_data(file_path='attached_assets/Sohokai_List_20240726(Graduated).csv'):
     """Load and process Sohokai alumni data from CSV."""
@@ -78,7 +109,7 @@ def load_alumni_data(file_path='attached_assets/Sohokai_List_20240726(Graduated)
                 progress_bar.progress(progress)
 
                 try:
-                    # Combine name fields (First Name and Prim_Last)
+                    # Combine name fields
                     name = f"{row['First Name']} {row['Prim_Last']}"
 
                     # Collect address components
@@ -92,11 +123,11 @@ def load_alumni_data(file_path='attached_assets/Sohokai_List_20240726(Graduated)
                     ]
 
                     # Format address
-                    formatted_address = format_japanese_address(address_parts)
+                    formatted_address = format_address(address_parts)
                     status_text.text(f"Processing {name}: {formatted_address}")
 
-                    # Get coordinates using fallback mechanism
-                    coords = get_coordinates(formatted_address)
+                    # Get coordinates using appropriate method
+                    coords = get_coordinates(address_parts, formatted_address)
 
                     processed_data.append({
                         'Name': name,
