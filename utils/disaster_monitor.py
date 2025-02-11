@@ -22,28 +22,33 @@ def fetch_eonet_data():
     try:
         st.info("Fetching disaster data from EONET...")
         response = requests.get(base_url, params=params, timeout=10)
-        st.info(f"API Response Status: {response.status_code}")
 
-        response.raise_for_status()
+        if response.status_code != 200:
+            st.error(f"API Error: Status {response.status_code}")
+            return []
+
         data = response.json()
 
-        if 'events' not in data:
-            st.warning("No events found in API response")
+        if not isinstance(data, dict) or 'events' not in data:
+            st.error("Invalid API response format")
             return []
 
         events = data['events']
+        if not events:
+            st.warning("No active disasters found in the current period")
+            return []
+
         st.success(f"Retrieved {len(events)} events from EONET API")
 
         processed_events = []
         for event in events:
             try:
                 # Extract and validate required fields
-                if not event.get('geometry') or not event.get('categories'):
+                if not all(key in event for key in ['id', 'title', 'categories', 'geometry']):
                     continue
 
-                # Get the most recent geometry
                 geometry = event['geometry'][0]
-                if 'coordinates' not in geometry:
+                if not geometry or 'coordinates' not in geometry:
                     continue
 
                 # Create standardized event structure
@@ -59,20 +64,31 @@ def fetch_eonet_data():
                 processed_events.append(processed_event)
 
             except (KeyError, IndexError) as e:
-                st.info(f"Skipping malformed event: {str(e)}")
+                st.warning(f"Skipping malformed event data: {event.get('title', 'Unknown event')}")
                 continue
+
+        if not processed_events:
+            st.warning("No valid disaster events found after processing")
+            return []
 
         st.success(f"Successfully processed {len(processed_events)} disaster events")
         return processed_events
 
     except requests.exceptions.RequestException as e:
-        st.error(f"Error fetching EONET data: {str(e)}")
+        st.error(f"Error connecting to EONET API: {str(e)}")
+        return []
+    except Exception as e:
+        st.error(f"Unexpected error processing disaster data: {str(e)}")
         return []
 
 def filter_disasters_by_type(disasters, selected_types):
     """Filter disasters based on selected types with improved type mapping."""
+    if not disasters:
+        return []
+
     if not selected_types:
-        return disasters
+        st.warning("No disaster types selected")
+        return []
 
     # Expanded type mapping for better matching
     type_mapping = {
@@ -99,8 +115,12 @@ def filter_disasters_by_type(disasters, selected_types):
                     break
 
         except (KeyError, IndexError) as e:
-            st.info(f"Error filtering disaster: {str(e)}")
+            st.warning(f"Error processing disaster category for: {disaster.get('title', 'Unknown')}")
             continue
 
-    st.info(f"Filtered to {len(filtered)} relevant disasters")
+    if not filtered:
+        st.warning(f"No disasters found matching selected types: {', '.join(selected_types)}")
+    else:
+        st.success(f"Found {len(filtered)} disasters matching selected types")
+
     return filtered
