@@ -22,8 +22,7 @@ def fetch_eonet_data():
     try:
         st.info("Fetching disaster data from EONET...")
         response = requests.get(base_url, params=params, timeout=10)
-        st.debug(f"API Response Status: {response.status_code}")
-        st.debug(f"API URL: {response.url}")
+        st.info(f"API Response Status: {response.status_code}")
 
         response.raise_for_status()
         data = response.json()
@@ -60,7 +59,7 @@ def fetch_eonet_data():
                 processed_events.append(processed_event)
 
             except (KeyError, IndexError) as e:
-                st.debug(f"Skipping malformed event: {str(e)}")
+                st.info(f"Skipping malformed event: {str(e)}")
                 continue
 
         st.success(f"Successfully processed {len(processed_events)} disaster events")
@@ -100,7 +99,7 @@ def filter_disasters_by_type(disasters, selected_types):
                     break
 
         except (KeyError, IndexError) as e:
-            st.debug(f"Error filtering disaster: {str(e)}")
+            st.info(f"Error filtering disaster: {str(e)}")
             continue
 
     st.info(f"Filtered to {len(filtered)} relevant disasters")
