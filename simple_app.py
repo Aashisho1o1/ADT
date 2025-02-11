@@ -5,8 +5,9 @@ from streamlit_folium import folium_static
 import requests
 from datetime import datetime, timedelta
 from geopy.distance import geodesic
+import numpy as np
 
-# Configure page with proper layout
+# Configure page
 st.set_page_config(
     page_title="Alumni Disaster Monitor",
     page_icon="🌍",
@@ -14,7 +15,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Add custom CSS for better map display
+# Add custom CSS for better visual feedback
 st.markdown("""
     <style>
     .stApp > header {
@@ -31,146 +32,174 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Add title with clear styling
-st.title("🌍 Alumni Natural Disaster Monitor")
-st.markdown("---")
-
+@st.cache_data(ttl=3600)  # Cache for 1 hour
 def load_alumni_data():
-    """Load and process alumni data from simplified CSV"""
+    """Load and cache alumni data"""
     try:
-        with st.spinner("📂 Loading alumni data..."):
-            file_path = 'assets/simplified_alumni.csv'
-            df = pd.read_csv(file_path)
+        file_path = 'assets/simplified_alumni.csv'
+        df = pd.read_csv(file_path)
 
-            if df.empty:
-                st.error("❌ No alumni data found")
-                return None
+        if df.empty:
+            st.error("❌ No alumni data found")
+            return None
 
-            st.success(f"✅ Successfully loaded {len(df)} alumni records")
-            return df
-
+        return df
     except Exception as e:
         st.error(f"❌ Error loading alumni data: {str(e)}")
         return None
 
+@st.cache_data(ttl=300)  # Cache for 5 minutes
 def fetch_disasters():
-    """Fetch natural disaster data from EONET"""
-    with st.spinner("🌐 Fetching disaster data..."):
-        url = "https://eonet.gsfc.nasa.gov/api/v3/events"
-        params = {
-            "status": "open",
-            "days": 7,
-            "category": "wildfires,severeStorms,volcanoes,earthquakes"
-        }
+    """Fetch and cache disaster data"""
+    url = "https://eonet.gsfc.nasa.gov/api/v3/events"
+    params = {
+        "status": "open",
+        "days": 7,
+        "category": "wildfires,severeStorms,volcanoes,earthquakes"
+    }
 
-        try:
-            response = requests.get(url, params=params)
-            if response.status_code == 200:
-                data = response.json().get('events', [])
-                st.success(f"✅ Found {len(data)} active disaster events")
-                return data
-            else:
-                st.error(f"❌ API request failed with status code: {response.status_code}")
-                return []
-        except Exception as e:
-            st.error(f"❌ Error fetching disaster data: {str(e)}")
-            return []
+    try:
+        response = requests.get(url, params=params, timeout=10)
+        if response.status_code == 200:
+            return response.json().get('events', [])
+        return []
+    except Exception as e:
+        st.error(f"❌ Error fetching disaster data: {str(e)}")
+        return []
 
-# Main application
-try:
-    # Create two columns for the layout
-    col1, col2 = st.columns([7, 3])
+def calculate_proximity_alerts(alumni_df, disasters, threshold_km=500):
+    """Optimized proximity calculation"""
+    alerts = []
 
-    with col1:
-        st.subheader("🗺️ Disaster Monitoring Map")
-        st.info("🔵 Blue markers: Alumni locations | 🔴 Red markers: Natural disasters")
-
-        # Load data
-        alumni_df = load_alumni_data()
-        if alumni_df is None:
-            st.stop()
-
-        # Create map centered on average coordinates
-        center_lat = alumni_df['Latitude'].mean()
-        center_lon = alumni_df['Longitude'].mean()
-
-        m = folium.Map(
-            location=[center_lat, center_lon],
-            zoom_start=3,
-            tiles="OpenStreetMap"
-        )
-
-        # Add alumni markers
-        for _, row in alumni_df.iterrows():
-            folium.CircleMarker(
-                location=[row['Latitude'], row['Longitude']],
-                radius=6,
-                popup=f"Alumni: {row['Name']}<br>Location: {row['Location']}",
-                color='blue',
-                fill=True,
-                fill_color='blue',
-                fill_opacity=0.7
-            ).add_to(m)
-
-        # Fetch and add disaster markers
-        disasters = fetch_disasters()
-        alerts = []
+    try:
+        # Convert to numpy arrays for faster calculation
+        alumni_coords = alumni_df[['Latitude', 'Longitude']].values
 
         for disaster in disasters:
             try:
                 coords = disaster['geometry'][0]['coordinates']
-                lat, lon = coords[1], coords[0]
+                disaster_coords = np.array([coords[1], coords[0]])
 
-                folium.CircleMarker(
-                    location=[lat, lon],
-                    radius=12,
-                    popup=f"Disaster: {disaster['title']}",
-                    color='red',
-                    fill=True,
-                    fill_opacity=0.7
-                ).add_to(m)
+                # Vectorized distance calculation
+                distances = np.array([
+                    geodesic(coord, disaster_coords).kilometers 
+                    for coord in alumni_coords
+                ])
 
-                # Check proximity to alumni
-                for _, alumni in alumni_df.iterrows():
-                    distance = int(geodesic(
-                        (alumni['Latitude'], alumni['Longitude']),
-                        (lat, lon)
-                    ).kilometers)
+                # Find alumni within threshold
+                nearby_indices = np.where(distances <= threshold_km)[0]
 
-                    if distance <= 500:  # Alert for disasters within 500km
-                        alerts.append({
-                            'alumni': alumni['Name'],
-                            'disaster': disaster['title'],
-                            'distance': distance
-                        })
+                for idx in nearby_indices:
+                    alerts.append({
+                        'alumni': alumni_df.iloc[idx]['Name'],
+                        'location': alumni_df.iloc[idx]['Location'],
+                        'disaster': disaster['title'],
+                        'distance': int(distances[idx])
+                    })
 
-            except Exception as e:
-                st.warning(f"⚠️ Error processing disaster: {str(e)}")
+            except (KeyError, IndexError):
                 continue
 
-        # Display the map using folium_static
-        folium_static(m, width=800, height=600)
+        return sorted(alerts, key=lambda x: x['distance'])
+    except Exception as e:
+        st.error(f"❌ Error calculating proximities: {str(e)}")
+        return []
 
-    # Right sidebar with statistics and alerts
+# Main application
+try:
+    st.title("🌍 Alumni Natural Disaster Monitor")
+    st.markdown("---")
+
+    # Create layout
+    col1, col2 = st.columns([7, 3])
+
+    with col1:
+        st.subheader("🗺️ Disaster Monitoring Map")
+
+        # Load data with progress indicators
+        with st.spinner("📂 Loading alumni data..."):
+            alumni_df = load_alumni_data()
+
+        if alumni_df is None:
+            st.stop()
+
+        with st.spinner("🌐 Fetching disaster data..."):
+            disasters = fetch_disasters()
+
+        # Create map centered on data
+        center_lat = alumni_df['Latitude'].mean()
+        center_lon = alumni_df['Longitude'].mean()
+
+        with st.spinner("🗺️ Generating map..."):
+            m = folium.Map(
+                location=[center_lat, center_lon],
+                zoom_start=2,
+                tiles="OpenStreetMap"
+            )
+
+            # Add alumni markers in batches
+            batch_size = 100
+            total_alumni = len(alumni_df)
+
+            progress_bar = st.progress(0)
+
+            for i in range(0, total_alumni, batch_size):
+                batch = alumni_df.iloc[i:i+batch_size]
+                for _, row in batch.iterrows():
+                    folium.CircleMarker(
+                        location=[row['Latitude'], row['Longitude']],
+                        radius=4,  # Smaller radius for better performance
+                        popup=f"Alumni: {row['Name']}<br>Location: {row['Location']}",
+                        color='blue',
+                        fill=True,
+                        fill_opacity=0.7
+                    ).add_to(m)
+
+                progress = min((i + batch_size) / total_alumni, 1.0)
+                progress_bar.progress(progress)
+
+            # Add disaster markers
+            for disaster in disasters:
+                try:
+                    coords = disaster['geometry'][0]['coordinates']
+                    folium.CircleMarker(
+                        location=[coords[1], coords[0]],
+                        radius=8,
+                        popup=f"Disaster: {disaster['title']}",
+                        color='red',
+                        fill=True,
+                        fill_opacity=0.7
+                    ).add_to(m)
+                except (KeyError, IndexError):
+                    continue
+
+            progress_bar.empty()
+
+            # Display map
+            folium_static(m, width=800, height=600)
+
     with col2:
         st.subheader("📊 Location Statistics")
         st.info(f"""
-        Total Alumni: {len(alumni_df)}
-        Countries: {alumni_df['Country'].nunique()}
-        States/Regions: {alumni_df['State'].nunique()}
+        Total Alumni: {len(alumni_df):,}
+        Countries: {alumni_df['Country'].nunique():,}
+        States/Regions: {alumni_df['State'].nunique():,}
         """)
 
-        # Show proximity alerts
+        # Calculate proximity alerts
         st.subheader("⚠️ Proximity Alerts")
+        with st.spinner("🔍 Analyzing proximities..."):
+            alerts = calculate_proximity_alerts(alumni_df, disasters)
+
         if alerts:
-            for alert in sorted(alerts, key=lambda x: x['distance']):
+            for alert in alerts:
                 st.warning(
-                    f"🚨 {alert['alumni']} is {alert['distance']}km "
-                    f"from {alert['disaster']}"
+                    f"🚨 {alert['alumni']} in {alert['location']} is "
+                    f"{alert['distance']}km from {alert['disaster']}"
                 )
         else:
             st.info("✅ No alerts within 500km")
 
 except Exception as e:
     st.error(f"❌ Application error: {str(e)}")
-    st.write("Please check the error message above and try again.")
+    st.exception(e)
