@@ -28,70 +28,91 @@ def clean_address_field(field):
         field = str(int(field)) if float(field).is_integer() else str(field)
     return str(field).strip()
 
-def get_coordinates(address_components):
+def get_coordinates_for_japanese_address(address_components):
     """Get coordinates using Japanese prefecture mapping"""
-    # Check if it's a Japanese address
-    country = clean_address_field(address_components.get('Country', ''))
-    is_japanese_address = 'japan' in country.lower() or 'jpn' in country.lower()
-
-    if not is_japanese_address:
-        # Return Tokyo coordinates for non-Japanese addresses
-        return 35.6762, 139.6503, False
-
     # For Japanese addresses, use prefecture mapping
     address_str = ' '.join(clean_address_field(v) for v in address_components.values() if v)
     lat, lon = get_prefecture_coordinates(address_str)
 
     # Check if we got default Tokyo coordinates
     is_default = (lat == 35.6762 and lon == 139.6503)
-
     return lat, lon, is_default
 
 def load_alumni_data():
-    """Load and process alumni data with Japanese location handling"""
+    """Load and process alumni data using both geocoded and raw data"""
     try:
-        st.write("📂 Attempting to load alumni data...")
-        file_path = 'attached_assets/Sohokai_List_20240726(Graduated).csv'
+        st.write("📂 Loading alumni data...")
 
-        # Read and detect file encoding
-        with open(file_path, 'rb') as file:
+        # Load geocoded data first
+        geocoded_file = 'attached_assets/Sohokai_List_20240726_geocodio_33dbd69d66d31a7292d132f4da9384855fb65a4e.csv'
+        with open(geocoded_file, 'rb') as file:
             raw_data = file.read()
             result = chardet.detect(raw_data)
-            st.info(f"📝 Detected file encoding: {result['encoding']}")
+            st.info(f"📝 Detected geocoded file encoding: {result['encoding']}")
 
-        # Read CSV file
-        df = pd.read_csv(file_path, encoding=result['encoding'])
-        st.success(f"✅ Successfully read CSV with {len(df)} rows")
+        # Read geocoded CSV
+        geocoded_df = pd.read_csv(geocoded_file, encoding=result['encoding'])
+        st.success(f"✅ Loaded {len(geocoded_df)} geocoded records")
+
+        # Load original data
+        original_file = 'attached_assets/Sohokai_List_20240726(Graduated).csv'
+        with open(original_file, 'rb') as file:
+            raw_data = file.read()
+            result = chardet.detect(raw_data)
+
+        # Read original CSV
+        original_df = pd.read_csv(original_file, encoding=result['encoding'])
 
         # Process alumni data
         alumni_data = []
         progress_bar = st.progress(0)
+        total_records = len(original_df)
 
-        for idx, row in df.iterrows():
-            progress = (idx + 1) / len(df)
-            progress_bar.progress(progress, f"Processing alumni {idx + 1}/{len(df)}")
+        for idx, row in original_df.iterrows():
+            progress = (idx + 1) / total_records
+            progress_bar.progress(progress, f"Processing alumni {idx + 1}/{total_records}")
 
             # Get name components
             name = f"{clean_address_field(row.get('First Name', ''))} {clean_address_field(row.get('Prim_Last', ''))}".strip()
 
-            # Collect address components
-            address_components = {
-                'Address 1': row.get('Address 1', ''),
-                'Address 2': row.get('Address 2', ''),
-                'City': row.get('City', ''),
-                'State': row.get('State', ''),
-                'Postal': row.get('Postal', ''),
-                'Country': row.get('Country', '')
-            }
+            # Check if we have geocoded data for this record
+            geocoded_match = geocoded_df[
+                (geocoded_df['First Name'] == row['First Name']) & 
+                (geocoded_df['Prim_Last'] == row['Prim_Last'])
+            ]
 
-            # Format display location
+            # Get location components
             location = ', '.join(
-                clean_address_field(v) for k, v in address_components.items() 
-                if v and k != 'Address 2'  # Exclude Address 2 from display
+                clean_address_field(v) for v in [
+                    row.get('City', ''),
+                    row.get('State', ''),
+                    row.get('Country', '')
+                ] if v
             )
 
-            # Get coordinates using Japanese prefecture mapping
-            lat, lon, is_default = get_coordinates(address_components)
+            if not geocoded_match.empty and 'Latitude' in geocoded_match.columns:
+                # Use pre-geocoded coordinates
+                lat = float(geocoded_match.iloc[0]['Latitude'])
+                lon = float(geocoded_match.iloc[0]['Longitude'])
+                is_default = False
+            else:
+                # Check if it's a Japanese address
+                country = clean_address_field(row.get('Country', ''))
+                if 'japan' in country.lower() or 'jpn' in country.lower():
+                    # Use Japanese prefecture mapping
+                    address_components = {
+                        'Address 1': row.get('Address 1', ''),
+                        'Address 2': row.get('Address 2', ''),
+                        'City': row.get('City', ''),
+                        'State': row.get('State', ''),
+                        'Postal': row.get('Postal', ''),
+                        'Country': row.get('Country', '')
+                    }
+                    lat, lon, is_default = get_coordinates_for_japanese_address(address_components)
+                else:
+                    # For non-Japanese addresses without geocoding, use Tokyo coordinates
+                    lat, lon = 35.6762, 139.6503
+                    is_default = True
 
             alumni_data.append({
                 'Name': name,
@@ -103,8 +124,10 @@ def load_alumni_data():
 
         progress_bar.empty()
         return pd.DataFrame(alumni_data)
+
     except Exception as e:
         st.error(f"❌ Error loading alumni data: {str(e)}")
+        st.exception(e)  # Show detailed error
         return pd.DataFrame()
 
 def fetch_disasters():
@@ -151,12 +174,12 @@ try:
 
     # Create map
     st.subheader("🗺️ Disaster Monitoring Map")
-    st.info("🔵 Blue markers: Alumni locations | 🔴 Red markers: Natural disasters")
+    st.info("🔵 Blue markers: Alumni locations | ⚫ Gray markers: Default locations | 🔴 Red markers: Natural disasters")
 
-    # Initialize map centered on Japan
+    # Initialize map centered on Pacific region to show both Japan and US
     m = folium.Map(
-        location=[36.2048, 138.2529],  # Center of Japan
-        zoom_start=5,
+        location=[30.0, 180.0],
+        zoom_start=3,
         tiles="OpenStreetMap"
     )
 
@@ -188,8 +211,8 @@ try:
     st.info(f"""
     📍 Location Statistics:
     - Total Alumni: {len(alumni_df)}
-    - Mapped to Prefecture: {len(alumni_df) - default_locations}
-    - Default Location: {default_locations}
+    - Geocoded/Mapped Locations: {len(alumni_df) - default_locations}
+    - Default Locations: {default_locations}
     """)
 
     # Add disaster markers and track proximity
