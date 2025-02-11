@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import folium
-from streamlit_folium import st_folium
+from streamlit_folium import folium_static
 import requests
 from datetime import datetime, timedelta
 from geopy.distance import geodesic
@@ -23,9 +23,10 @@ st.markdown("""
     .main > div {
         padding-top: 2rem;
     }
-    iframe {
+    div[data-testid="stVerticalBlock"] > div:has(iframe) {
         border: 2px solid #ddd;
         border-radius: 10px;
+        padding: 1rem;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -46,14 +47,6 @@ def load_alumni_data():
                 return None
 
             st.success(f"✅ Successfully loaded {len(df)} alumni records")
-
-            # Show sample of data
-            with st.expander("🔍 View Sample Data"):
-                st.dataframe(
-                    df[['Name', 'Location', 'Latitude', 'Longitude']].head(),
-                    hide_index=True
-                )
-
             return df
 
     except Exception as e:
@@ -155,13 +148,8 @@ try:
                 st.warning(f"⚠️ Error processing disaster: {str(e)}")
                 continue
 
-        # Display the map with explicit dimensions
-        st_folium(
-            m,
-            width=800,
-            height=600,
-            returned_objects=["last_active_drawing"]
-        )
+        # Display the map using folium_static
+        folium_static(m, width=800, height=600)
 
     # Right sidebar with statistics and alerts
     with col2:
