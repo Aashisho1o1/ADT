@@ -27,6 +27,10 @@ args = "csv_reader"
 task = "workflow.run"
 args = "load_alumni_data"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "simplify_csv"
+
 [[workflows.workflow]]
 name = "streamlit_app"
 author = "agent"
@@ -69,6 +73,20 @@ task = "packager.installForAll"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python scripts/load_alumni_data.py"
+
+[[workflows.workflow]]
+name = "simplify_csv"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "mkdir -p assets && python scripts/simplify_csv.py"
 
 [[ports]]
 localPort = 5000
