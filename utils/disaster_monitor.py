@@ -6,121 +6,109 @@ from . import database as db
 from .database import DisasterEvent
 import streamlit as st
 
-@st.cache_data(ttl=300)  # Cache for 5 minutes
+# Optimize caching for better performance
+@st.cache_data(ttl=3600, show_spinner=False)  # Cache for 1 hour
 def fetch_eonet_data():
-    """Fetch natural disaster data from NASA's EONET API with improved error handling."""
+    """Fetch natural disaster data from NASA's EONET API with optimized caching."""
     api_key = "hjp6PQBMN7kiHJf28k6EuTLIowh0AOcxPtxLkk1c"
     base_url = "https://eonet.gsfc.nasa.gov/api/v3/events"
 
-    # Query parameters with default values that work well
+    # Optimize query parameters for faster response
     params = {
         "status": "open",
-        "days": 60,
+        "days": 7,  # Reduced to last week for faster response
+        "limit": 50,  # Limit results for better performance
         "api_key": api_key
     }
 
     try:
-        st.info("Fetching disaster data from EONET...")
-        response = requests.get(base_url, params=params, timeout=10)
+        with st.spinner('🌍 Fetching disaster data...'):
+            # Progress indicator for API request
+            progress_bar = st.progress(0)
+            progress_bar.progress(25, 'Connecting to EONET API...')
 
-        if response.status_code != 200:
-            st.error(f"API Error: Status {response.status_code}")
-            return []
+            response = requests.get(base_url, params=params, timeout=5)  # Reduced timeout
+            progress_bar.progress(50, 'Processing response...')
 
-        data = response.json()
+            if response.status_code != 200:
+                st.error("⚠️ Unable to fetch disaster data")
+                return []
 
-        if not isinstance(data, dict) or 'events' not in data:
-            st.error("Invalid API response format")
-            return []
+            data = response.json()
+            if not isinstance(data, dict) or 'events' not in data:
+                return []
 
-        events = data['events']
-        if not events:
-            st.warning("No active disasters found in the current period")
-            return []
+            events = data['events']
+            if not events:
+                return []
 
-        st.success(f"Retrieved {len(events)} events from EONET API")
+            progress_bar.progress(75, 'Processing events...')
 
-        processed_events = []
-        for event in events:
-            try:
-                # Extract and validate required fields
-                if not all(key in event for key in ['id', 'title', 'categories', 'geometry']):
+            # Process events with minimal data structure
+            processed_events = []
+            for event in events:
+                try:
+                    if not event.get('geometry'):
+                        continue
+
+                    # Only process relevant disasters
+                    category_id = event.get('categories', [{}])[0].get('id', '').lower()
+                    if not any(term in category_id for term in ['wildfires', 'severstorms', 'volcanoes', 'earthquakes']):
+                        continue
+
+                    geometry = event['geometry'][0]
+                    if not geometry.get('coordinates'):
+                        continue
+
+                    # Minimal event structure for better performance
+                    processed_event = {
+                        'id': event['id'],
+                        'title': event['title'],
+                        'categories': [{'title': cat['title'], 'id': cat['id']}
+                                     for cat in event['categories'][:1]],
+                        'geometry': [{
+                            'coordinates': geometry['coordinates']
+                        }]
+                    }
+                    processed_events.append(processed_event)
+
+                except (KeyError, IndexError):
                     continue
 
-                geometry = event['geometry'][0]
-                if not geometry or 'coordinates' not in geometry:
-                    continue
+            progress_bar.progress(100, 'Complete!')
+            time.sleep(0.5)  # Brief pause to show completion
+            progress_bar.empty()
 
-                # Create standardized event structure
-                processed_event = {
-                    'id': event['id'],
-                    'title': event['title'],
-                    'categories': event['categories'],
-                    'geometry': [{
-                        'coordinates': geometry['coordinates'],
-                        'date': geometry.get('date', datetime.now().isoformat())
-                    }]
-                }
-                processed_events.append(processed_event)
+            if processed_events:
+                st.success(f"✅ Found {len(processed_events)} active disasters")
+            return processed_events
 
-            except (KeyError, IndexError) as e:
-                st.warning(f"Skipping malformed event data: {event.get('title', 'Unknown event')}")
-                continue
-
-        if not processed_events:
-            st.warning("No valid disaster events found after processing")
-            return []
-
-        st.success(f"Successfully processed {len(processed_events)} disaster events")
-        return processed_events
-
-    except requests.exceptions.RequestException as e:
-        st.error(f"Error connecting to EONET API: {str(e)}")
+    except requests.exceptions.RequestException:
+        st.error("🚫 Connection error - please try again")
         return []
-    except Exception as e:
-        st.error(f"Unexpected error processing disaster data: {str(e)}")
+    except Exception:
+        st.error("🚫 Unexpected error fetching disaster data")
         return []
 
 def filter_disasters_by_type(disasters, selected_types):
-    """Filter disasters based on selected types with improved type mapping."""
-    if not disasters:
+    """Filter disasters based on selected types with optimized matching."""
+    if not disasters or not selected_types:
         return []
 
-    if not selected_types:
-        st.warning("No disaster types selected")
-        return []
-
-    # Expanded type mapping for better matching
+    # Use sets for faster lookups
     type_mapping = {
-        "Wildfires": ["wildfires", "fire"],
-        "Severe Storms": ["severeStorms", "severe-storms", "storms"],
-        "Volcanoes": ["volcanoes", "volcano"],
-        "Earthquakes": ["earthquakes", "earthquake"]
+        "Wildfires": {"wildfires", "fire"},
+        "Severe Storms": {"severestorms", "severe-storms", "storms"},
+        "Volcanoes": {"volcanoes", "volcano"},
+        "Earthquakes": {"earthquakes", "earthquake"}
     }
 
-    filtered = []
-    for disaster in disasters:
-        try:
-            categories = disaster.get('categories', [])
-            if not categories:
-                continue
+    selected_terms = set()
+    for type_name in selected_types:
+        selected_terms.update(type_mapping.get(type_name, set()))
 
-            category = categories[0].get('id', '').lower()
-            title = categories[0].get('title', '').lower()
-
-            for selected_type in selected_types:
-                mapped_terms = type_mapping.get(selected_type, [])
-                if any(term.lower() in category or term.lower() in title for term in mapped_terms):
-                    filtered.append(disaster)
-                    break
-
-        except (KeyError, IndexError) as e:
-            st.warning(f"Error processing disaster category for: {disaster.get('title', 'Unknown')}")
-            continue
-
-    if not filtered:
-        st.warning(f"No disasters found matching selected types: {', '.join(selected_types)}")
-    else:
-        st.success(f"Found {len(filtered)} disasters matching selected types")
-
-    return filtered
+    return [
+        disaster for disaster in disasters
+        if any(term in disaster['categories'][0]['id'].lower()
+               for term in selected_terms)
+    ]
