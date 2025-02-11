@@ -1160,6 +1160,12 @@ wheels = [
 ]
 
 [[package]]
+name = "ratelimit"
+version = "2.2.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ab/38/ff60c8fc9e002d50d48822cc5095deb8ebbc5f91a6b8fdd9731c87a147c9/ratelimit-2.2.1.tar.gz", hash = "sha256:af8a9b64b821529aca09ebaf6d8d279100d766f19e90b5059ac6a718ca6dee42", size = 5251 }
+
+[[package]]
 name = "referencing"
 version = "0.36.2"
 source = { registry = "https://pypi.org/simple" }
@@ -1239,6 +1245,7 @@ dependencies = [
     { name = "geopy" },
     { name = "pandas" },
     { name = "psycopg2-binary" },
+    { name = "ratelimit" },
     { name = "sqlalchemy" },
     { name = "streamlit" },
     { name = "streamlit-folium" },
@@ -1256,6 +1263,7 @@ requires-dist = [
     { name = "geopy", specifier = ">=2.4.1" },
     { name = "pandas", specifier = ">=2.2.3" },
     { name = "psycopg2-binary", specifier = ">=2.9.10" },
+    { name = "ratelimit", specifier = ">=2.2.1" },
     { name = "sqlalchemy", specifier = ">=2.0.38" },
     { name = "streamlit", specifier = ">=1.42.0" },
     { name = "streamlit-folium", specifier = ">=0.24.0" },
