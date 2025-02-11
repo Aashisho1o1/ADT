@@ -12,12 +12,13 @@ def detect_encoding(file_path):
         with open(file_path, 'rb') as file:
             raw_data = file.read()
             result = chardet.detect(raw_data)
+            st.info(f"Detected encoding: {result['encoding']}")
             return result['encoding']
     except Exception as e:
         st.error(f"Error reading file: {str(e)}")
         return None
 
-def load_alumni_data(file_path='assets/sample_alumni.csv'):
+def load_alumni_data(file_path='attached_assets/Sohokai_List_20240726(Graduated).csv'):
     """Load and process alumni data from CSV, store in database."""
     try:
         # Initialize database
@@ -40,6 +41,8 @@ def load_alumni_data(file_path='assets/sample_alumni.csv'):
             try:
                 # Try main CSV first
                 df = pd.read_csv(file_path)
+                st.success(f"Successfully read CSV file: {file_path}")
+                st.write("Available columns:", df.columns.tolist())
             except Exception as main_file_error:
                 st.warning(f"Could not read main CSV file: {str(main_file_error)}")
                 st.info("Loading sample alumni data instead")
@@ -54,13 +57,21 @@ def load_alumni_data(file_path='assets/sample_alumni.csv'):
                 'name': 'Name',
                 'location': 'Location',
                 'latitude': 'Latitude',
-                'longitude': 'Longitude'
+                'longitude': 'Longitude',
+                # Add mappings for possible column names in your CSV
+                'Full Name': 'Name',
+                'Address': 'Location',
+                'Lat': 'Latitude',
+                'Long': 'Longitude'
             }
 
+            # Rename columns if they exist
             df.rename(columns=column_mapping, inplace=True, errors='ignore')
 
             if not all(col in df.columns for col in required_columns):
-                st.warning("Required columns not found in CSV, using sample data")
+                st.warning("Required columns not found in CSV.")
+                st.write("Available columns:", df.columns.tolist())
+                st.warning("Using sample data instead")
                 df = pd.DataFrame({
                     'Name': ['John Doe', 'Jane Smith', 'Bob Johnson'],
                     'Location': ['Tokyo, Japan', 'New York, USA', 'London, UK'],
@@ -74,6 +85,9 @@ def load_alumni_data(file_path='assets/sample_alumni.csv'):
             if len(df) == 0:
                 st.error("No valid alumni data found with location information")
                 return None
+
+            # Clear existing data
+            session.query(Alumni).delete()
 
             # Store data in database
             for _, row in df.iterrows():
