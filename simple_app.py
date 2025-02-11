@@ -68,6 +68,10 @@ def load_alumni_data():
         progress_bar = st.progress(0)
         total_records = len(original_df)
 
+        us_canada_count = 0
+        japan_count = 0
+        other_count = 0
+
         for idx, row in original_df.iterrows():
             progress = (idx + 1) / total_records
             progress_bar.progress(progress, f"Processing alumni {idx + 1}/{total_records}")
@@ -75,13 +79,10 @@ def load_alumni_data():
             # Get name components
             name = f"{clean_address_field(row.get('First Name', ''))} {clean_address_field(row.get('Prim_Last', ''))}".strip()
 
-            # Check if we have geocoded data for this record
-            geocoded_match = geocoded_df[
-                (geocoded_df['First Name'] == row['First Name']) & 
-                (geocoded_df['Prim_Last'] == row['Prim_Last'])
-            ]
+            # Get country and clean it
+            country = clean_address_field(row.get('Country', '')).lower()
 
-            # Get location components
+            # Format location string
             location = ', '.join(
                 clean_address_field(v) for v in [
                     row.get('City', ''),
@@ -90,29 +91,44 @@ def load_alumni_data():
                 ] if v
             )
 
-            if not geocoded_match.empty and 'Latitude' in geocoded_match.columns:
-                # Use pre-geocoded coordinates
-                lat = float(geocoded_match.iloc[0]['Latitude'])
-                lon = float(geocoded_match.iloc[0]['Longitude'])
-                is_default = False
+            # Initialize coordinates
+            lat, lon = None, None
+            is_default = True
+
+            # Check if US or Canada
+            if 'usa' in country or 'united states' in country or 'canada' in country:
+                # Try to get geocoded data
+                geocoded_match = geocoded_df[
+                    (geocoded_df['First Name'] == row['First Name']) & 
+                    (geocoded_df['Prim_Last'] == row['Prim_Last'])
+                ]
+
+                if not geocoded_match.empty and 'Latitude' in geocoded_match.columns:
+                    lat = float(geocoded_match.iloc[0]['Latitude'])
+                    lon = float(geocoded_match.iloc[0]['Longitude'])
+                    is_default = False
+                    us_canada_count += 1
+
+            # Check if Japanese address
+            elif 'japan' in country or 'jpn' in country:
+                # Use Japanese prefecture mapping
+                address_components = {
+                    'Address 1': row.get('Address 1', ''),
+                    'Address 2': row.get('Address 2', ''),
+                    'City': row.get('City', ''),
+                    'State': row.get('State', ''),
+                    'Postal': row.get('Postal', ''),
+                    'Country': row.get('Country', '')
+                }
+                lat, lon, is_default = get_coordinates_for_japanese_address(address_components)
+                japan_count += 1
             else:
-                # Check if it's a Japanese address
-                country = clean_address_field(row.get('Country', ''))
-                if 'japan' in country.lower() or 'jpn' in country.lower():
-                    # Use Japanese prefecture mapping
-                    address_components = {
-                        'Address 1': row.get('Address 1', ''),
-                        'Address 2': row.get('Address 2', ''),
-                        'City': row.get('City', ''),
-                        'State': row.get('State', ''),
-                        'Postal': row.get('Postal', ''),
-                        'Country': row.get('Country', '')
-                    }
-                    lat, lon, is_default = get_coordinates_for_japanese_address(address_components)
-                else:
-                    # For non-Japanese addresses without geocoding, use Tokyo coordinates
-                    lat, lon = 35.6762, 139.6503
-                    is_default = True
+                other_count += 1
+
+            # Use Tokyo coordinates as default if no coordinates found
+            if lat is None or lon is None:
+                lat, lon = 35.6762, 139.6503
+                is_default = True
 
             alumni_data.append({
                 'Name': name,
@@ -123,6 +139,15 @@ def load_alumni_data():
             })
 
         progress_bar.empty()
+
+        # Show processing statistics
+        st.success(f"""
+        ✅ Processing complete:
+        - US/Canada (Geocoded): {us_canada_count}
+        - Japan (Prefecture Mapped): {japan_count}
+        - Other Countries: {other_count}
+        """)
+
         return pd.DataFrame(alumni_data)
 
     except Exception as e:
