@@ -5,6 +5,9 @@ from sqlalchemy.orm import Session
 from . import database as db
 from .database import Alumni
 import streamlit as st
+from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderTimedOut
+import time
 
 def detect_encoding(file_path):
     """Detect the encoding of a file."""
@@ -16,6 +19,21 @@ def detect_encoding(file_path):
             return result['encoding']
     except Exception as e:
         st.error(f"Error reading file: {str(e)}")
+        return None
+
+def geocode_address(address):
+    """Convert address to coordinates using Nominatim."""
+    geolocator = Nominatim(user_agent="alumni_disaster_monitor")
+    try:
+        # Add country to improve geocoding accuracy
+        if 'japan' not in address.lower():
+            address += ', Japan'
+        location = geolocator.geocode(address)
+        if location:
+            return location.latitude, location.longitude
+        return None
+    except GeocoderTimedOut:
+        time.sleep(1)  # Wait before retry
         return None
 
 def load_alumni_data(file_path='attached_assets/Sohokai_List_20240726(Graduated).csv'):
@@ -48,30 +66,48 @@ def load_alumni_data(file_path='attached_assets/Sohokai_List_20240726(Graduated)
                 else:
                     raise Exception("Could not detect file encoding")
 
-                # Map specific columns from your CSV file
-                column_mapping = {
-                    'Name/氏名': 'Name',
-                    'Current Location/現住所': 'Location',
-                    'Latitude': 'Latitude',
-                    'Longitude': 'Longitude',
-                    'Current Address/現住所': 'Location'
-                }
+                # Process alumni data
+                processed_data = []
+                with st.spinner('Processing alumni addresses...'):
+                    for _, row in df.iterrows():
+                        # Combine name fields
+                        name = f"{row['First Name']} {row['Prim_Last']}"
 
-                # Rename columns if they exist
-                df.rename(columns=column_mapping, inplace=True, errors='ignore')
+                        # Combine address fields
+                        address_parts = [
+                            str(part) for part in [
+                                row['Address 1'],
+                                row['Address 2'],
+                                row['City'],
+                                row['State'],
+                                row['Postal'],
+                                row['Country']
+                            ] if pd.notna(part)
+                        ]
+                        full_address = ', '.join(address_parts)
+
+                        # Get coordinates
+                        coords = geocode_address(full_address)
+                        if coords:
+                            processed_data.append({
+                                'Name': name,
+                                'Location': full_address,
+                                'Latitude': coords[0],
+                                'Longitude': coords[1]
+                            })
+
+                if not processed_data:
+                    st.error("No valid alumni data could be geocoded")
+                    return None
+
+                # Convert to DataFrame
+                processed_df = pd.DataFrame(processed_data)
 
                 # Clear existing data
                 session.query(Alumni).delete()
 
-                # Filter out rows with missing location data
-                df = df.dropna(subset=['Latitude', 'Longitude'])
-
-                if len(df) == 0:
-                    st.error("No valid alumni data found with location information")
-                    return None
-
-                # Store data in database
-                for _, row in df.iterrows():
+                # Store in database
+                for _, row in processed_df.iterrows():
                     alumni = Alumni(
                         name=row['Name'],
                         location=row['Location'],
@@ -82,8 +118,8 @@ def load_alumni_data(file_path='attached_assets/Sohokai_List_20240726(Graduated)
                     session.add(alumni)
 
                 session.commit()
-                st.success(f"Successfully loaded {len(df)} alumni records")
-                return df
+                st.success(f"Successfully loaded {len(processed_df)} alumni records")
+                return processed_df
 
             except Exception as e:
                 st.error(f"Error reading CSV: {str(e)}")
