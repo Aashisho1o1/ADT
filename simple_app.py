@@ -29,6 +29,9 @@ st.markdown("""
         border-radius: 10px;
         padding: 1rem;
         z-index: 1;  /* Ensure map stays above other elements */
+        width: 100% !important;
+        display: flex;
+        justify-content: center;
     }
     div[data-testid="stSidebar"] {
         z-index: 2;  /* Keep sidebar above map */
@@ -38,6 +41,12 @@ st.markdown("""
     }
     .map-container {
         margin-right: 1rem;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    iframe {
+        width: 100% !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -200,23 +209,24 @@ try:
 
             # Display map with responsive width
             with st.container():
-                folium_static(m, width=700, height=600)
+                folium_static(m, width=None, height=600)
 
     with col2:
+        # Calculate alerts first for statistics
+        alerts = calculate_proximity_alerts(alumni_df, disasters, proximity_threshold)
+
         # Collapsible statistics section
         with st.expander("📊 Location Statistics", expanded=True):
             st.info(f"""
             Total Alumni: {len(alumni_df):,}
             Countries: {alumni_df['Country'].nunique():,}
             States/Regions: {alumni_df['State'].nunique():,}
+            Alumni in Alert Zone: {len(alerts):,}
             """)
 
         # Collapsible proximity alerts section
         with st.expander("⚠️ Proximity Alerts", expanded=True):
             st.caption(f"🎯 Showing alerts within {proximity_threshold:,}km")
-
-            with st.spinner("🔍 Analyzing proximities..."):
-                alerts = calculate_proximity_alerts(alumni_df, disasters, proximity_threshold)
 
             if alerts:
                 for alert in alerts:
