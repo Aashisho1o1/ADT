@@ -4,34 +4,66 @@ from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 import streamlit as st
+import pandas as pd
+import os.path
 
-# Load environment variables
+# Load environment variables for local development
 load_dotenv()
-
-# Get database URL from environment variable
-DATABASE_URL = os.getenv("DATABASE_URL")
-if not DATABASE_URL:
-    st.error("Database URL not found in environment variables")
-    raise Exception("Database URL not configured")
-
-# Create SQLAlchemy engine
-engine = create_engine(DATABASE_URL)
-
-# Create SessionLocal class
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Create Base class
 Base = declarative_base()
 
+# Alumni model definition
 class Alumni(Base):
     __tablename__ = "alumni"
-
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     location = Column(String, nullable=False)
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
     last_updated = Column(DateTime)
+
+# Try to get database URL from Streamlit secrets first, then environment
+def get_connection_string():
+    # First try to get from Streamlit secrets
+    try:
+        return st.secrets["DATABASE_URL"]
+    except:
+        # Then try environment variable
+        db_url = os.getenv("DATABASE_URL")
+        if db_url:
+            return db_url
+        
+        # Finally, indicate we'll use CSV fallback
+        return None
+
+# Engine and session factory
+try:
+    # Try to create database connection
+    db_url = get_connection_string()
+    if db_url:
+        engine = create_engine(db_url)
+        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+        
+        def get_db():
+            db = SessionLocal()
+            try:
+                yield db
+            finally:
+                db.close()
+    else:
+        # Setup dummy placeholders if no database connection
+        engine = None
+        SessionLocal = None
+        def get_db():
+            yield None
+            
+except Exception as e:
+    st.warning(f"Database connection failed: {str(e)}. Using CSV fallback.")
+    engine = None
+    SessionLocal = None
+    def get_db():
+        yield None
 
 class DisasterEvent(Base):
     __tablename__ = "disaster_events"
@@ -53,11 +85,3 @@ def init_db():
     except Exception as e:
         st.error(f"Error initializing database: {str(e)}")
         raise e
-
-def get_db():
-    """Get database session"""
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
