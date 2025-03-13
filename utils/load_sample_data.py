@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from database import Base, Alumni, engine
+from .database import Base, Alumni, engine
 from datetime import datetime
 import pandas as pd
 

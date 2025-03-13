@@ -84,10 +84,11 @@ def load_alumni_data(_=None):
 def load_from_csv():
     """Fallback to load data from CSV when database is unavailable"""
     try:
-        # Check for various CSV locations
+        # Check for various CSV locations - prioritize the simplified version
         potential_paths = [
-            'assets/combo 3.csv',
+            'assets/sample_alumni.csv',  # Add this first - simpler format
             'assets/simplified_alumni.csv',
+            'assets/combo 3.csv',
             'attached_assets/combo 3.csv'
         ]
         
