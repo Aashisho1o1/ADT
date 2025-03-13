@@ -1,4 +1,4 @@
-from database import Base, engine
+from .database import Base, engine
 
 def init_database():
     Base.metadata.create_all(bind=engine)
