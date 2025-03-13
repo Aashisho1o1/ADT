@@ -1,6 +1,6 @@
 import pandas as pd
 from sqlalchemy import create_engine
-from database import Base, engine
+from .database import Base, engine
 import chardet
 
 def import_from_csv(csv_path):
