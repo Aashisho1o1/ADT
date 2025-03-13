@@ -1,23 +1,26 @@
+import os
+from dotenv import load_dotenv
 from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
-import os
 import streamlit as st
 
-# Get database URL from environment variable and modify for SSL mode
-DATABASE_URL = os.getenv('DATABASE_URL')
+# Load environment variables
+load_dotenv()
+
+# Get database URL from environment variable
+DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     st.error("Database URL not found in environment variables")
     raise Exception("Database URL not configured")
 
-# Modify URL to disable SSL verification for development
-if "sslmode" not in DATABASE_URL:
-    DATABASE_URL += "?sslmode=prefer"
-
-# Create engine and session
+# Create SQLAlchemy engine
 engine = create_engine(DATABASE_URL)
+
+# Create SessionLocal class
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+# Create Base class
 Base = declarative_base()
 
 class Alumni(Base):
