@@ -35,11 +35,26 @@ def main():
     # Load alumni data
     with st.spinner('Loading alumni data...'):
         try:
-            alumni_df = load_alumni_data()
-            if alumni_df is None or alumni_df.empty:
+            # Updated to handle the new return format
+            alumni_df, metadata = load_alumni_data()
+            
+            if alumni_df is None:
                 st.error("Could not load alumni data. Please check the database connection.")
                 return
-            st.success(f"Loaded {len(alumni_df)} alumni records")
+                
+            # Display data quality metrics
+            if metadata:
+                st.success(f"Loaded {metadata['total_records']} alumni records")
+                
+                # Display info about coordinates
+                if metadata['invalid_coords'] > 0:
+                    st.info(f"""
+                    📊 Alumni Data Summary:
+                    - Total Records: {metadata['total_records']}
+                    - Records with Valid Coordinates: {metadata['total_records'] - metadata['invalid_coords']}
+                    - Records with Default Coordinates: {metadata['invalid_coords']}
+                    """)
+            
         except Exception as e:
             st.error(f"Error loading alumni data: {str(e)}")
             return
@@ -82,7 +97,7 @@ def main():
             st.info("✅ No alerts within the specified threshold.")
 
         st.subheader("Alumni Overview")
-        if not alumni_df.empty:
+        if alumni_df is not None and not alumni_df.empty:
             st.dataframe(
                 alumni_df[['Name', 'Location', 'Latitude', 'Longitude']].dropna(),
                 hide_index=True
