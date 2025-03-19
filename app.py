@@ -106,26 +106,5 @@ def main():
         else:
             st.warning("No alumni data available to display.")
 
-    # List directory contents to debug
-    st.write("Files in root directory:")
-    st.write(os.listdir())
-
-    if os.path.exists('assets'):
-        st.write("Files in assets directory:")
-        st.write(os.listdir('assets'))
-    else:
-        st.write("Assets directory not found!")
-
-    # Try to load a simple DataFrame
-    try:
-        st.write("Creating sample data:")
-        df = pd.DataFrame({
-            'Name': ['Test 1', 'Test 2', 'Test 3'],
-            'Value': [1, 2, 3]
-        })
-        st.dataframe(df)
-    except Exception as e:
-        st.error(f"Error creating DataFrame: {e}")
-
 if __name__ == "__main__":
     main()
