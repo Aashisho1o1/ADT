@@ -5,74 +5,73 @@ from sqlalchemy.orm import Session
 from . import database as db
 from .database import DisasterEvent
 import streamlit as st
+from sqlalchemy import create_engine
+import logging
+
+# Set up logging at the top of your file
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Access secrets
+if "DATABASE_URL" in st.secrets:
+    db_url = st.secrets["DATABASE_URL"]
+else:
+    db_url = None  # Fallback for local development
 
 # Optimize caching for better performance
 @st.cache_data(ttl=3600, show_spinner=False)  # Cache for 1 hour
 def fetch_eonet_data():
     """Fetch natural disaster data from NASA's EONET API with optimized caching."""
-    api_key = "hjp6PQBMN7kiHJf28k6EuTLIowh0AOcxPtxLkk1c"
-    base_url = "https://eonet.gsfc.nasa.gov/api/v3/events"
-
-    # Optimize query parameters for faster response
-    params = {
-        "status": "open",
-        "days": 3,  # Reduced to last 3 days for faster response
-        "limit": 25,  # Further limited results for better performance
-        "categories": "wildfires,severeStorms,volcanoes,earthquakes",  # Pre-filter categories
-        "api_key": api_key
-    }
-
     try:
-        # Progress indicator for API request
-        progress_bar = st.progress(0)
-        progress_bar.progress(25, 'Connecting to EONET API...')
-
-        response = requests.get(base_url, params=params, timeout=5)  # Reduced timeout
-        progress_bar.progress(50, 'Processing response...')
-
-        if response.status_code != 200:
-            st.error("⚠️ Unable to fetch disaster data")
-            return []
-
-        data = response.json()
-        if not data.get('events'):
-            return []
-
-        # Process events with minimal data structure
-        processed_events = []
-        for event in data['events']:
-            try:
-                if not (geometry := event.get('geometry', [{}])[0]):
-                    continue
-
-                coords = geometry.get('coordinates')
-                if not coords:
-                    continue
-
-                # Minimal event structure
-                processed_events.append({
-                    'id': event['id'],
-                    'title': event['title'],
-                    'categories': [{'title': event['categories'][0]['title'], 
-                                  'id': event['categories'][0]['id']}],
-                    'geometry': [{'coordinates': coords}]
-                })
-
-            except (KeyError, IndexError):
-                continue
-
-        progress_bar.progress(100, 'Complete!')
-        progress_bar.empty()
-
-        return processed_events
-
-    except Exception:
-        st.error("🚫 Connection error")
+        # Correctly access secrets
+        api_key = None
+        
+        # Try to get from secrets in different ways
+        if "nasa" in st.secrets:
+            # If you have a nested structure like [nasa] api_key = "value"
+            api_key = st.secrets["nasa"]["api_key"] 
+        elif "NASA_API_KEY" in st.secrets:
+            # If you have a flat structure like NASA_API_KEY = "value"
+            api_key = st.secrets["NASA_API_KEY"]
+            
+        base_url = "https://eonet.gsfc.nasa.gov/api/v3/events"
+        
+        # Optimize query parameters
+        params = {
+            "status": "open",
+            "days": 3,
+            "limit": 25,
+            "api_key": api_key
+        }
+        
+        # Send request
+        response = requests.get(base_url, params=params)
+        
+        # Check status and parse JSON properly
+        response.raise_for_status()  # Raise exception for bad status codes
+        data = response.json()  # Parse JSON
+        
+        # Access events (ensure it's a list)
+        events = data.get("events", []) if isinstance(data, dict) else []
+        
+        return events
+        
+    except Exception as e:
+        st.error(f"Error in fetch_eonet_data: {str(e)}")
+        # Add debugging information
+        import traceback
+        st.error(f"Traceback: {traceback.format_exc()}")
         return []
 
-def filter_disasters_by_type(disasters, selected_types):
+def filter_disasters_by_type(disaster_data, selected_types):
     """Filter disasters based on selected types with optimized matching."""
-    if not disasters or not selected_types:
+    # Replace st.write with logger.debug
+    logger.debug(f"Disaster data type: {type(disaster_data)}")
+    
+    if isinstance(disaster_data, list) and len(disaster_data) > 0:
+        logger.debug(f"First item type: {type(disaster_data[0])}")
+
+    if not disaster_data or not selected_types:
         return []
 
     # Pre-computed type sets for faster lookup
@@ -87,5 +86,17 @@ def filter_disasters_by_type(disasters, selected_types):
     selected_terms = set().union(*(type_sets[t] for t in selected_types if t in type_sets))
 
     # Use generator expression for memory efficiency
-    return [d for d in disasters 
+    return [d for d in disaster_data 
             if d['categories'][0]['id'].lower().split('-')[0] in selected_terms]
+
+# Modified database connection code
+def get_db_connection():
+    try:
+        if "DATABASE_URL" in st.secrets:
+            return create_engine(st.secrets["DATABASE_URL"])
+        else:
+            st.warning("No database configuration found")
+            return None
+    except Exception as e:
+        st.error(f"Failed to connect to database: {str(e)}")
+        return None
