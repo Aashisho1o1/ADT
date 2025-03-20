@@ -12,74 +12,79 @@ def load_alumni_data(_=None):
     try:
         # Try database first
         if engine is not None:
-            session = next(get_db())
-            if session is not None:
-                try:
-                    # Use pagination for better memory management
-                    page_size = 500
-                    offset = 0
-                    all_records = []
+            try:
+                session = next(get_db())
+                if session is not None:
+                    try:
+                        # Use pagination for better memory management
+                        page_size = 500
+                        offset = 0
+                        all_records = []
 
-                    while True:
-                        # Fetch records in batches
-                        batch = session.query(Alumni)\
-                            .order_by(Alumni.id)\
-                            .limit(page_size)\
-                            .offset(offset)\
-                            .all()
+                        while True:
+                            # Fetch records in batches
+                            batch = session.query(Alumni)\
+                                .order_by(Alumni.id)\
+                                .limit(page_size)\
+                                .offset(offset)\
+                                .all()
 
-                        if not batch:
-                            break
+                            if not batch:
+                                break
 
-                        all_records.extend(batch)
-                        offset += page_size
+                            all_records.extend(batch)
+                            offset += page_size
 
-                    total_records = len(all_records)
+                        total_records = len(all_records)
 
-                    if not all_records:
-                        return None, None
+                        if not all_records:
+                            return None, None
 
-                    # Process records in batches for better memory efficiency
-                    data = []
-                    invalid_coords = 0
+                        # Process records in batches for better memory efficiency
+                        data = []
+                        invalid_coords = 0
 
-                    for record in all_records:
-                        # Track records with missing coordinates
-                        if record.latitude == 0 and record.longitude == 0:
-                            invalid_coords += 1
-                            # Use Tokyo coordinates as default for visualization
-                            record.latitude = 35.6762
-                            record.longitude = 139.6503
+                        for record in all_records:
+                            # Track records with missing coordinates
+                            if record.latitude == 0 and record.longitude == 0:
+                                invalid_coords += 1
+                                # Use Tokyo coordinates as default for visualization
+                                record.latitude = 35.6762
+                                record.longitude = 139.6503
 
-                        data.append({
-                            'Name': record.name,
-                            'Location': record.location,
-                            'Latitude': record.latitude,
-                            'Longitude': record.longitude,
-                            'Has_Valid_Coords': not (record.latitude == 35.6762 and record.longitude == 139.6503)
-                        })
+                            data.append({
+                                'Name': record.name,
+                                'Location': record.location,
+                                'Latitude': record.latitude,
+                                'Longitude': record.longitude,
+                                'Has_Valid_Coords': not (record.latitude == 35.6762 and record.longitude == 139.6503)
+                            })
 
-                    df = pd.DataFrame(data)
+                        df = pd.DataFrame(data)
 
-                    metadata = {
-                        'total_records': total_records,
-                        'invalid_coords': invalid_coords
-                    }
+                        metadata = {
+                            'total_records': total_records,
+                            'invalid_coords': invalid_coords
+                        }
 
-                    return df, metadata
+                        st.success("Successfully loaded data from Neon database")
+                        return df, metadata
 
-                except Exception as e:
-                    st.warning(f"Database query failed: {str(e)}. Trying CSV fallback.")
-                    return load_from_csv()
-                finally:
-                    if session:
-                        session.close()
+                    except Exception as db_error:
+                        st.error(f"Database query error: {str(db_error)}")
+                        raise
+            except Exception as db_error:
+                st.error(f"Database session error: {str(db_error)}")
+                st.info("Falling back to CSV data source")
+                return load_from_csv()
         else:
-            # No database connection, use CSV
+            st.warning("Database engine not available, using CSV fallback")
             return load_from_csv()
+            
     except Exception as e:
-        st.warning(f"Error in data loader: {str(e)}. Trying CSV fallback.")
-        return load_from_csv()
+        st.error(f"Error in data loading: {str(e)}")
+        # Last resort - return empty data with metadata
+        return pd.DataFrame(), {"total_records": 0, "invalid_coords": 0}
 
 def load_from_csv():
     """Fallback to load data from CSV when database is unavailable"""

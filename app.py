@@ -15,7 +15,25 @@ st.set_page_config(
 
 def main():
     st.title("🌍 Alumni Natural Disaster Monitor")
-
+    
+    # Add this diagnostic section
+    st.sidebar.markdown("### System Status")
+    
+    try:
+        from utils.database import engine
+        # Test database connection
+        with engine.connect() as conn:
+            result = conn.execute("SELECT 1")
+            if result:
+                st.sidebar.success("✅ Connected to Neon Database")
+                # Count records in alumni table
+                count_result = conn.execute("SELECT COUNT(*) FROM alumni")
+                count = count_result.scalar()
+                st.sidebar.info(f"📊 Alumni records in database: {count}")
+    except Exception as e:
+        st.sidebar.error(f"❌ Database connection failed: {str(e)}")
+        st.sidebar.warning("Falling back to CSV data")
+    
     # Sidebar filters
     st.sidebar.header("Disaster Filters")
     disaster_types = ["Wildfires", "Severe Storms", "Volcanoes", "Earthquakes"]
