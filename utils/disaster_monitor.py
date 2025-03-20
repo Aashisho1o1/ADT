@@ -7,19 +7,15 @@ from .database import DisasterEvent
 import streamlit as st
 from sqlalchemy import create_engine
 import logging
+import os
 
 # Set up logging at the top of your file
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Access secrets
-if "DATABASE_URL" in st.secrets:
-    db_url = st.secrets["DATABASE_URL"]
-else:
-    db_url = None  # Fallback for local development
 
 # Optimize caching for better performance
-@st.cache_data(ttl=3600, show_spinner=False)  # Cache for 1 hour
+@st.cache_data(ttl=5, show_spinner=False)  # Cache for 5 min
 def fetch_eonet_data():
     """Fetch natural disaster data from NASA's EONET API with optimized caching."""
     try:
@@ -30,9 +26,6 @@ def fetch_eonet_data():
         if "nasa" in st.secrets:
             # If you have a nested structure like [nasa] api_key = "value"
             api_key = st.secrets["nasa"]["api_key"] 
-        elif "NASA_API_KEY" in st.secrets:
-            # If you have a flat structure like NASA_API_KEY = "value"
-            api_key = st.secrets["NASA_API_KEY"]
             
         base_url = "https://eonet.gsfc.nasa.gov/api/v3/events"
         
@@ -99,4 +92,23 @@ def get_db_connection():
             return None
     except Exception as e:
         st.error(f"Failed to connect to database: {str(e)}")
+        return None
+
+def get_database_url():
+    """Get database URL with consistent fallback hierarchy"""
+    try:
+        # Try nested format (current format in your secrets.toml)
+        if "postgres" in st.secrets and "url" in st.secrets["postgres"]:
+            return st.secrets["postgres"]["url"]
+            
+        # Try environment variable
+        db_url = os.getenv("DATABASE_URL")
+        if db_url:
+            return db_url
+            
+        # No database URL found
+        logger.warning("No database connection URL found in secrets or environment")
+        return None
+    except Exception as e:
+        logger.error(f"Error accessing database URL: {e}")
         return None
