@@ -5,7 +5,7 @@ channel = "stable-24_05"
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["sh", "-c", "streamlit run simple_app.py"]
+run = ["sh", "-c", "streamlit run app.py"]
 
 [workflows]
 runButton = "Project"
