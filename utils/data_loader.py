@@ -88,8 +88,8 @@ def load_from_csv():
         potential_paths = [
             'assets/sample_alumni.csv',  # Add this first - simpler format
             'assets/simplified_alumni.csv',
-            'assets/combo 3.csv',
-            'attached_assets/combo 3.csv'
+            'assets/combo3.csv',
+            'attached_assets/combo3.csv'
         ]
         
         csv_path = None
