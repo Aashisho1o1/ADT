@@ -25,17 +25,11 @@ class Alumni(Base):
 
 # Try to get database URL from Streamlit secrets first, then environment
 def get_connection_string():
-    # First try to get from Streamlit secrets
     try:
-        return st.secrets["DATABASE_URL"]
+        return st.secrets["postgres"]["url"]
     except:
-        # Then try environment variable
-        db_url = os.getenv("DATABASE_URL")
-        if db_url:
-            return db_url
-        
-        # Finally, indicate we'll use CSV fallback
-        return None
+        # Fallback for local development (use environment variables)
+        return os.getenv("DATABASE_URL")
 
 # Engine and session factory
 try:
