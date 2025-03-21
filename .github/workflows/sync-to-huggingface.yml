@@ -4,20 +4,40 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:  # Allows manual triggering
 
 jobs:
   sync-to-huggingface:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          
+      
+      - name: Debug Environment
+        run: |
+          echo "GitHub workspace: $GITHUB_WORKSPACE"
+          echo "Repository contents:"
+          ls -la
+      
+      - name: Setup Git
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+      
       - name: Push to Hugging Face
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-          git remote add space https://Aashisho1o1:$HF_TOKEN@huggingface.co/spaces/Aashisho1o1/ADT
-          git push --force space main
+          echo "Setting up Hugging Face remote..."
+          git remote add hf https://${{ secrets.HF_TOKEN }}@huggingface.co/spaces/Aashisho1o1/ADT
+          
+          echo "Pushing to Hugging Face (with verbose output)..."
+          git push --verbose --force hf main || {
+            echo "Push failed. Checking if remote exists..."
+            git remote -v
+            echo "Checking token format (length only, not showing actual token)..."
+            echo "Token length: ${#HF_TOKEN}"
+            exit 1
+          }
