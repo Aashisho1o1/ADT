@@ -10,32 +10,39 @@ jobs:
   sync-to-huggingface:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
       
-      - name: Debug info
+      - name: Setup Git
         run: |
-          echo "Repository contents:"
-          ls -la
-      
-      - name: Push to Hugging Face
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: |
-          if [ -z "$HF_TOKEN" ]; then
-            echo "Error: HF_TOKEN is empty. Please check your secrets configuration."
-            exit 1
-          fi
-          
-          echo "Setting up Git credentials..."
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
-          
-          echo "Setting up Hugging Face remote..."
-          # Using authentication in URL format correctly
-          git remote add hf "https://Aashisho1o1:${HF_TOKEN}@huggingface.co/spaces/Aashisho1o1/ADT"
+      
+      - name: Check Token
+        id: check_token
+        run: |
+          if [[ -z "$HF_PAT" ]]; then
+            echo "::error::HF_PAT is empty. Please check GitHub secrets configuration."
+            exit 1
+          else
+            echo "Token exists with length: ${#HF_PAT}"
+            echo "token_exists=true" >> $GITHUB_OUTPUT
+          fi
+        env:
+          HF_PAT: ${{ secrets.HF_TOKEN }}
+      
+      - name: Push to Hugging Face
+        if: steps.check_token.outputs.token_exists == 'true'
+        run: |
+          # Using variables directly in the git remote command
+          echo "Adding Hugging Face remote..."
+          git remote add hf https://$USERNAME:$HF_PAT@huggingface.co/spaces/$USERNAME/$REPO_NAME
           
           echo "Pushing to Hugging Face..."
           git push --force hf main
+        env:
+          HF_PAT: ${{ secrets.HF_TOKEN }}
+          USERNAME: "Aashisho1o1"
+          REPO_NAME: "ADT"
