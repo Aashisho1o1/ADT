@@ -22,6 +22,54 @@ st.set_page_config(
     layout="wide"
 )
 
+st.title("🌍 Alumni Natural Disaster Monitor")
+st.info("App is starting in safe mode without database connection.")
+
+# Create sidebar
+st.sidebar.markdown("### System Status")
+db_status = st.sidebar.empty()
+db_status.warning("⚠️ Database connection deferred for security")
+
+# Main content area
+st.write("Welcome to the Alumni Disaster Monitor application!")
+st.write("This app helps track natural disasters near alumni locations.")
+
+# Show environment information
+st.subheader("Environment Information")
+st.json({
+    "Space Name": os.environ.get("SPACE_ID", "Unknown"),
+    "Running On": "Hugging Face Spaces",
+    "Has Environment Secret": "POSTGRES_URL" in os.environ
+})
+
+# Add button to attempt safe connection
+if st.button("Test Database Connection"):
+    try:
+        postgres_url = os.environ.get("POSTGRES_URL")
+        if postgres_url:
+            # Only show masked version for security
+            masked_url = "...@" + postgres_url.split("@")[-1] if "@" in postgres_url else "[database url found but masked]"
+            st.success(f"✅ Found database configuration ending with: {masked_url}")
+            
+            # Attempt connection
+            st.info("Attempting connection...")
+            from sqlalchemy import create_engine, text
+            
+            engine = create_engine(
+                postgres_url,
+                pool_pre_ping=True,
+                connect_args={"connect_timeout": 5}  # 5 second timeout
+            )
+            
+            with engine.connect() as conn:
+                result = conn.execute(text("SELECT 1"))
+                value = result.scalar()
+                st.success(f"✅ Database connection test successful! Result: {value}")
+        else:
+            st.error("No database URL found in environment variables")
+    except Exception as e:
+        st.error(f"Connection error: {str(e)}")
+
 def main():
     """Main application function."""
     st.title("🌍 Alumni Natural Disaster Monitor")
