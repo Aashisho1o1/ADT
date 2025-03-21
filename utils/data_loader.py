@@ -119,10 +119,33 @@ def load_from_csv():
                 "source": "csv"
             }
             
-        # No CSV files found
+        # No CSV files found - return a default minimal DataFrame
         logger.error("No CSV files found")
-        return pd.DataFrame(), {"total_records": 0, "invalid_coords": 0}
+        empty_df = pd.DataFrame({
+            'Name': ['Sample User'],
+            'Location': ['Default Location'],
+            'Latitude': [0],
+            'Longitude': [0],
+            'Has_Valid_Coords': [False]
+        })
+        return empty_df, {
+            "total_records": 0, 
+            "invalid_coords": 0, 
+            "source": "default"
+        }
         
     except Exception as e:
         logger.error(f"CSV loading error: {e}")
-        return pd.DataFrame(), {"total_records": 0, "invalid_coords": 0}
+        # Return an empty DataFrame with the required columns
+        empty_df = pd.DataFrame({
+            'Name': ['Sample User'],
+            'Location': ['Error Location'],
+            'Latitude': [0],
+            'Longitude': [0],
+            'Has_Valid_Coords': [False]
+        })
+        return empty_df, {
+            "total_records": 0, 
+            "invalid_coords": 0, 
+            "source": "error"
+        }
