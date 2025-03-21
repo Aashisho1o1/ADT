@@ -71,9 +71,7 @@ def load_from_csv():
     try:
         # Check for CSV files in priority order
         csv_paths = [
-            'assets/sample_alumni.csv',
-            'assets/simplified_alumni.csv',
-            'assets/combo3.csv',
+            'assets/combo.csv',
             'attached_assets/combo3.csv'
         ]
         
