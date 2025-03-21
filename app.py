@@ -2,6 +2,8 @@
 import streamlit as st
 import os
 import logging
+from utils.helpers import get_db_url, create_db_engine, mask_url, init_session_state, show_debug_info, run_database_diagnosis
+from utils.data_loader import load_alumni_data
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -15,251 +17,124 @@ st.set_page_config(
 )
 
 # Initialize session state
-if "app_loaded" not in st.session_state:
-    st.session_state.app_loaded = False
-if "show_debugging" not in st.session_state:
-    st.session_state.show_debugging = True
+init_session_state()
 
+# Page title
 st.title("🌍 Alumni Natural Disaster Monitor")
 
-# Main content area - conditional on whether full app is loaded
+# SIMPLE MODE
 if not st.session_state.app_loaded:
-    st.info("App is starting in safe mode for Hugging Face deployment")
+    st.info("App is starting in safe mode for deployment stability")
     
-    # Create sidebar
+    # Sidebar status
     st.sidebar.markdown("### System Status")
-    db_status = st.sidebar.empty()
-    db_status.warning("⚠️ Database connection deferred for stability")
+    st.sidebar.warning("⚠️ Database connection deferred for stability")
     
-    # Main content area
-    st.write("Welcome to the Alumni Disaster Monitor application!")
-    st.write("This app helps track natural disasters near alumni locations.")
+    # Main content
+    st.write("Welcome to the Alumni Disaster Monitor!")
     
-    # Debug secrets loading
+    # Debugging (only if needed)
     if st.session_state.show_debugging:
-        with st.expander("Secrets Debugging", expanded=True):
-            # Check file existence
-            import os
-            streamlit_dir = ".streamlit"
-            secrets_file = os.path.join(streamlit_dir, "secrets.toml")
-            
-            file_exists = os.path.exists(secrets_file)
-            st.write(f"1. Secrets file exists at {secrets_file}: {file_exists}")
-            
-            # Check if st.secrets is working
-            st.write("2. st.secrets content:")
-            try:
-                # Print all secret keys
-                if hasattr(st, "secrets"):
-                    all_keys = dir(st.secrets)
-                    secret_keys = [k for k in all_keys if not k.startswith('_')]
-                    st.write(f"Available keys in st.secrets: {secret_keys}")
-                    
-                    # Check for postgres specifically
-                    if "postgres" in secret_keys:
-                        st.write("'postgres' key exists in secrets")
-                        if hasattr(st.secrets.postgres, "url"):
-                            masked_url = "...@" + st.secrets.postgres.url.split("@")[-1]
-                            st.write(f"Database URL found: {masked_url}")
-                        else:
-                            st.write("No 'url' in postgres section")
-                else:
-                    st.write("st.secrets does not exist")
-            except Exception as e:
-                st.write(f"Error accessing secrets: {str(e)}")
-            
-            # Environment vars
-            st.write("3. Environment variables:")
-            env_vars = {k: "[MASKED]" if "KEY" in k or "URL" in k or "TOKEN" in k else v 
-                      for k, v in os.environ.items() 
-                      if "POSTGRES" in k or "NASA" in k}
-            st.write(env_vars)
+        show_debug_info()
     
-    # Add button to attempt safe connection
-    if st.button("Test Database Connection", key="test_db_conn"):
-        try:
-            # Try environment variables first (for Hugging Face)
-            postgres_url = os.environ.get("POSTGRES_URL")
+    # Database test button
+    if st.button("Test Database Connection", key="test_db"):
+        db_url = get_db_url()
+        if not db_url:
+            st.error("No database URL found in environment or secrets")
             
-            # If not found in environment, try Streamlit secrets (for local development)
-            if not postgres_url and hasattr(st, "secrets") and "postgres" in st.secrets:
-                postgres_url = st.secrets.postgres.url
-                
-            if postgres_url:
-                # Only show masked version for security
-                masked_url = "...@" + postgres_url.split("@")[-1] if "@" in postgres_url else "[database url found but masked]"
-                st.success(f"✅ Found database configuration ending with: {masked_url}")
-                
-                # Attempt connection
-                st.info("Attempting connection...")
-                from sqlalchemy import create_engine, text
-                
-                engine = create_engine(
-                    postgres_url,
-                    pool_pre_ping=True,
-                    connect_args={"connect_timeout": 5}  # 5 second timeout
-                )
-                
-                with engine.connect() as conn:
-                    # Try to count alumni records
-                    try:
-                        result = conn.execute(text("SELECT COUNT(*) FROM alumni"))
-                        count = result.scalar()
-                        st.success(f"✅ Database connection successful! Found {count} alumni records.")
-                        
-                        # Check for records with valid coordinates
-                        valid_coords_result = conn.execute(text("SELECT COUNT(*) FROM alumni WHERE latitude != 0 OR longitude != 0"))
-                        valid_coords_count = valid_coords_result.scalar()
-                        st.info(f"Records with valid coordinates: {valid_coords_count} of {count} ({valid_coords_count/count*100:.1f}%)")
-                    except Exception as e:
-                        st.error(f"Error querying alumni table: {str(e)}")
-            else:
-                st.error("No database URL found in environment variables or secrets")
-        except Exception as e:
-            st.error(f"Connection error: {str(e)}")
-    
-    # Add database diagnosis button
-    if st.button("Diagnose Data Loading", key="diagnose_data"):
-        st.info("Testing data loading pipeline...")
-        from utils.data_loader import load_alumni_data
-        
-        # Time the data loading
-        import time
-        start_time = time.time()
-        df, metadata = load_alumni_data()
-        end_time = time.time()
-        
-        # Show results
-        if df is not None:
-            st.success(f"✅ Data loaded in {end_time - start_time:.2f} seconds")
-            st.json(metadata)
-            
-            # Show data source info
-            st.info(f"Data source: {metadata.get('source', 'unknown')}")
-            st.info(f"Total records: {metadata.get('total_records', 0)}")
-            
-            # Show valid coordinates info
-            valid_coords = df['Has_Valid_Coords'].sum() if 'Has_Valid_Coords' in df.columns else "Unknown"
-            st.info(f"Records with valid coordinates: {valid_coords}")
-            
-            # Show the first few records
-            st.subheader("Sample Data")
-            st.dataframe(df.head())
         else:
-            st.error("❌ Data loading failed")
+            from sqlalchemy import text
+            st.success(f"Found database configuration: {mask_url(db_url)}")
+            
+            try:
+                engine = create_db_engine(db_url)
+                with engine.connect() as conn:
+                    result = conn.execute(text("SELECT COUNT(*) FROM alumni"))
+                    count = result.scalar()
+                    st.success(f"✅ Connected! Found {count} alumni records")
+            except Exception as e:
+                st.error(f"Connection error: {str(e)}")
     
-    # Function to load the full application
-    def load_full_app():
+    # Diagnosis button
+    if st.button("Diagnose Data Loading", key="diagnose"):
+        run_database_diagnosis()
+    
+    # Full app button
+    if st.button("Load Full Application", key="load_app"):
         st.session_state.app_loaded = True
-        # Hide debugging info once full app is loaded
         st.session_state.show_debugging = False
         st.rerun()
-    
-    # Add button to enable full application mode
-    st.button("Load Full Application", key="load_full_app", on_click=load_full_app)
 
+# FULL APPLICATION MODE
 else:
-    # FULL APPLICATION MODE
     try:
-        # Import required modules
+        # Import modules
         import pandas as pd
-        import time
-        from utils.data_loader import load_alumni_data
         from utils.disaster_monitor import fetch_eonet_data, filter_disasters_by_type
         from utils.map_handler import create_map, calculate_proximity_alerts
-        import folium
         from streamlit_folium import st_folium
         
-        # Sidebar filters
-        st.sidebar.markdown("### Disaster Filters")
-        disaster_types = ["Wildfires", "Severe Storms", "Volcanoes", "Earthquakes"]
-        selected_types = st.sidebar.multiselect(
-            "Select Disaster Types",
-            disaster_types,
-            default=disaster_types
-        )
-        proximity_threshold = st.sidebar.slider(
-            "Proximity Alert Threshold (km)",
-            min_value=50, max_value=1000, value=200, step=50
-        )
+        # Sidebar
+        with st.sidebar:
+            st.markdown("### Disaster Filters")
+            
+            disaster_types = ["Wildfires", "Severe Storms", "Volcanoes", "Earthquakes"]
+            selected_types = st.multiselect("Select Types", disaster_types, default=disaster_types)
+            
+            proximity_threshold = st.slider("Alert Threshold (km)", 50, 1000, 200, 50)
+            
+            if st.button("◀️ Simple Mode", key="simple_btn"):
+                st.session_state.app_loaded = False
+                st.rerun()
         
-        # Add option to go back to simple mode
-        if st.sidebar.button("Return to Simple Mode", key="return_simple_sidebar"):
-            st.session_state.app_loaded = False
-            st.session_state.show_debugging = True
-            st.rerun()
-        
-        # Main application
+        # Main content
         col1, col2 = st.columns([3, 1])
         
+        # Map column
         with col1:
-            st.subheader("Disaster Monitoring Map")
+            st.subheader("🗺️ Disaster Monitoring Map")
             
-            # Load data with spinner
-            with st.spinner("Loading alumni data..."):
+            # Load data
+            with st.spinner("Loading data..."):
                 alumni_df, metadata = load_alumni_data()
-                
-                # Add data diagnostics
-                if metadata:
-                    st.success(f"Loaded {metadata.get('total_records', 0)} total records from {metadata.get('source', 'unknown')}")
-                    valid_count = alumni_df['Has_Valid_Coords'].sum() if 'Has_Valid_Coords' in alumni_df.columns else "Unknown"
-                    st.info(f"Records with valid coordinates: {valid_count}")
-                    
-                    # Show sample records
-                    with st.expander("Sample Data (First 5 Records)"):
-                        st.dataframe(alumni_df.head())
-            
-            with st.spinner("Fetching disaster data..."):
                 disaster_data = fetch_eonet_data()
                 filtered_disasters = filter_disasters_by_type(disaster_data, selected_types) if disaster_data else []
-                if filtered_disasters:
-                    st.success(f"Found {len(filtered_disasters)} disasters matching selected types")
-                else:
-                    st.info("No disasters found for the selected types")
             
-            # Create and display map
+            # Show data info  
+            if metadata:
+                st.success(f"Loaded {metadata.get('total_records', 0)} records from {metadata.get('source')}")
+            
+            # Create map if data is available
             if alumni_df is not None and not alumni_df.empty and filtered_disasters:
                 map_obj = create_map(alumni_df, filtered_disasters)
-                st.info("Blue: Alumni locations | Red: Natural disasters")
                 st_folium(map_obj, width=800, height=600)
-            elif alumni_df is None or alumni_df.empty:
-                st.error("No alumni data available. Please check your database connection.")
             else:
-                st.warning("No disaster data to display on the map.")
+                st.warning("Insufficient data to display map")
         
+        # Alert column  
         with col2:
-            st.subheader("Proximity Alerts")
+            st.subheader("⚠️ Proximity Alerts")
             
             if alumni_df is not None and not alumni_df.empty and filtered_disasters:
                 alerts = calculate_proximity_alerts(alumni_df, filtered_disasters, proximity_threshold)
                 
                 if alerts:
-                    st.warning(f"⚠️ {len(alerts)} alerts within {proximity_threshold}km")
+                    st.warning(f"{len(alerts)} alerts within {proximity_threshold}km")
                     for alert in alerts:
                         with st.expander(f"🚨 {alert['alumni_name']} - {alert['disaster_type']}"):
                             st.write(f"Distance: {alert['distance']} km")
                             st.write(f"Location: {alert['location']}")
                             st.write(f"Disaster: {alert['disaster_description']}")
                 else:
-                    st.success("✅ No alerts within the specified threshold")
-            else:
-                st.info("Data unavailable for alerts")
+                    st.success("No alerts within the threshold")
             
-            # Show data summary
-            if metadata:
-                st.subheader("Data Summary")
-                st.info(f"""
-                📊 Alumni Data: {metadata.get('total_records', 0)} total records
-                Source: {metadata.get('source', 'unknown')}
-                """)
-    
     except Exception as e:
-        st.error(f"Error in full application: {str(e)}")
-        import traceback
+        st.error(f"Application error: {str(e)}")
         with st.expander("Error Details"):
+            import traceback
             st.code(traceback.format_exc())
         
-        # Add button to return to simple mode
-        if st.button("Return to Simple Mode", key="return_simple_error"):
+        if st.button("Return to Simple Mode", key="error_return"):
             st.session_state.app_loaded = False
             st.rerun()
