@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 import logging
+import time
 from utils.data_loader import load_alumni_data
 from utils.disaster_monitor import fetch_eonet_data, filter_disasters_by_type
 from utils.map_handler import create_map, calculate_proximity_alerts
@@ -42,13 +43,18 @@ def main():
     
     # Load alumni data
     with st.spinner('Loading alumni data...'):
-        alumni_df, metadata = load_alumni_data()
-        
-        if alumni_df is None or alumni_df.empty:
-            st.error("Could not load alumni data. Please check data sources.")
-            return
+        try:
+            alumni_df, metadata = load_alumni_data()
             
-        show_data_summary(alumni_df, metadata)
+            if alumni_df is None or alumni_df.empty:
+                st.error("Could not load alumni data. Please check data sources.")
+                return
+                
+            show_data_summary(alumni_df, metadata)
+        except Exception as e:
+            logger.error(f"Error loading alumni data: {e}")
+            st.error(f"Error loading data: {e}")
+            return
     
     # Fetch disaster data
     with st.spinner('Fetching disaster data...'):
@@ -78,40 +84,29 @@ def show_db_status():
     
     try:
         from utils.database import get_engine
-        import threading
         
-        # Set a flag for async checking
-        db_status = {"connected": False, "count": 0, "error": None}
+        # Set a timeout for database connection
+        start_time = time.time()
+        engine = get_engine()
         
-        # Function to check DB in background
-        def check_db_connection():
+        if engine is not None:
             try:
-                engine = get_engine()  # Lazy initialization
-                if engine is not None:
-                    with engine.connect() as conn:
-                        result = conn.execute(text("SELECT COUNT(*) FROM alumni"))
-                        db_status["count"] = result.scalar()
-                        db_status["connected"] = True
+                # Set a timeout for query execution
+                with engine.connect() as conn:
+                    result = conn.execute(text("SELECT COUNT(*) FROM alumni"))
+                    count = result.scalar()
+                    status_placeholder.success("✅ Connected to Database")
+                    st.sidebar.info(f"📊 {count} alumni records")
             except Exception as e:
-                db_status["error"] = str(e)
-        
-        # Start a thread with timeout
-        thread = threading.Thread(target=check_db_connection)
-        thread.daemon = True
-        thread.start()
-        thread.join(timeout=3)  # Wait max 3 seconds
-        
-        # Check result
-        if db_status["connected"]:
-            status_placeholder.success("✅ Connected to Database")
-            st.sidebar.info(f"📊 {db_status['count']} alumni records")
+                status_placeholder.warning("⚠️ Database query error")
+                st.sidebar.info("Using CSV fallback")
+                logger.error(f"Database query error: {e}")
         else:
-            status_placeholder.warning("⚠️ Using CSV fallback")
-            if db_status["error"]:
-                st.sidebar.error(f"Error: {db_status['error']}")
+            status_placeholder.warning("⚠️ Using CSV fallback - No engine")
     except Exception as e:
-        status_placeholder.error(f"❌ Database error: {str(e)}")
+        status_placeholder.error(f"❌ Database error")
         st.sidebar.info("Using CSV fallback")
+        logger.error(f"Database connection error: {e}")
 
 def show_data_summary(alumni_df, metadata):
     """Display data quality summary."""
@@ -137,9 +132,13 @@ def display_map_and_alerts(alumni_df, disasters, threshold_km):
     
     with col1:
         st.subheader("Disaster Monitoring Map")
-        map_obj = create_map(alumni_df, disasters)
-        st.info("Blue: Alumni locations | Red: Natural disasters")
-        st_folium(map_obj, width=800)
+        try:
+            map_obj = create_map(alumni_df, disasters)
+            st.info("Blue: Alumni locations | Red: Natural disasters")
+            st_folium(map_obj, width=800)
+        except Exception as e:
+            logger.error(f"Error creating map: {e}")
+            st.error(f"Error creating map: {e}")
     
     with col2:
         display_alerts(alumni_df, disasters, threshold_km)
@@ -152,26 +151,43 @@ def display_alerts(alumni_df, disasters, threshold_km):
     if not disasters:
         st.info("No disaster data available for alerts")
         return
-        
-    alerts = calculate_proximity_alerts(alumni_df, disasters, threshold_km)
     
-    if alerts:
-        st.warning(f"⚠️ {len(alerts)} alerts within {threshold_km}km")
-        for alert in alerts:
-            with st.expander(f"🚨 {alert['alumni_name']} - {alert['disaster_type']}"):
-                st.write(f"Distance: {alert['distance']} km")
-                st.write(f"Location: {alert['location']}")
-                st.write(f"Disaster: {alert['disaster_description']}")
-    else:
-        st.info("✅ No alerts within the specified threshold")
+    try:    
+        alerts = calculate_proximity_alerts(alumni_df, disasters, threshold_km)
+        
+        if alerts:
+            st.warning(f"⚠️ {len(alerts)} alerts within {threshold_km}km")
+            for alert in alerts:
+                with st.expander(f"🚨 {alert['alumni_name']} - {alert['disaster_type']}"):
+                    st.write(f"Distance: {alert['distance']} km")
+                    st.write(f"Location: {alert['location']}")
+                    st.write(f"Disaster: {alert['disaster_description']}")
+        else:
+            st.info("✅ No alerts within the specified threshold")
+    except Exception as e:
+        logger.error(f"Error calculating alerts: {e}")
+        st.error(f"Error calculating alerts: {e}")
 
 def display_alumni_table(alumni_df):
     """Display alumni data table."""
     st.subheader("Alumni Overview")
-    st.dataframe(
-        alumni_df[['Name', 'Location', 'Latitude', 'Longitude']].dropna(),
-        hide_index=True
-    )
+    try:
+        # Make sure required columns exist
+        required_cols = ['Name', 'Location', 'Latitude', 'Longitude']
+        missing_cols = [col for col in required_cols if col not in alumni_df.columns]
+        
+        if missing_cols:
+            st.warning(f"Missing columns in data: {', '.join(missing_cols)}")
+            valid_cols = [col for col in required_cols if col in alumni_df.columns]
+            if valid_cols:
+                st.dataframe(alumni_df[valid_cols].dropna(), hide_index=True)
+            else:
+                st.error("Cannot display alumni table: missing required columns")
+        else:
+            st.dataframe(alumni_df[required_cols].dropna(), hide_index=True)
+    except Exception as e:
+        logger.error(f"Error displaying alumni table: {e}")
+        st.error(f"Error displaying alumni table: {e}")
 
 if __name__ == "__main__":
     main()

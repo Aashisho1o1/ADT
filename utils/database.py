@@ -38,6 +38,10 @@ class DisasterEvent(Base):
     start_date = Column(DateTime)
     end_date = Column(DateTime, nullable=True)
 
+# Global variables
+engine = None
+SessionLocal = None
+
 # Database connection
 def get_connection_string():
     """Get database connection string with proper fallbacks."""
@@ -49,10 +53,6 @@ def get_connection_string():
     
     # Try environment variable fallback
     return os.environ.get("DATABASE_URL")
-
-# Global variables
-engine = None
-SessionLocal = None
 
 def get_engine():
     """Lazy initialize database engine only when needed"""
@@ -67,37 +67,30 @@ def get_engine():
                     pool_recycle=1800,
                     connect_args={"connect_timeout": 10}
                 )
+                logger.info("Database engine initialized")
             except Exception as e:
-                logger.error(f"Database connection error: {e}")
+                logger.error(f"Database engine initialization error: {e}")
     return engine
 
-# Initialize database connection
-try:
-    connection_string = get_connection_string()
-    if connection_string:
-        engine = create_engine(
-            connection_string, 
-            pool_pre_ping=True,         # Check connection before using
-            pool_recycle=1800,          # Recycle connections after 30 min
-            connect_args={"connect_timeout": 10}  # 10 second connection timeout
-        )
-        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-        logger.info("Database connection initialized")
-    else:
-        logger.warning("No database connection string found")
-        engine, SessionLocal = None, None
-except Exception as e:
-    logger.error(f"Database connection error: {e}")
-    engine, SessionLocal = None, None
+def get_session_maker():
+    """Get session maker with lazy initialization"""
+    global SessionLocal
+    if SessionLocal is None:
+        engine = get_engine()
+        if engine is not None:
+            SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    return SessionLocal
 
 @contextmanager
 def get_db_session():
     """Context manager for database sessions."""
-    if SessionLocal is None:
+    session_maker = get_session_maker()
+    if session_maker is None:
+        logger.warning("No session maker available")
         yield None
         return
         
-    session = SessionLocal()
+    session = session_maker()
     try:
         yield session
         session.commit()
@@ -110,6 +103,7 @@ def get_db_session():
 
 def init_database():
     """Initialize database tables."""
+    engine = get_engine()
     if engine is not None:
         Base.metadata.create_all(bind=engine)
         return True
@@ -118,11 +112,12 @@ def init_database():
 # Legacy generator for compatibility
 def get_db():
     """Session generator for backwards compatibility."""
-    if SessionLocal is None:
+    session_maker = get_session_maker()
+    if session_maker is None:
         yield None
         return
         
-    session = SessionLocal()
+    session = session_maker()
     try:
         yield session
     finally:
@@ -138,4 +133,3 @@ empty_df = pd.DataFrame({
     'Longitude': [0],
     'Has_Valid_Coords': [False]
 })
-return empty_df, {"total_records": 0, "invalid_coords": 0, "source": "default"}
