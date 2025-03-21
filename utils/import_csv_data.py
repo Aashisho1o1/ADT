@@ -39,4 +39,4 @@ def import_from_csv(csv_path):
     print(f"Successfully imported {len(alumni_data)} records")
 
 if __name__ == "__main__":
-    import_from_csv('assets/combo 3.csv')  # Updated path to your actual CSV file 
+    import_from_csv('assets/combo.csv')  # Updated path to your actual CSV file 
