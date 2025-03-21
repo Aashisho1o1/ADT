@@ -6,7 +6,6 @@ from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import streamlit as st
-import pandas as pd
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -122,14 +121,3 @@ def get_db():
         yield session
     finally:
         session.close()
-
-# No CSV files found
-logger.error("No CSV files found")
-# Return an empty DataFrame with required columns
-empty_df = pd.DataFrame({
-    'Name': ['Sample User'],
-    'Location': ['Default Location'],
-    'Latitude': [0],
-    'Longitude': [0],
-    'Has_Valid_Coords': [False]
-})
