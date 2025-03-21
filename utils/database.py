@@ -1,20 +1,22 @@
+"""Database connection and model definitions for the Alumni Disaster Monitor app."""
 import os
-from dotenv import load_dotenv
-from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, ForeignKey
+from contextlib import contextmanager
+import logging
+from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.orm import sessionmaker
 import streamlit as st
-import pandas as pd
-import os.path
 
-# Load environment variables for local development
-load_dotenv()
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Create Base class
 Base = declarative_base()
 
-# Alumni model definition
+# Model definitions
 class Alumni(Base):
+    """Alumni database model."""
     __tablename__ = "alumni"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
@@ -23,45 +25,9 @@ class Alumni(Base):
     longitude = Column(Float, nullable=False)
     last_updated = Column(DateTime)
 
-# Try to get database URL from Streamlit secrets first, then environment
-def get_connection_string():
-    try:
-        return st.secrets["postgres"]["url"]
-    except:
-        # Fallback for local development (use environment variables)
-        return os.getenv("DATABASE_URL")
-
-# Engine and session factory
-try:
-    # Try to create database connection
-    db_url = get_connection_string()
-    if db_url:
-        engine = create_engine(db_url)
-        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-        
-        def get_db():
-            db = SessionLocal()
-            try:
-                yield db
-            finally:
-                db.close()
-    else:
-        # Setup dummy placeholders if no database connection
-        engine = None
-        SessionLocal = None
-        def get_db():
-            yield None
-            
-except Exception as e:
-    st.warning(f"Database connection failed: {str(e)}. Using CSV fallback.")
-    engine = None
-    SessionLocal = None
-    def get_db():
-        yield None
-
 class DisasterEvent(Base):
+    """Disaster event database model."""
     __tablename__ = "disaster_events"
-
     id = Column(Integer, primary_key=True, index=True)
     eonet_id = Column(String, unique=True, index=True)
     title = Column(String, nullable=False)
@@ -71,11 +37,71 @@ class DisasterEvent(Base):
     start_date = Column(DateTime)
     end_date = Column(DateTime, nullable=True)
 
-def init_db():
-    """Initialize the database tables"""
+# Database connection
+def get_connection_string():
+    """Get database connection string with proper fallbacks."""
+    # Try Streamlit secrets first
     try:
-        Base.metadata.create_all(bind=engine)
-        st.success("Database initialized successfully")
+        return st.secrets["postgres"]["url"]
     except Exception as e:
-        st.error(f"Error initializing database: {str(e)}")
-        raise e
+        logger.info(f"Streamlit secrets not available: {e}")
+    
+    # Try environment variable fallback
+    return os.environ.get("DATABASE_URL")
+
+# Initialize database connection
+try:
+    connection_string = get_connection_string()
+    if connection_string:
+        engine = create_engine(
+            connection_string, 
+            pool_pre_ping=True,         # Check connection before using
+            pool_recycle=1800,          # Recycle connections after 30 min
+            connect_args={"connect_timeout": 10}  # 10 second connection timeout
+        )
+        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+        logger.info("Database connection initialized")
+    else:
+        logger.warning("No database connection string found")
+        engine, SessionLocal = None, None
+except Exception as e:
+    logger.error(f"Database connection error: {e}")
+    engine, SessionLocal = None, None
+
+@contextmanager
+def get_db_session():
+    """Context manager for database sessions."""
+    if SessionLocal is None:
+        yield None
+        return
+        
+    session = SessionLocal()
+    try:
+        yield session
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        logger.error(f"Database session error: {e}")
+        raise
+    finally:
+        session.close()
+
+def init_database():
+    """Initialize database tables."""
+    if engine is not None:
+        Base.metadata.create_all(bind=engine)
+        return True
+    return False
+
+# Legacy generator for compatibility
+def get_db():
+    """Session generator for backwards compatibility."""
+    if SessionLocal is None:
+        yield None
+        return
+        
+    session = SessionLocal()
+    try:
+        yield session
+    finally:
+        session.close()
