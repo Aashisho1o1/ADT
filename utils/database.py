@@ -6,6 +6,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import streamlit as st
+import pandas as pd
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -48,6 +49,27 @@ def get_connection_string():
     
     # Try environment variable fallback
     return os.environ.get("DATABASE_URL")
+
+# Global variables
+engine = None
+SessionLocal = None
+
+def get_engine():
+    """Lazy initialize database engine only when needed"""
+    global engine
+    if engine is None:
+        connection_string = get_connection_string()
+        if connection_string:
+            try:
+                engine = create_engine(
+                    connection_string,
+                    pool_pre_ping=True,
+                    pool_recycle=1800,
+                    connect_args={"connect_timeout": 10}
+                )
+            except Exception as e:
+                logger.error(f"Database connection error: {e}")
+    return engine
 
 # Initialize database connection
 try:
@@ -105,3 +127,15 @@ def get_db():
         yield session
     finally:
         session.close()
+
+# No CSV files found
+logger.error("No CSV files found")
+# Return an empty DataFrame with required columns
+empty_df = pd.DataFrame({
+    'Name': ['Sample User'],
+    'Location': ['Default Location'],
+    'Latitude': [0],
+    'Longitude': [0],
+    'Has_Valid_Coords': [False]
+})
+return empty_df, {"total_records": 0, "invalid_coords": 0, "source": "default"}

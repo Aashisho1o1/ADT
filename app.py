@@ -72,19 +72,45 @@ def show_db_status():
     """Display database connection status in sidebar."""
     st.sidebar.markdown("### System Status")
     
+    # Start with a placeholder
+    status_placeholder = st.sidebar.empty()
+    status_placeholder.info("Checking database connection...")
+    
     try:
-        from utils.database import engine
+        from utils.database import get_engine
+        import threading
         
-        if engine is not None:
-            with engine.connect() as conn:
-                result = conn.execute(text("SELECT COUNT(*) FROM alumni"))
-                count = result.scalar()
-                st.sidebar.success("✅ Connected to Database")
-                st.sidebar.info(f"📊 {count} alumni records")
+        # Set a flag for async checking
+        db_status = {"connected": False, "count": 0, "error": None}
+        
+        # Function to check DB in background
+        def check_db_connection():
+            try:
+                engine = get_engine()  # Lazy initialization
+                if engine is not None:
+                    with engine.connect() as conn:
+                        result = conn.execute(text("SELECT COUNT(*) FROM alumni"))
+                        db_status["count"] = result.scalar()
+                        db_status["connected"] = True
+            except Exception as e:
+                db_status["error"] = str(e)
+        
+        # Start a thread with timeout
+        thread = threading.Thread(target=check_db_connection)
+        thread.daemon = True
+        thread.start()
+        thread.join(timeout=3)  # Wait max 3 seconds
+        
+        # Check result
+        if db_status["connected"]:
+            status_placeholder.success("✅ Connected to Database")
+            st.sidebar.info(f"📊 {db_status['count']} alumni records")
         else:
-            st.sidebar.warning("⚠️ Using CSV fallback")
+            status_placeholder.warning("⚠️ Using CSV fallback")
+            if db_status["error"]:
+                st.sidebar.error(f"Error: {db_status['error']}")
     except Exception as e:
-        st.sidebar.error(f"❌ Database error: {str(e)}")
+        status_placeholder.error(f"❌ Database error: {str(e)}")
         st.sidebar.info("Using CSV fallback")
 
 def show_data_summary(alumni_df, metadata):
