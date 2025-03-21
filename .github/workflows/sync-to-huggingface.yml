@@ -4,30 +4,38 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  sync:
+  sync-to-huggingface:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Check out the repository
-      uses: actions/checkout@v2
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
-
-    - name: Sync to Hugging Face
-      env:
-        HF_TOKEN: ${{ secrets.HF_TOKEN }}
-      run: |
-        if [ -z "$HF_TOKEN" ]; then
-          echo "Error: HF_TOKEN is empty. Please check your secrets configuration."
-          exit 1
-        fi
-        # Your sync command here
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      - name: Debug info
+        run: |
+          echo "Repository contents:"
+          ls -la
+      
+      - name: Push to Hugging Face
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          if [ -z "$HF_TOKEN" ]; then
+            echo "Error: HF_TOKEN is empty. Please check your secrets configuration."
+            exit 1
+          fi
+          
+          echo "Setting up Git credentials..."
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          
+          echo "Setting up Hugging Face remote..."
+          # Using authentication in URL format correctly
+          git remote add hf "https://Aashisho1o1:${HF_TOKEN}@huggingface.co/spaces/Aashisho1o1/ADT"
+          
+          echo "Pushing to Hugging Face..."
+          git push --force hf main
