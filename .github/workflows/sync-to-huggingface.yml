@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:  # Allows manual triggering
+  workflow_dispatch:
 
 jobs:
   sync-to-huggingface:
@@ -15,29 +15,27 @@ jobs:
         with:
           fetch-depth: 0
       
-      - name: Debug Environment
+      - name: Debug info
         run: |
-          echo "GitHub workspace: $GITHUB_WORKSPACE"
           echo "Repository contents:"
           ls -la
-      
-      - name: Setup Git
-        run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
       
       - name: Push to Hugging Face
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          echo "Setting up Hugging Face remote..."
-          git remote add hf https://${{ secrets.HF_TOKEN }}@huggingface.co/spaces/Aashisho1o1/ADT
-          
-          echo "Pushing to Hugging Face (with verbose output)..."
-          git push --verbose --force hf main || {
-            echo "Push failed. Checking if remote exists..."
-            git remote -v
-            echo "Checking token format (length only, not showing actual token)..."
-            echo "Token length: ${#HF_TOKEN}"
+          if [ -z "$HF_TOKEN" ]; then
+            echo "Error: HF_TOKEN is empty. Please check your secrets configuration."
             exit 1
-          }
+          fi
+          
+          echo "Setting up Git credentials..."
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          
+          echo "Setting up Hugging Face remote..."
+          # Using authentication in URL format correctly
+          git remote add hf "https://Aashisho1o1:${HF_TOKEN}@huggingface.co/spaces/Aashisho1o1/ADT"
+          
+          echo "Pushing to Hugging Face..."
+          git push --force hf main
