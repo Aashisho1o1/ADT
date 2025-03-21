@@ -76,7 +76,7 @@ if not st.session_state.app_loaded:
             st.write(env_vars)
     
     # Add button to attempt safe connection
-    if st.button("Test Database Connection"):
+    if st.button("Test Database Connection", key="test_db_conn"):
         try:
             # Try environment variables first (for Hugging Face)
             postgres_url = os.environ.get("POSTGRES_URL")
@@ -119,7 +119,7 @@ if not st.session_state.app_loaded:
             st.error(f"Connection error: {str(e)}")
     
     # Add database diagnosis button
-    if st.button("Diagnose Data Loading"):
+    if st.button("Diagnose Data Loading", key="diagnose_data"):
         st.info("Testing data loading pipeline...")
         from utils.data_loader import load_alumni_data
         
@@ -156,7 +156,7 @@ if not st.session_state.app_loaded:
         st.rerun()
     
     # Add button to enable full application mode
-    st.button("Load Full Application", on_click=load_full_app)
+    st.button("Load Full Application", key="load_full_app", on_click=load_full_app)
 
 else:
     # FULL APPLICATION MODE
@@ -184,7 +184,7 @@ else:
         )
         
         # Add option to go back to simple mode
-        if st.sidebar.button("Return to Simple Mode"):
+        if st.sidebar.button("Return to Simple Mode", key="return_simple_sidebar"):
             st.session_state.app_loaded = False
             st.session_state.show_debugging = True
             st.rerun()
@@ -260,6 +260,6 @@ else:
             st.code(traceback.format_exc())
         
         # Add button to return to simple mode
-        if st.button("Return to Simple Mode"):
+        if st.button("Return to Simple Mode", key="return_simple_error"):
             st.session_state.app_loaded = False
             st.rerun()

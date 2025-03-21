@@ -40,15 +40,24 @@ def load_from_database():
             invalid_coords = 0
             
             for record in records:
-                valid_coords = record.latitude != 0 or record.longitude != 0
+                # Ensure coordinates are floats
+                try:
+                    lat = float(record.latitude)
+                    lon = float(record.longitude)
+                    valid_coords = lat != 0 or lon != 0
+                except (ValueError, TypeError):
+                    lat = 0.0
+                    lon = 0.0
+                    valid_coords = False
+                    
                 if not valid_coords:
                     invalid_coords += 1
                     
                 data.append({
                     'Name': record.name,
                     'Location': record.location,
-                    'Latitude': record.latitude,
-                    'Longitude': record.longitude,
+                    'Latitude': lat,  # Store as float
+                    'Longitude': lon,  # Store as float
                     'Has_Valid_Coords': valid_coords
                 })
                 
@@ -89,28 +98,50 @@ def load_from_csv():
             # Process different CSV formats
             if 'lat' in df.columns and 'lon' in df.columns:
                 # Process combo3.csv format
-                alumni_data = pd.DataFrame({
-                    'Name': df['original_First Name'].fillna('') + ' ' + df['original_Prim_Last'].fillna(''),
-                    'Location': df.apply(
-                        lambda row: f"{row.get('original_City', '')} {row.get('original_State', '')} {row.get('original_Country', '')}".strip(),
-                        axis=1
-                    ),
-                    'Latitude': df['lat'],
-                    'Longitude': df['lon'],
-                    'Has_Valid_Coords': (df['lat'] != 0) & (df['lon'] != 0)
-                })
+                try:
+                    # Convert coordinates to numeric first
+                    df['lat'] = pd.to_numeric(df['lat'], errors='coerce')
+                    df['lon'] = pd.to_numeric(df['lon'], errors='coerce')
+                    
+                    alumni_data = pd.DataFrame({
+                        'Name': df['original_First Name'].fillna('') + ' ' + df['original_Prim_Last'].fillna(''),
+                        'Location': df.apply(
+                            lambda row: f"{row.get('original_City', '')} {row.get('original_State', '')} {row.get('original_Country', '')}".strip(),
+                            axis=1
+                        ),
+                        'Latitude': df['lat'].astype(float),
+                        'Longitude': df['lon'].astype(float),
+                        'Has_Valid_Coords': (~df['lat'].isna() & ~df['lon'].isna() & 
+                                           (df['lat'] != 0) & (df['lon'] != 0))
+                    })
+                except Exception as e:
+                    logger.error(f"Error processing CSV data: {e}")
+                    # Create an empty dataframe with the right structure
+                    alumni_data = pd.DataFrame(columns=['Name', 'Location', 'Latitude', 'Longitude', 'Has_Valid_Coords'])
             else:
                 # Handle standard format
-                alumni_data = df
+                alumni_data = df.copy()
+                
+                # Convert latitude and longitude to numeric
+                if 'Latitude' in alumni_data.columns:
+                    alumni_data['Latitude'] = pd.to_numeric(alumni_data['Latitude'], errors='coerce').fillna(0.0)
+                if 'Longitude' in alumni_data.columns:
+                    alumni_data['Longitude'] = pd.to_numeric(alumni_data['Longitude'], errors='coerce').fillna(0.0)
+                    
                 if 'Has_Valid_Coords' not in alumni_data:
-                    alumni_data['Has_Valid_Coords'] = True
+                    alumni_data['Has_Valid_Coords'] = (alumni_data['Latitude'] != 0) & (alumni_data['Longitude'] != 0)
                     
             # Clean up data
             alumni_data = alumni_data.fillna('')
             
+            # Make sure coordinates are numeric
+            alumni_data['Latitude'] = pd.to_numeric(alumni_data['Latitude'], errors='coerce').fillna(0.0)
+            alumni_data['Longitude'] = pd.to_numeric(alumni_data['Longitude'], errors='coerce').fillna(0.0)
+            
             # Count invalid coordinates
             invalid_coords = len(alumni_data) - alumni_data['Has_Valid_Coords'].sum()
             
+            logger.info(f"Loaded {len(alumni_data)} records from CSV with {invalid_coords} invalid coordinates")
             return alumni_data, {
                 "total_records": len(alumni_data),
                 "invalid_coords": invalid_coords,
@@ -122,8 +153,8 @@ def load_from_csv():
         empty_df = pd.DataFrame({
             'Name': ['Sample User'],
             'Location': ['Default Location'],
-            'Latitude': [0],
-            'Longitude': [0],
+            'Latitude': [0.0],  # Explicit float
+            'Longitude': [0.0],  # Explicit float
             'Has_Valid_Coords': [False]
         })
         return empty_df, {
@@ -138,8 +169,8 @@ def load_from_csv():
         empty_df = pd.DataFrame({
             'Name': ['Sample User'],
             'Location': ['Error Location'],
-            'Latitude': [0],
-            'Longitude': [0],
+            'Latitude': [0.0],  # Explicit float
+            'Longitude': [0.0],  # Explicit float
             'Has_Valid_Coords': [False]
         })
         return empty_df, {
