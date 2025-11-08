@@ -19,11 +19,11 @@ class Alumni(Base):
     """Alumni database model."""
     __tablename__ = "alumni"
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    location = Column(String, nullable=False)
-    latitude = Column(Float, nullable=False)
-    longitude = Column(Float, nullable=False)
-    last_updated = Column(DateTime)
+    name = Column(String, nullable=False, index=True)
+    location = Column(String, nullable=False, index=True)
+    latitude = Column(Float, nullable=False, index=True)
+    longitude = Column(Float, nullable=False, index=True)
+    last_updated = Column(DateTime, index=True)
 
 class DisasterEvent(Base):
     """Disaster event database model."""
@@ -31,11 +31,11 @@ class DisasterEvent(Base):
     id = Column(Integer, primary_key=True, index=True)
     eonet_id = Column(String, unique=True, index=True)
     title = Column(String, nullable=False)
-    disaster_type = Column(String, nullable=False)
-    latitude = Column(Float, nullable=False)
-    longitude = Column(Float, nullable=False)
-    start_date = Column(DateTime)
-    end_date = Column(DateTime, nullable=True)
+    disaster_type = Column(String, nullable=False, index=True)
+    latitude = Column(Float, nullable=False, index=True)
+    longitude = Column(Float, nullable=False, index=True)
+    start_date = Column(DateTime, index=True)
+    end_date = Column(DateTime, nullable=True, index=True)
 
 # Global variables
 engine = None
@@ -64,6 +64,8 @@ def get_engine():
                     connection_string,
                     pool_pre_ping=True,
                     pool_recycle=1800,
+                    pool_size=10,
+                    max_overflow=20,
                     connect_args={"connect_timeout": 10}
                 )
                 logger.info("Database engine initialized")

@@ -74,20 +74,38 @@ def filter_disasters_by_type(disaster_data, selected_types):
     if not disaster_data or not selected_types:
         return []
 
-    # Pre-computed type sets for faster lookup
-    type_sets = {
-        "Wildfires": {"wildfires", "fire"},
-        "Severe Storms": {"severestorms", "severe-storms", "storms"},
-        "Volcanoes": {"volcanoes", "volcano"},
-        "Earthquakes": {"earthquakes", "earthquake"}
+    # Pre-computed type mapping for O(1) lookup
+    type_mapping = {
+        "wildfires": "Wildfires",
+        "fire": "Wildfires",
+        "severestorms": "Severe Storms",
+        "severe": "Severe Storms",
+        "storms": "Severe Storms",
+        "volcanoes": "Volcanoes",
+        "volcano": "Volcanoes",
+        "earthquakes": "Earthquakes",
+        "earthquake": "Earthquakes"
     }
 
-    # Create single set of terms for faster matching
-    selected_terms = set().union(*(type_sets[t] for t in selected_types if t in type_sets))
+    # Convert selected types to a set for O(1) lookup
+    selected_set = set(selected_types)
 
-    # Use generator expression for memory efficiency
-    return [d for d in disaster_data 
-            if d['categories'][0]['id'].lower().split('-')[0] in selected_terms]
+    # Filter using more efficient logic
+    filtered = []
+    for d in disaster_data:
+        try:
+            # Extract category id and normalize
+            category_id = d['categories'][0]['id'].lower()
+            # Get first part before hyphen
+            category_key = category_id.split('-')[0]
+            
+            # Map to standard type and check if selected
+            if category_key in type_mapping and type_mapping[category_key] in selected_set:
+                filtered.append(d)
+        except (KeyError, IndexError):
+            continue
+    
+    return filtered
 
 # Modified database connection code
 def get_db_connection():
