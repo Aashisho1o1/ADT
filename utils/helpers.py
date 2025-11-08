@@ -47,17 +47,16 @@ def init_session_state():
 def show_debug_info():
     """Show condensed debug information."""
     with st.expander("System Information", expanded=False):
-        # Check file existence
-        streamlit_dir = ".streamlit"
-        secrets_file = os.path.join(streamlit_dir, "secrets.toml")
+        # Check file existence once
+        secrets_file = os.path.join(".streamlit", "secrets.toml")
         file_exists = os.path.exists(secrets_file)
         
         # Check secrets
         has_secrets = hasattr(st, "secrets") 
         has_postgres = has_secrets and "postgres" in dir(st.secrets)
         
-        # Environment vars
-        env_vars = {k: "[MASKED]" for k in os.environ if "POSTGRES" in k or "NASA" in k}
+        # Environment vars - filter once using list comprehension
+        env_var_keys = [k for k in os.environ if "POSTGRES" in k or "NASA" in k]
         
         # Show info
         st.json({
@@ -65,11 +64,11 @@ def show_debug_info():
                 "secrets.toml exists": file_exists
             },
             "Database Access": {
-                "Environment Variables": bool(env_vars),
+                "Environment Variables": bool(env_var_keys),
                 "Streamlit Secrets": has_secrets,
                 "Postgres Section": has_postgres
             },
-            "Environment Variables": list(env_vars.keys())
+            "Environment Variables": env_var_keys
         })
 
 def run_database_diagnosis():
