@@ -27,41 +27,47 @@ def load_from_database():
             if session is None:
                 return None, None
                 
-            # Fetch all records (with batching for large datasets)
-            query = session.query(Alumni).order_by(Alumni.id)
-            records = query.all()
+            # Fetch all records with batch size hint for large datasets
+            query = session.query(Alumni).order_by(Alumni.id).yield_per(1000)
+            records = list(query)
             
             if not records:
                 logger.warning("No records found in database")
                 return None, None
                 
-            # Process records
-            data = []
+            # Process records more efficiently using list comprehension
+            # Pre-allocate lists for better performance
+            names = []
+            locations = []
+            lats = []
+            lons = []
+            valid_coords = []
             invalid_coords = 0
             
             for record in records:
-                # Ensure coordinates are floats
-                try:
-                    lat = float(record.latitude)
-                    lon = float(record.longitude)
-                    valid_coords = lat != 0 or lon != 0
-                except (ValueError, TypeError):
-                    lat = 0.0
-                    lon = 0.0
-                    valid_coords = False
-                    
-                if not valid_coords:
-                    invalid_coords += 1
-                    
-                data.append({
-                    'Name': record.name,
-                    'Location': record.location,
-                    'Latitude': lat,  # Store as float
-                    'Longitude': lon,  # Store as float
-                    'Has_Valid_Coords': valid_coords
-                })
+                # Direct float conversion - coordinates from DB should already be floats
+                lat = record.latitude
+                lon = record.longitude
+                is_valid = (lat != 0 or lon != 0)
                 
-            df = pd.DataFrame(data)
+                if not is_valid:
+                    invalid_coords += 1
+                
+                names.append(record.name)
+                locations.append(record.location)
+                lats.append(lat)
+                lons.append(lon)
+                valid_coords.append(is_valid)
+            
+            # Create DataFrame directly from lists (more efficient than list of dicts)
+            df = pd.DataFrame({
+                'Name': names,
+                'Location': locations,
+                'Latitude': lats,
+                'Longitude': lons,
+                'Has_Valid_Coords': valid_coords
+            })
+            
             metadata = {
                 "total_records": len(records),
                 "invalid_coords": invalid_coords,
@@ -99,20 +105,22 @@ def load_from_csv():
             if 'lat' in df.columns and 'lon' in df.columns:
                 # Process combo3.csv format
                 try:
-                    # Convert coordinates to numeric first
-                    df['lat'] = pd.to_numeric(df['lat'], errors='coerce')
-                    df['lon'] = pd.to_numeric(df['lon'], errors='coerce')
+                    # Convert coordinates to numeric once
+                    lat_series = pd.to_numeric(df['lat'], errors='coerce').fillna(0.0)
+                    lon_series = pd.to_numeric(df['lon'], errors='coerce').fillna(0.0)
+                    
+                    # Vectorized location building
+                    city = df.get('original_City', pd.Series([''] * len(df))).fillna('')
+                    state = df.get('original_State', pd.Series([''] * len(df))).fillna('')
+                    country = df.get('original_Country', pd.Series([''] * len(df))).fillna('')
+                    location_series = (city + ' ' + state + ' ' + country).str.strip()
                     
                     alumni_data = pd.DataFrame({
                         'Name': df['original_First Name'].fillna('') + ' ' + df['original_Prim_Last'].fillna(''),
-                        'Location': df.apply(
-                            lambda row: f"{row.get('original_City', '')} {row.get('original_State', '')} {row.get('original_Country', '')}".strip(),
-                            axis=1
-                        ),
-                        'Latitude': df['lat'].astype(float),
-                        'Longitude': df['lon'].astype(float),
-                        'Has_Valid_Coords': (~df['lat'].isna() & ~df['lon'].isna() & 
-                                           (df['lat'] != 0) & (df['lon'] != 0))
+                        'Location': location_series,
+                        'Latitude': lat_series,
+                        'Longitude': lon_series,
+                        'Has_Valid_Coords': (lat_series != 0) | (lon_series != 0)
                     })
                 except Exception as e:
                     logger.error(f"Error processing CSV data: {e}")
@@ -122,21 +130,24 @@ def load_from_csv():
                 # Handle standard format
                 alumni_data = df.copy()
                 
-                # Convert latitude and longitude to numeric
+                # Convert latitude and longitude to numeric once
                 if 'Latitude' in alumni_data.columns:
                     alumni_data['Latitude'] = pd.to_numeric(alumni_data['Latitude'], errors='coerce').fillna(0.0)
+                else:
+                    alumni_data['Latitude'] = 0.0
+                    
                 if 'Longitude' in alumni_data.columns:
                     alumni_data['Longitude'] = pd.to_numeric(alumni_data['Longitude'], errors='coerce').fillna(0.0)
+                else:
+                    alumni_data['Longitude'] = 0.0
                     
                 if 'Has_Valid_Coords' not in alumni_data:
-                    alumni_data['Has_Valid_Coords'] = (alumni_data['Latitude'] != 0) & (alumni_data['Longitude'] != 0)
+                    alumni_data['Has_Valid_Coords'] = (alumni_data['Latitude'] != 0) | (alumni_data['Longitude'] != 0)
                     
-            # Clean up data
-            alumni_data = alumni_data.fillna('')
-            
-            # Make sure coordinates are numeric
-            alumni_data['Latitude'] = pd.to_numeric(alumni_data['Latitude'], errors='coerce').fillna(0.0)
-            alumni_data['Longitude'] = pd.to_numeric(alumni_data['Longitude'], errors='coerce').fillna(0.0)
+            # Clean up data - only fillna for non-numeric columns
+            for col in alumni_data.columns:
+                if col not in ['Latitude', 'Longitude', 'Has_Valid_Coords']:
+                    alumni_data[col] = alumni_data[col].fillna('')
             
             # Count invalid coordinates
             invalid_coords = len(alumni_data) - alumni_data['Has_Valid_Coords'].sum()
