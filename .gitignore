@@ -45,7 +45,23 @@ Desktop.ini
 
 # Environment variables
 .env
+.env.*
+!.env.example
 
-# Streamlit
-.streamlit/secrets.toml .streamlit/secrets.toml
+# Streamlit secrets
 .streamlit/secrets.toml
+
+# Secrets and credentials
+secrets/
+*.key
+*.pem
+*.p12
+*.pfx
+credentials.json
+secrets.json
+service-account*.json
+
+# Sensitive data files
+**/sensitive/
+**/private/
+backup_alumni_data.csv
