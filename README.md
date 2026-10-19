@@ -136,3 +136,7 @@ This repository started as a larger prototype: a Postgres database, several data
 ## Tech stack
 
 Python · Streamlit · pandas · NumPy · Folium · NASA EONET API · pytest
+
+## License
+
+[MIT](LICENSE)

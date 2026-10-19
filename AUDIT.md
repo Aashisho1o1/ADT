@@ -103,7 +103,7 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 | C6 | `app.py` vs `env_debug.py` | 2 Streamlit apps. | FIXED (step 1) |
 | C7 | NASA key lookup in `disaster_monitor.py` (2 secret shapes) and `secrets_handler.get_nasa_api_key` | Duplicated — and EONET doesn't need a key at all. | FIXED (step 4) |
 | C8 | `.github/workflows/main.yml`, `sync-to-huggingface.yml`, `.replit`, Streamlit Cloud (README) | 3–4 deploy targets. Pick one. | FIXED (step 8) |
-| C9 | `SECURITY.md` + `CREDENTIALS_ROTATION_REQUIRED.md` + README security section | Security docs in 3 places. | OPEN |
+| C9 | `SECURITY.md` + `CREDENTIALS_ROTATION_REQUIRED.md` + README security section | Security docs in 3 places. | FIXED (step 9) |
 | C10 | `assets/combo.csv`, `example_format.csv`, README "Data Format" | 3 different alumni schemas documented. | FIXED (README) |
 
 ### D. Dead files / folders (not reachable from the app)
@@ -128,8 +128,8 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 | E2 | README says Postgres is core — app actually runs off the CSV fallback. | FIXED (README) |
 | E3 | README references a LICENSE file that doesn't exist. | FIXED (README) |
 | E4 | README setup step `python utils/init_db.py` crashes (see B4). | FIXED (README) |
-| E5 | No tests. `test_csv_reader.py` is not a test. | OPEN |
-| E6 | No working CI (lint/test). | OPEN |
+| E5 | No tests. `test_csv_reader.py` is not a test. | FIXED (step 9) |
+| E6 | No working CI (lint/test). | FIXED (step 9) |
 | E7 | `~/CLAUDE.md` describes a different project ("Ripple") — misleads AI sessions in this repo. | OPEN |
 
 ### F. Product / demo
@@ -337,7 +337,7 @@ Postgres (`database.py`, `sqlalchemy`, `psycopg2`) kept only if the owner wants 
 | 6 | **Tests** — DONE: haversine known distances; threshold edge; `latest_point` picks last geometry; event with missing categories skipped; CSV loads with one schema | `tests/test_core.py` | J1, J2, G2 | `pytest` green, no network |
 | 7 | **Dependencies** — DONE: `streamlit`, `pandas`, `numpy`, `folium`, `streamlit-folium`, `requests` — current versions, no known vulns; pin Python 3.12 | `requirements.txt`, `runtime.txt` | B2, A12, I2 | fresh venv install + `pip-audit` clean |
 | 8 | **CI** — DONE: one workflow — ruff, pytest, pip-audit; pinned actions; `contents: read`. Delete old workflows. | `.github/workflows/ci.yml` | A10, J3, A7, C8 | green check on push |
-| 9 | **Docs**: README (pitch, demo link, screenshot, 3-line quickstart, how it works, decisions D-1..D-5, what's next); MIT LICENSE; short SECURITY.md (synthetic data only, no secrets needed) | `README.md`, `LICENSE`, `SECURITY.md` | E1–E6, C9, F (story) | read it as a recruiter |
+| 9 | **Docs** — DONE: README (pitch, demo link, screenshot, 3-line quickstart, how it works, decisions D-1..D-5, what's next); MIT LICENSE; short SECURITY.md (synthetic data only, no secrets needed) | `README.md`, `LICENSE`, `SECURITY.md` | E1–E6, C9, F (story) | read it as a recruiter |
 | 10 | **Later / optional**: history purge with `git filter-repo`; move `~/CLAUDE.md` (Ripple) out of the way | — | A2, A3, K1, K2, E7 | `git log --all -p` grep clean |
 
 ### Final layout
