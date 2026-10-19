@@ -65,12 +65,12 @@ Severity: CRITICAL / HIGH / MEDIUM / LOW
 | A1 | CRITICAL | `CREDENTIALS_ROTATION_REQUIRED.md:13-24` | Plaintext Neon DB host/user/password and NASA API key committed at HEAD in a **public** repo. VERIFIED | FIXED at HEAD (step 1); still in history → A2 |
 | A2 | CRITICAL | git history | Same DB password, `.env` and `.streamlit/secrets.toml` exist in older commits. Removing files from HEAD does not remove them from history. VERIFIED | OPEN |
 | A3 | CRITICAL | git history | Older commits still contain alumni CSV files with personal data. Paths kept out of this file on purpose. VERIFIED | OPEN |
-| A4 | HIGH | `app.py:57,133-136`, `utils/disaster_monitor.py:60-63` | Raw exceptions and full tracebacks shown to end users (can leak DB host, paths). INFERRED | OPEN |
+| A4 | HIGH | `app.py:57,133-136`, `utils/disaster_monitor.py:60-63` | Raw exceptions and full tracebacks shown to end users (can leak DB host, paths). INFERRED | FIXED (step 4) |
 | A5 | HIGH | `env_debug.py` | Second Streamlit app that dumps all env vars; redaction is keyword-based, anything not matching leaks. INFERRED | FIXED (step 1) |
-| A6 | MEDIUM | `app.py` safe mode, `utils/helpers.py:47-99` | Debug panel / DB diagnosis / sample data table exposed to every visitor of the public demo. VERIFIED | OPEN |
+| A6 | MEDIUM | `app.py` safe mode, `utils/helpers.py:47-99` | Debug panel / DB diagnosis / sample data table exposed to every visitor of the public demo. VERIFIED | FIXED (step 4) |
 | A7 | MEDIUM | `.github/workflows/sync-to-huggingface.yml` | HF token embedded in git remote URL, `git push --force`, echoes token length. Username hardcoded. INFERRED | OPEN |
 | A8 | MEDIUM | `scripts/load_alumni_data.py:22,42` | Nominatim used with generic user agent at 60 req/min — violates Nominatim's 1 req/sec policy. INFERRED | FIXED (step 2) |
-| A9 | LOW | `utils/disaster_monitor.py:48` | `requests.get` with no timeout — app can hang. INFERRED | OPEN |
+| A9 | LOW | `utils/disaster_monitor.py:48` | `requests.get` with no timeout — app can hang. INFERRED | FIXED (step 4) |
 | A10 | LOW | `.github/workflows/main.yml` | Outdated `actions/checkout@v2`; workflow does nothing. INFERRED | OPEN |
 
 Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optional, later) purge history with `git filter-repo` → force-push.
@@ -79,29 +79,29 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 
 | # | Sev | Where | Issue | Status |
 |---|---|---|---|---|
-| B1 | HIGH | `utils/disaster_monitor.py:16` | Reads `st.secrets` at import time → full app crashes on any fresh clone without `secrets.toml`. VERIFIED | OPEN |
+| B1 | HIGH | `utils/disaster_monitor.py:16` | Reads `st.secrets` at import time → full app crashes on any fresh clone without `secrets.toml`. VERIFIED | FIXED (step 4) |
 | B2 | HIGH | `requirements.txt`, `runtime.txt` | Pinned deps don't install on current Python; `runtime.txt` is empty so Python version is undefined. VERIFIED | OPEN |
 | B3 | HIGH | `scripts/load_alumni_data.py:11,13,19` | Imports `backoff`, `ratelimit` (not in requirements) and `init_db` (does not exist). Script cannot run. VERIFIED | FIXED (step 2) |
 | B4 | HIGH | `utils/import_csv_data.py:3`, `utils/init_db.py:1`, `utils/load_sample_data.py:2` | Import module-level `engine`, which is always `None` (lazy init) → `create_all(bind=None)` fails. INFERRED | FIXED (step 2) |
-| B5 | MEDIUM | `utils/map_handler.py:50,96` | Only `geometry[0]` used. EONET geometry is chronological → distance uses the *oldest* position. VERIFIED: Tropical Cyclone Wati moved from (-163.3, -10.8) to (-156.8, -20.7), ~1,250 km, between first and last point. Polygons would be silently skipped. | OPEN |
-| B6 | MEDIUM | `utils/data_loader.py:84` | CSV fallback path `attached_assets/combo3.csv` no longer exists. VERIFIED | OPEN |
-| B7 | MEDIUM | `utils/data_loader.py` (3 branches) | Loader handles 3 different CSV schemas; `0,0` used as "invalid coord" sentinel; on error returns a fake "Sample User" at 0,0. INFERRED | OPEN |
+| B5 | MEDIUM | `utils/map_handler.py:50,96` | Only `geometry[0]` used. EONET geometry is chronological → distance uses the *oldest* position. VERIFIED: Tropical Cyclone Wati moved from (-163.3, -10.8) to (-156.8, -20.7), ~1,250 km, between first and last point. Polygons would be silently skipped. | FIXED (step 4) |
+| B6 | MEDIUM | `utils/data_loader.py:84` | CSV fallback path `attached_assets/combo3.csv` no longer exists. VERIFIED | FIXED (step 4) |
+| B7 | MEDIUM | `utils/data_loader.py` (3 branches) | Loader handles 3 different CSV schemas; `0,0` used as "invalid coord" sentinel; on error returns a fake "Sample User" at 0,0. INFERRED | FIXED (step 4) |
 | B8 | LOW | `.replit` | Runs `simple_app.py`, which does not exist. VERIFIED | FIXED (step 2) |
-| B9 | LOW | `utils/map_handler.py:45,80,123` | Business logic calls `st.warning`/`st.error` — couples math to UI, untestable. INFERRED | OPEN |
-| B10 | LOW | `utils/database.py:6` | Deprecated `sqlalchemy.ext.declarative.declarative_base`. INFERRED | OPEN |
-| B11 | LOW | `utils/disaster_monitor.py:1-10`, `utils/database.py:11` | Unused imports (`timedelta`, `time`, `Session`, `db`, `create_engine`); `logging.basicConfig` called in 3 modules. INFERRED | OPEN |
+| B9 | LOW | `utils/map_handler.py:45,80,123` | Business logic calls `st.warning`/`st.error` — couples math to UI, untestable. INFERRED | FIXED (step 4) |
+| B10 | LOW | `utils/database.py:6` | Deprecated `sqlalchemy.ext.declarative.declarative_base`. INFERRED | FIXED (step 4) |
+| B11 | LOW | `utils/disaster_monitor.py:1-10`, `utils/database.py:11` | Unused imports (`timedelta`, `time`, `Session`, `db`, `create_engine`); `logging.basicConfig` called in 3 modules. INFERRED | FIXED (step 4) |
 
 ### C. Duplicate / redundant code
 
 | # | Where | Duplication | Status |
 |---|---|---|---|
-| C1 | `helpers.get_db_url` (reads `POSTGRES_URL`), `secrets_handler.get_db_url`, `database.get_connection_string` (reads `DATABASE_URL`), `disaster_monitor` (reads `st.secrets["DATABASE_URL"]`) | **4 ways to get the DB URL, using 3 different keys.** Pick one. | OPEN |
-| C2 | `helpers.create_db_engine`, `database.get_engine`, `disaster_monitor.get_db_connection` | 3 ways to create a DB engine. | OPEN |
-| C3 | `database.get_db_session` vs `database.get_db` | 2 session helpers; `get_db` unused. | OPEN |
+| C1 | `helpers.get_db_url` (reads `POSTGRES_URL`), `secrets_handler.get_db_url`, `database.get_connection_string` (reads `DATABASE_URL`), `disaster_monitor` (reads `st.secrets["DATABASE_URL"]`) | **4 ways to get the DB URL, using 3 different keys.** Pick one. | FIXED (step 4) |
+| C2 | `helpers.create_db_engine`, `database.get_engine`, `disaster_monitor.get_db_connection` | 3 ways to create a DB engine. | FIXED (step 4) |
+| C3 | `database.get_db_session` vs `database.get_db` | 2 session helpers; `get_db` unused. | FIXED (step 4) |
 | C4 | `database.init_database` vs `utils/init_db.py` | Same function twice. | FIXED (step 2) |
 | C5 | `import_csv_data.py`, `load_sample_data.py`, `scripts/load_alumni_data.py`, `scripts/simplify_csv.py`, `create_sample_data.py`, `test_csv_reader.py` | **6 data load/seed/convert scripts**, each expecting a different CSV schema. Need exactly one `seed` script. | FIXED (step 2) |
 | C6 | `app.py` vs `env_debug.py` | 2 Streamlit apps. | FIXED (step 1) |
-| C7 | NASA key lookup in `disaster_monitor.py` (2 secret shapes) and `secrets_handler.get_nasa_api_key` | Duplicated — and EONET doesn't need a key at all. | OPEN |
+| C7 | NASA key lookup in `disaster_monitor.py` (2 secret shapes) and `secrets_handler.get_nasa_api_key` | Duplicated — and EONET doesn't need a key at all. | FIXED (step 4) |
 | C8 | `.github/workflows/main.yml`, `sync-to-huggingface.yml`, `.replit`, Streamlit Cloud (README) | 3–4 deploy targets. Pick one. | OPEN |
 | C9 | `SECURITY.md` + `CREDENTIALS_ROTATION_REQUIRED.md` + README security section | Security docs in 3 places. | OPEN |
 | C10 | `assets/combo.csv`, `example_format.csv`, README "Data Format" | 3 different alumni schemas documented. | OPEN |
@@ -117,7 +117,7 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 | D5 | `.replit`, `replit.nix`, `generated-icon.png` (337 KB) | Replit leftovers. | FIXED (step 2) |
 | D6 | `.cursor/rules/learner.mdc` | Empty template. | FIXED (step 2) |
 | D7 | `utils/japan_locations.py`, `utils/secrets_handler.py` | Not imported by the app. | FIXED (step 2) |
-| D8 | `database.DisasterEvent`, `database.get_db`, `disaster_monitor.get_db_connection`, `disaster_monitor.db_url` | Defined, never used. | OPEN |
+| D8 | `database.DisasterEvent`, `database.get_db`, `disaster_monitor.get_db_connection`, `disaster_monitor.db_url` | Defined, never used. | FIXED (step 4) |
 | D9 | `env_debug.py`, `test_csv_reader.py`, `create_sample_data.py` | Root-level one-off scripts. | FIXED (step 2) |
 
 ### E. Docs & repo hygiene
@@ -136,9 +136,9 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 
 | # | Issue | Status |
 |---|---|---|
-| F1 | First screen is a debug "safe mode", not the product. A recruiter sees buttons, not a map. | OPEN |
-| F2 | With live data (3 days, open events) there are usually **0 alerts** — the core feature is invisible. | OPEN |
-| F3 | Demo depends on secrets/DB that a fresh clone doesn't have (B1). Should run with zero setup. | OPEN |
+| F1 | First screen is a debug "safe mode", not the product. A recruiter sees buttons, not a map. | FIXED (step 4) |
+| F2 | With live data (3 days, open events) there are usually **0 alerts** — the core feature is invisible. | FIXED (step 4) |
+| F3 | Demo depends on secrets/DB that a fresh clone doesn't have (B1). Should run with zero setup. | FIXED (step 4) |
 | F4 | Alumni data is 15 fake US rows with a junk `combo` header row and ~40 empty columns. | OPEN |
 
 ---
@@ -176,44 +176,44 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 
 | # | Sev | Where | Issue | Status |
 |---|---|---|---|---|
-| A11 | MEDIUM | `utils/map_handler.py:37,59` | HTML injection: alumni name/location (CSV/DB) and disaster title (external API) go raw into Folium popup HTML. Runs inside the map iframe. Fix: `html.escape()`. VERIFIED | OPEN |
+| A11 | MEDIUM | `utils/map_handler.py:37,59` | HTML injection: alumni name/location (CSV/DB) and disaster title (external API) go raw into Folium popup HTML. Runs inside the map iframe. Fix: `html.escape()`. VERIFIED | FIXED (step 4) |
 | A12 | MEDIUM | `requirements.txt` | 9 known vulnerabilities in pinned versions (streamlit, python-dotenv, geopy, requests). VERIFIED | OPEN |
-| A13 | MEDIUM | `app.py:124-128` | Alert list publicly shows each alumnus's name + location on a public URL. Real data must never be deployed publicly without auth; demo must use synthetic data only. INFERRED | OPEN |
-| A14 | LOW | `utils/helpers.py:16-17` | Bare `except: pass` hides config errors. VERIFIED (ruff S110) | OPEN |
+| A13 | MEDIUM | `app.py:124-128` | Alert list publicly shows each alumnus's name + location on a public URL. Real data must never be deployed publicly without auth; demo must use synthetic data only. INFERRED | FIXED (step 4) |
+| A14 | LOW | `utils/helpers.py:16-17` | Bare `except: pass` hides config errors. VERIFIED (ruff S110) | FIXED (step 4) |
 
 #### G. Correctness
 
 | # | Sev | Where | Issue | Status |
 |---|---|---|---|---|
-| G1 | HIGH | `utils/disaster_monitor.py:78-83` + `app.py:82` | Filter only offers 4 types; `seaLakeIce` (and floods, dust, etc.) silently dropped. Type list is hardcoded in two places (UI + type map). VERIFIED | OPEN |
-| G2 | MEDIUM | `utils/disaster_monitor.py:90` | `d['categories'][0]` crashes on an event with no categories — one bad event kills the whole list. VERIFIED | OPEN |
-| G3 | MEDIUM | `utils/disaster_monitor.py:22,59-63` | On API error returns `[]` — and `st.cache_data` caches that `[]` for 1 hour. One blip = an hour of "no disasters". INFERRED | OPEN |
-| G4 | MEDIUM | `utils/data_loader.py:11` | `load_alumni_data` cached 1h, including a failed DB → CSV fallback. Strange unused `_=None` param. INFERRED | OPEN |
-| G5 | MEDIUM | `utils/disaster_monitor.py:40-44` | `days=3, limit=25` — window too narrow for a useful demo (F2); without `days` the 25 events are arbitrary. VERIFIED | OPEN |
-| G6 | LOW | `utils/map_handler.py:9-10` | Map center = mean of all alumni including `0,0` invalid ones. INFERRED | OPEN |
-| G7 | LOW | `utils/map_handler.py:20-27` | Invalid (0,0) alumni still drawn on the map at "Null Island" off Africa. INFERRED | OPEN |
-| G8 | LOW | `utils/database.py:95` | Session commits after read-only queries. Harmless, but noise. INFERRED | OPEN |
+| G1 | HIGH | `utils/disaster_monitor.py:78-83` + `app.py:82` | Filter only offers 4 types; `seaLakeIce` (and floods, dust, etc.) silently dropped. Type list is hardcoded in two places (UI + type map). VERIFIED | FIXED (step 4) |
+| G2 | MEDIUM | `utils/disaster_monitor.py:90` | `d['categories'][0]` crashes on an event with no categories — one bad event kills the whole list. VERIFIED | FIXED (step 4) |
+| G3 | MEDIUM | `utils/disaster_monitor.py:22,59-63` | On API error returns `[]` — and `st.cache_data` caches that `[]` for 1 hour. One blip = an hour of "no disasters". INFERRED | FIXED (step 4) |
+| G4 | MEDIUM | `utils/data_loader.py:11` | `load_alumni_data` cached 1h, including a failed DB → CSV fallback. Strange unused `_=None` param. INFERRED | FIXED (step 4) |
+| G5 | MEDIUM | `utils/disaster_monitor.py:40-44` | `days=3, limit=25` — window too narrow for a useful demo (F2); without `days` the 25 events are arbitrary. VERIFIED | FIXED (step 4) |
+| G6 | LOW | `utils/map_handler.py:9-10` | Map center = mean of all alumni including `0,0` invalid ones. INFERRED | FIXED (step 4) |
+| G7 | LOW | `utils/map_handler.py:20-27` | Invalid (0,0) alumni still drawn on the map at "Null Island" off Africa. INFERRED | FIXED (step 4) |
+| G8 | LOW | `utils/database.py:95` | Session commits after read-only queries. Harmless, but noise. INFERRED | FIXED (step 4) |
 
 #### H. Performance
 
 | # | Sev | Where | Issue | Status |
 |---|---|---|---|---|
-| H1 | HIGH | `utils/map_handler.py:83-120` | O(alumni × events) Python loop with `geopy.geodesic` + `iterrows`: **15.5 s** for realistic size. Vectorised numpy haversine would be milliseconds and drops the geopy dependency from the app. VERIFIED | OPEN |
-| H2 | HIGH | `app.py:111` | `st_folium(...)` without `returned_objects=[]` → every pan/zoom triggers a full rerun → H1 + map rebuild again. INFERRED | OPEN |
-| H3 | MEDIUM | `utils/map_handler.py:16-43` | One `CircleMarker` per alumnus via `iterrows` → 2.1 MB HTML, 3.2 s. Use `MarkerCluster` or only draw alumni near events. VERIFIED | OPEN |
-| H4 | LOW | `app.py:73-76` | Heavy imports inside the try-block on each rerun; `import traceback` inside except. Harmless but messy. INFERRED | OPEN |
+| H1 | HIGH | `utils/map_handler.py:83-120` | O(alumni × events) Python loop with `geopy.geodesic` + `iterrows`: **15.5 s** for realistic size. Vectorised numpy haversine would be milliseconds and drops the geopy dependency from the app. VERIFIED | FIXED (step 4) |
+| H2 | HIGH | `app.py:111` | `st_folium(...)` without `returned_objects=[]` → every pan/zoom triggers a full rerun → H1 + map rebuild again. INFERRED | FIXED (step 4) |
+| H3 | MEDIUM | `utils/map_handler.py:16-43` | One `CircleMarker` per alumnus via `iterrows` → 2.1 MB HTML, 3.2 s. Use `MarkerCluster` or only draw alumni near events. VERIFIED | FIXED (step 4) |
+| H4 | LOW | `app.py:73-76` | Heavy imports inside the try-block on each rerun; `import traceback` inside except. Harmless but messy. INFERRED | FIXED (step 4) |
 
 #### I. Code quality
 
 | # | Sev | Where | Issue | Status |
 |---|---|---|---|---|
-| I1 | MEDIUM | 22 places (ruff F401) | Unused imports, incl. `numpy` in `map_handler.py:3`. VERIFIED | OPEN |
+| I1 | MEDIUM | 22 places (ruff F401) | Unused imports, incl. `numpy` in `map_handler.py:3`. VERIFIED | FIXED (step 4) |
 | I2 | MEDIUM | `requirements.txt` | `python-dotenv` never imported. `chardet`, `numpy` only used by dead scripts. `backoff`, `ratelimit` used but missing. VERIFIED | OPEN |
-| I3 | MEDIUM | `map_handler.py`, `disaster_monitor.py`, `helpers.py` | UI calls (`st.error`/`st.warning`) mixed into logic functions. Logic can't be tested or reused. INFERRED | OPEN |
-| I4 | LOW | `app.py` | Two "modes" with session-state flags (`app_loaded`, `show_debugging`) — complexity that only exists to hide B1. INFERRED | OPEN |
-| I5 | LOW | whole codebase | Column names in 3 casings (`Latitude`/`lat`/`latitude`), dicts with ad-hoc keys passed between modules. One schema needed. INFERRED | OPEN |
-| I6 | LOW | multiple | Comments that restate the code ("# Create base map", "# Ensure coordinates are floats" ×6) and stale ones ("Replace st.write with logger.debug"). INFERRED | OPEN |
-| I7 | LOW | `data_loader.py`, `map_handler.py` | Defensive `float()` casts + try/except repeated in every function instead of cleaning data once at load. INFERRED | OPEN |
+| I3 | MEDIUM | `map_handler.py`, `disaster_monitor.py`, `helpers.py` | UI calls (`st.error`/`st.warning`) mixed into logic functions. Logic can't be tested or reused. INFERRED | FIXED (step 4) |
+| I4 | LOW | `app.py` | Two "modes" with session-state flags (`app_loaded`, `show_debugging`) — complexity that only exists to hide B1. INFERRED | FIXED (step 4) |
+| I5 | LOW | whole codebase | Column names in 3 casings (`Latitude`/`lat`/`latitude`), dicts with ad-hoc keys passed between modules. One schema needed. INFERRED | FIXED (step 4) |
+| I6 | LOW | multiple | Comments that restate the code ("# Create base map", "# Ensure coordinates are floats" ×6) and stale ones ("Replace st.write with logger.debug"). INFERRED | FIXED (step 4) |
+| I7 | LOW | `data_loader.py`, `map_handler.py` | Defensive `float()` casts + try/except repeated in every function instead of cleaning data once at load. INFERRED | FIXED (step 4) |
 
 #### J. Testing & CI
 
@@ -331,8 +331,8 @@ Postgres (`database.py`, `sqlalchemy`, `psycopg2`) kept only if the owner wants 
 |---|---|---|---|---|
 | 1 | **Remove secrets & debug apps** from HEAD | delete `CREDENTIALS_ROTATION_REQUIRED.md`, `env_debug.py` | A1 (HEAD), A5, C6 | `git grep` for the old password/key returns nothing |
 | 2 | **Delete dead files** | delete `src/`, `ADT/`, `utils/__pycache__/`, `attached_assets/`, `.replit`, `replit.nix`, `generated-icon.png`, `.cursor/`, `test_csv_reader.py`, `create_sample_data.py`, `scripts/`, `utils/{secrets_handler,japan_locations,import_csv_data,init_db,load_sample_data}.py`, `example_format.csv` | D1–D9, B3, B4, B8, C5, A8 | app still boots |
-| 3 | **Write `core.py`** — DONE (not wired in yet; issues close in step 4) (replaces `utils/`): `fetch_events()` with timeout + fallback to `data/events.json`; `latest_point()`; `load_alumni()` with one schema; `find_nearby()` with numpy haversine; `html.escape` for popup text; categories read from data | new `core.py`, `data/events.json`; delete `utils/` | B5, B6, B7, B9, G1–G7, H1, A11, A14, I1, I3, I5, I7, C1–C4 | unit tests (step 6) |
-| 4 | **Rewrite `app.py`**: one screen — sidebar (categories, radius) + map + nearby list. No modes, no debug, generic error message. `st_folium(..., returned_objects=[])`. Cluster alumni markers. | `app.py` | A4, A6, A13 (synthetic only), F1, F3, H2, H3, H4, I4 | `streamlit run app.py` on fresh clone; AppTest smoke test |
+| 3 | **Write `core.py`** — DONE (replaces `utils/`): `fetch_events()` with timeout + fallback to `data/events.json`; `latest_point()`; `load_alumni()` with one schema; `find_nearby()` with numpy haversine; `html.escape` for popup text; categories read from data | new `core.py`, `data/events.json`; delete `utils/` | B5, B6, B7, B9, G1–G7, H1, A11, A14, I1, I3, I5, I7, C1–C4 | unit tests (step 6) |
+| 4 | **Rewrite `app.py`** — DONE: one screen — sidebar (categories, radius) + map + nearby list. No modes, no debug, generic error message. `st_folium(..., returned_objects=[])`. Cluster alumni markers. | `app.py` | A4, A6, A13 (synthetic only), F1, F3, H2, H3, H4, I4 | `streamlit run app.py` on fresh clone; AppTest smoke test |
 | 5 | **Synthetic data**: ~200 fake alumni (`name,city,country,lat,lon`) spread over cities that often have events (California, Australia, Japan, Philippines, Caribbean…), so the demo shows alerts | `data/alumni.csv` (replaces `assets/combo.csv`) | F2, F4, C10, G5 | demo shows ≥1 alert with default radius |
 | 6 | **Tests**: haversine known distances; threshold edge; `latest_point` picks last geometry; event with missing categories skipped; CSV loads with one schema | `tests/test_core.py` | J1, J2, G2 | `pytest` green, no network |
 | 7 | **Dependencies**: `streamlit`, `pandas`, `numpy`, `folium`, `streamlit-folium`, `requests` — current versions, no known vulns; pin Python 3.12 | `requirements.txt`, `runtime.txt` | B2, A12, I2 | fresh venv install + `pip-audit` clean |

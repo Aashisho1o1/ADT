@@ -1,140 +1,71 @@
-"""Alumni Disaster Monitor Streamlit application."""
+"""Alumni Disaster Tracker: which alumni are near an active natural disaster?"""
+import html
+
+import folium
 import streamlit as st
-import os
-import logging
-from utils.helpers import get_db_url, create_db_engine, mask_url, init_session_state, show_debug_info, run_database_diagnosis
-from utils.data_loader import load_alumni_data
+from folium.plugins import MarkerCluster
+from streamlit_folium import st_folium
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+import core
 
-# Page configuration
-st.set_page_config(
-    page_title="Alumni Disaster Monitor",
-    page_icon="🌍",
-    layout="wide"
-)
+st.set_page_config(page_title="Alumni Disaster Tracker", page_icon="🌍", layout="wide")
 
-# Initialize session state
-init_session_state()
 
-# Page title
-st.title("🌍 Alumni Natural Disaster Monitor")
+@st.cache_data(ttl=900)
+def get_events():
+    return core.fetch_events()
 
-# SIMPLE MODE
-if not st.session_state.app_loaded:
-    st.info("App is starting in safe mode for deployment stability")
-    
-    # Sidebar status
-    st.sidebar.markdown("### System Status")
-    st.sidebar.warning("⚠️ Database connection deferred for stability")
-    
-    # Main content
-    st.write("Welcome to the Alumni Disaster Monitor!")
-    
-    # Debugging (only if needed)
-    if st.session_state.show_debugging:
-        show_debug_info()
-    
-    # Database test button
-    if st.button("Test Database Connection", key="test_db"):
-        db_url = get_db_url()
-        if not db_url:
-            st.error("No database URL found in environment or secrets")
-            
-        else:
-            from sqlalchemy import text
-            st.success(f"Found database configuration: {mask_url(db_url)}")
-            
-            try:
-                engine = create_db_engine(db_url)
-                with engine.connect() as conn:
-                    result = conn.execute(text("SELECT COUNT(*) FROM alumni"))
-                    count = result.scalar()
-                    st.success(f"✅ Connected! Found {count} alumni records")
-            except Exception as e:
-                st.error(f"Connection error: {str(e)}")
-    
-    # Diagnosis button
-    if st.button("Diagnose Data Loading", key="diagnose"):
-        run_database_diagnosis()
-    
-    # Full app button
-    if st.button("Load Full Application", key="load_app"):
-        st.session_state.app_loaded = True
-        st.session_state.show_debugging = False
-        st.rerun()
 
-# FULL APPLICATION MODE
-else:
-    try:
-        # Import modules
-        import pandas as pd
-        from utils.disaster_monitor import fetch_eonet_data, filter_disasters_by_type
-        from utils.map_handler import create_map, calculate_proximity_alerts
-        from streamlit_folium import st_folium
-        
-        # Sidebar
-        with st.sidebar:
-            st.markdown("### Disaster Filters")
-            
-            disaster_types = ["Wildfires", "Severe Storms", "Volcanoes", "Earthquakes"]
-            selected_types = st.multiselect("Select Types", disaster_types, default=disaster_types)
-            
-            proximity_threshold = st.slider("Alert Threshold (km)", 50, 1000, 200, 50)
-            
-            if st.button("◀️ Simple Mode", key="simple_btn"):
-                st.session_state.app_loaded = False
-                st.rerun()
-        
-        # Main content
-        col1, col2 = st.columns([3, 1])
-        
-        # Map column
-        with col1:
-            st.subheader("🗺️ Disaster Monitoring Map")
-            
-            # Load data
-            with st.spinner("Loading data..."):
-                alumni_df, metadata = load_alumni_data()
-                disaster_data = fetch_eonet_data()
-                filtered_disasters = filter_disasters_by_type(disaster_data, selected_types) if disaster_data else []
-            
-            # Show data info  
-            if metadata:
-                st.success(f"Loaded {metadata.get('total_records', 0)} records from {metadata.get('source')}")
-            
-            # Create map if data is available
-            if alumni_df is not None and not alumni_df.empty and filtered_disasters:
-                map_obj = create_map(alumni_df, filtered_disasters)
-                st_folium(map_obj, width=800, height=600)
-            else:
-                st.warning("Insufficient data to display map")
-        
-        # Alert column  
-        with col2:
-            st.subheader("⚠️ Proximity Alerts")
-            
-            if alumni_df is not None and not alumni_df.empty and filtered_disasters:
-                alerts = calculate_proximity_alerts(alumni_df, filtered_disasters, proximity_threshold)
-                
-                if alerts:
-                    st.warning(f"{len(alerts)} alerts within {proximity_threshold}km")
-                    for alert in alerts:
-                        with st.expander(f"🚨 {alert['alumni_name']} - {alert['disaster_type']}"):
-                            st.write(f"Distance: {alert['distance']} km")
-                            st.write(f"Location: {alert['location']}")
-                            st.write(f"Disaster: {alert['disaster_description']}")
-                else:
-                    st.success("No alerts within the threshold")
-            
-    except Exception as e:
-        st.error(f"Application error: {str(e)}")
-        with st.expander("Error Details"):
-            import traceback
-            st.code(traceback.format_exc())
-        
-        if st.button("Return to Simple Mode", key="error_return"):
-            st.session_state.app_loaded = False
-            st.rerun()
+@st.cache_data
+def get_alumni():
+    return core.load_alumni()
+
+
+def build_map(alumni, events, radius_km):
+    m = folium.Map(location=[20, 0], zoom_start=2)
+    cluster = MarkerCluster().add_to(m)
+    for a in alumni.itertuples():
+        folium.CircleMarker(
+            [a.lat, a.lon], radius=6, color="#1f77b4", fill=True,
+            popup=html.escape(f"{a.name}, {a.city}"),
+        ).add_to(cluster)
+    for e in events.itertuples():
+        folium.Circle([e.lat, e.lon], radius=radius_km * 1000, color="#d62728", weight=1, fill=True, fill_opacity=0.08).add_to(m)
+        folium.CircleMarker(
+            [e.lat, e.lon], radius=7, color="#d62728", fill=True,
+            popup=html.escape(f"{e.title} ({e.category}, {e.date})"),
+        ).add_to(m)
+    return m
+
+
+events, is_live = get_events()
+alumni = get_alumni()
+
+with st.sidebar:
+    st.header("Filters")
+    categories = sorted(events["category"].unique())
+    selected = st.multiselect("Event types", categories, default=categories)
+    radius_km = st.slider("Alert radius (km)", 50, 1000, 300, step=50)
+
+events = events[events["category"].isin(selected)]
+nearby = core.find_nearby(alumni, events, radius_km)
+
+st.title("🌍 Alumni Disaster Tracker")
+st.caption("Open natural-disaster events from NASA EONET (last 30 days), matched against alumni locations.")
+if not is_live:
+    st.warning("NASA EONET is unreachable, so this is a saved snapshot.")
+
+c1, c2, c3 = st.columns(3)
+c1.metric("Active events", len(events))
+c2.metric("Alumni", len(alumni))
+c3.metric("Alumni near an event", nearby["name"].nunique())
+
+map_col, list_col = st.columns([3, 2])
+with map_col:
+    st_folium(build_map(alumni, events, radius_km), height=550, use_container_width=True, returned_objects=[])
+with list_col:
+    st.subheader(f"Within {radius_km} km")
+    if nearby.empty:
+        st.success("No alumni near an active event.")
+    else:
+        st.dataframe(nearby, hide_index=True)
