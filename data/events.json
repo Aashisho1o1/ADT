@@ -1,0 +1,6190 @@
+{
+	"title": "EONET Events",
+	"description": "Natural events from EONET.",
+	"link": "https://eonet.gsfc.nasa.gov/api/v3/events",
+	"events": [
+		{
+			"id": "EONET_25340",
+			"title": "Tropical Cyclone Wati",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25340",
+			"closed": null,
+				"categories": [
+					{
+					"id": "severeStorms",
+					"title": "Severe Storms"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "JTWC",
+					"url": "https://www.metoc.navy.mil/jtwc/products/sh0127.tcw"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 35.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-16T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -163.3, -10.8 ]
+							},
+
+							{
+							"magnitudeValue": 40.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-16T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -163.3, -11.7 ]
+							},
+
+							{
+							"magnitudeValue": 40.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-16T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -163.4, -12.7 ]
+							},
+
+							{
+							"magnitudeValue": 55.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-17T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -163.6, -12.1 ]
+							},
+
+							{
+							"magnitudeValue": 60.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-17T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -163.2, -13.2 ]
+							},
+
+							{
+							"magnitudeValue": 60.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-17T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -163.1, -14.4 ]
+							},
+
+							{
+							"magnitudeValue": 65.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-17T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -163.2, -14.8 ]
+							},
+
+							{
+							"magnitudeValue": 65.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -162.8, -15.6 ]
+							},
+
+							{
+							"magnitudeValue": 65.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-18T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -162.4, -16.1 ]
+							},
+
+							{
+							"magnitudeValue": 60.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-18T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -161.4, -17.4 ]
+							},
+
+							{
+							"magnitudeValue": 55.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-18T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -160.2, -18.6 ]
+							},
+
+							{
+							"magnitudeValue": 50.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-19T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -158.9, -19.9 ]
+							},
+
+							{
+							"magnitudeValue": 45.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-19T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -156.8, -20.7 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25339",
+			"title": "Super Typhoon Champi",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25339",
+			"closed": null,
+				"categories": [
+					{
+					"id": "severeStorms",
+					"title": "Severe Storms"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "JTWC",
+					"url": "https://www.metoc.navy.mil/jtwc/products/wp2926.tcw"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 35.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-15T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 157.4, 11 ]
+							},
+
+							{
+							"magnitudeValue": 40.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-15T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 155.7, 11.2 ]
+							},
+
+							{
+							"magnitudeValue": 45.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-16T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 153.8, 11.3 ]
+							},
+
+							{
+							"magnitudeValue": 50.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-16T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 152.7, 11.3 ]
+							},
+
+							{
+							"magnitudeValue": 60.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-16T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 151.4, 11.4 ]
+							},
+
+							{
+							"magnitudeValue": 75.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-16T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 150.2, 11.9 ]
+							},
+
+							{
+							"magnitudeValue": 85.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-17T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 148.6, 12.4 ]
+							},
+
+							{
+							"magnitudeValue": 115.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-17T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 147.3, 12.5 ]
+							},
+
+							{
+							"magnitudeValue": 120.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-17T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 146.1, 12.6 ]
+							},
+
+							{
+							"magnitudeValue": 130.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-17T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 144.8, 13.1 ]
+							},
+
+							{
+							"magnitudeValue": 130.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 143.4, 13.1 ]
+							},
+
+							{
+							"magnitudeValue": 130.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-18T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 142.3, 13.1 ]
+							},
+
+							{
+							"magnitudeValue": 120.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-18T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 141.4, 13.5 ]
+							},
+
+							{
+							"magnitudeValue": 120.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-18T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 140.2, 13.8 ]
+							},
+
+							{
+							"magnitudeValue": 135.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-19T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 139.2, 14 ]
+							},
+
+							{
+							"magnitudeValue": 140.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-19T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 138.4, 14.3 ]
+							},
+
+							{
+							"magnitudeValue": 140.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-19T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 137.6, 14.8 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25310",
+			"title": "Prescribed Fire Newman Piles RX, Coconino, Arizona",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25310",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-AZCOF-001566"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 751.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-10-14T10:42:00Z",
+					"type": "Point", 
+							"coordinates": [ -111.65, 35.016667 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25290",
+			"title": "Hurricane Trudy",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25290",
+			"closed": null,
+				"categories": [
+					{
+					"id": "severeStorms",
+					"title": "Severe Storms"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "JTWC",
+					"url": "https://www.metoc.navy.mil/jtwc/products/ep2126.tcw"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 35.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-13T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -95.9, 10.3 ]
+							},
+
+							{
+							"magnitudeValue": 35.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -96.9, 10.5 ]
+							},
+
+							{
+							"magnitudeValue": 40.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-14T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -98.6, 10.8 ]
+							},
+
+							{
+							"magnitudeValue": 45.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-14T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -99.2, 11.3 ]
+							},
+
+							{
+							"magnitudeValue": 55.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-14T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -99.7, 11.7 ]
+							},
+
+							{
+							"magnitudeValue": 55.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-15T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -100.5, 12.1 ]
+							},
+
+							{
+							"magnitudeValue": 65.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-15T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -101.2, 12.6 ]
+							},
+
+							{
+							"magnitudeValue": 80.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-15T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -101.6, 12.9 ]
+							},
+
+							{
+							"magnitudeValue": 80.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-15T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -101.6, 13.5 ]
+							},
+
+							{
+							"magnitudeValue": 85.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-16T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -101.9, 14.1 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-16T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -102.4, 14 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-16T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -102.4, 14.4 ]
+							},
+
+							{
+							"magnitudeValue": 75.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-16T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -102.4, 14.6 ]
+							},
+
+							{
+							"magnitudeValue": 75.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-17T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -102.5, 15.1 ]
+							},
+
+							{
+							"magnitudeValue": 80.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-17T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -103.2, 15.7 ]
+							},
+
+							{
+							"magnitudeValue": 80.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-17T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -103.7, 16.3 ]
+							},
+
+							{
+							"magnitudeValue": 85.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-17T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -105, 17 ]
+							},
+
+							{
+							"magnitudeValue": 85.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -105.5, 17.9 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-18T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -106.1, 18.4 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-18T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -106.6, 18.9 ]
+							},
+
+							{
+							"magnitudeValue": 85.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-18T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -106.9, 19.3 ]
+							},
+
+							{
+							"magnitudeValue": 75.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-19T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -107.4, 19.6 ]
+							},
+
+							{
+							"magnitudeValue": 55.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-19T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -107.8, 19.7 ]
+							},
+
+							{
+							"magnitudeValue": 50.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-19T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -108.3, 19.6 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25311",
+			"title": "Prescribed Fire Jane 102 RX, Harney, Oregon",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25311",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-ORMAF-002746"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 3000.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-10-13T10:24:00Z",
+					"type": "Point", 
+							"coordinates": [ -118.766432, 44.025847 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25312",
+			"title": "Prescribed Fire SRF 2026 Rx Implementation, Humboldt, California",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25312",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-CASRF-000982"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 500.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-10-12T16:27:00Z",
+					"type": "Point", 
+							"coordinates": [ -123.540573, 41.300685 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25238",
+			"title": "Wildfire Buckhorn 2, Cassia, Idaho",
+            "description": "12 Miles S from Murtaugh, ID",
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25238",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-IDTFD-000268"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 2000.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-10-10T14:58:00Z",
+					"type": "Point", 
+							"coordinates": [ -114.102967, 42.337217 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25233",
+			"title": "Wildfire PK, Sheridan, Wyoming",
+            "description": "10 Miles W from Sheridan, WY",
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25233",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-WYSHX-000391"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 1645.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-10-09T19:26:00Z",
+					"type": "Point", 
+							"coordinates": [ -107.2199, 44.7516 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25232",
+			"title": "Wildfire CYRUS, Kern, California",
+            "description": "4 Miles SE from KERNVILLE, CA",
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25232",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-CASQF-001695"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 543.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-10-09T17:15:00Z",
+					"type": "Point", 
+							"coordinates": [ -118.418, 35.69875 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25234",
+			"title": "Prescribed Fire Bridger Trail Unit - KPERP Rx NKRD CY26, Coconino, Arizona",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25234",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-AZKNF-001107"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 5019.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-10-09T11:49:00Z",
+					"type": "Point", 
+							"coordinates": [ -112.185988, 36.73752 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_6474",
+			"title": "Iceberg D35",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_6474",
+			"closed": null,
+				"categories": [
+					{
+					"id": "seaLakeIce",
+					"title": "Sea and Lake Ice"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "NATICE",
+					"url": "https://usicecenter.gov/pub/Iceberg_Tabular.csv"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-01-11T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 21.01, -69.83 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-01-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 18.24, -69.29 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-02-02T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 16.63, -69.53 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-03-01T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 12.63, -69.36 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-03-07T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 11.39, -69.55 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-03-15T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 6.81, -69.77 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-03-22T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 12.63, -69.36 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-03-29T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 2.31, -69.95 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-04-05T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -1.79, -69.69 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-04-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -5.22, -70.01 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-12-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -27.82, -74.57 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-04-04T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -30.73, -74.62 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-04-24T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -31.03, -74.14 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-05-29T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -32.13, -73.51 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-06-05T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -31.99, -72.73 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-06-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -32.52, -71.97 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-07-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -34.34, -71.89 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-07-31T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -35.4, -72.29 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-08-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -37.49, -71.87 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-08-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -38.79, -71.3 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-08-28T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -39.24, -70.51 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-09-11T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -40.02, -69.3 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-09-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -40.24, -68.69 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-10-16T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -41.71, -68.54 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-11-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -43.35, -68.51 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-11-28T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -44.78, -68.23 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-01-02T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -46.42, -68.28 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-01-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -46.79, -67.73 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-01-23T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -47.25, -67.15 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-02-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -47.97, -66.37 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-03-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -48.19, -65.87 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-04-03T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -48.55, -65.34 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-08T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -48.79, -64.33 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -48.32, -63.43 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-29T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -48.63, -62.86 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -47.65, -62.51 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-03T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -45.53, -62.45 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -44.72, -62.1 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-30T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -44.79, -61.55 ]
+							},
+
+							{
+							"magnitudeValue": 168.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -43.87, -60.93 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-04T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -44.63, -60.41 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -45.73, -60.27 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -44.86, -60.01 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-15T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -43.77, -60.14 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25268",
+			"title": "Iceberg B52",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25268",
+			"closed": null,
+				"categories": [
+					{
+					"id": "seaLakeIce",
+					"title": "Sea and Lake Ice"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "NATICE",
+					"url": "https://usicecenter.gov/pub/Iceberg_Tabular.csv"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 48.88,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -130.24, -74.4 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25309",
+			"title": "Wildfire Craig Lake 1, Baraga, Michigan",
+            "description": "7 Miles NW from Michigamme, MI",
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25309",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-MIMIS-070006"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 604.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-10-08T18:05:00Z",
+					"type": "Point", 
+							"coordinates": [ -88.16960353, 46.63331342 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25235",
+			"title": "Prescribed Fire COOPER UNIT - KPERP RX NKRD  CY26, Coconino, Arizona",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25235",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-AZKNF-001101"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 2000.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-10-08T12:16:00Z",
+					"type": "Point", 
+							"coordinates": [ -112.214205, 36.754175 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25094",
+			"title": "Hurricane Simon",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25094",
+			"closed": null,
+				"categories": [
+					{
+					"id": "severeStorms",
+					"title": "Severe Storms"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "JTWC",
+					"url": "https://www.metoc.navy.mil/jtwc/products/ep2026.tcw"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 35.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-07T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -101.3, 15.2 ]
+							},
+
+							{
+							"magnitudeValue": 40.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-08T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -102.1, 15.3 ]
+							},
+
+							{
+							"magnitudeValue": 45.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-08T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -102.7, 15.4 ]
+							},
+
+							{
+							"magnitudeValue": 55.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-08T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -103.1, 15.4 ]
+							},
+
+							{
+							"magnitudeValue": 60.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-08T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -103.7, 15.6 ]
+							},
+
+							{
+							"magnitudeValue": 65.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -104.3, 15.7 ]
+							},
+
+							{
+							"magnitudeValue": 80.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-09T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -104.4, 15.7 ]
+							},
+
+							{
+							"magnitudeValue": 80.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-09T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -104.5, 15.9 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-09T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -104.7, 16 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -104.6, 16.6 ]
+							},
+
+							{
+							"magnitudeValue": 120.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-10T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -104.6, 17 ]
+							},
+
+							{
+							"magnitudeValue": 130.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-10T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -104.8, 17.3 ]
+							},
+
+							{
+							"magnitudeValue": 130.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-10T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -104.8, 17.4 ]
+							},
+
+							{
+							"magnitudeValue": 130.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-11T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -104.8, 18 ]
+							},
+
+							{
+							"magnitudeValue": 135.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-11T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -105, 18.4 ]
+							},
+
+							{
+							"magnitudeValue": 130.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-11T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -105.2, 18.9 ]
+							},
+
+							{
+							"magnitudeValue": 115.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-11T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -105.6, 19.4 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -105.8, 19.7 ]
+							},
+
+							{
+							"magnitudeValue": 100.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-12T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -106.1, 19.9 ]
+							},
+
+							{
+							"magnitudeValue": 95.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-12T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -106.4, 20 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-12T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -106.7, 20 ]
+							},
+
+							{
+							"magnitudeValue": 85.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -106.9, 20.3 ]
+							},
+
+							{
+							"magnitudeValue": 80.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-13T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -107.1, 20.5 ]
+							},
+
+							{
+							"magnitudeValue": 80.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-13T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -107.2, 20.3 ]
+							},
+
+							{
+							"magnitudeValue": 80.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-13T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -107.4, 20.2 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -107.5, 20.2 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-14T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -107.7, 20 ]
+							},
+
+							{
+							"magnitudeValue": 85.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-14T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -108, 19.8 ]
+							},
+
+							{
+							"magnitudeValue": 75.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-14T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -108.3, 19.5 ]
+							},
+
+							{
+							"magnitudeValue": 55.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-15T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -108.5, 19.2 ]
+							},
+
+							{
+							"magnitudeValue": 55.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-15T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -108.5, 19.2 ]
+							},
+
+							{
+							"magnitudeValue": 50.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-15T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -108, 19.2 ]
+							},
+
+							{
+							"magnitudeValue": 45.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-15T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -108.2, 19.2 ]
+							},
+
+							{
+							"magnitudeValue": 40.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-16T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -108.3, 19.3 ]
+							},
+
+							{
+							"magnitudeValue": 35.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-16T06:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -108.5, 19.7 ]
+							},
+
+							{
+							"magnitudeValue": 35.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-16T12:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -109.2, 20.4 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-16T18:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -110, 21.3 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25119",
+			"title": "Prescribed Fire CON BSE13 RX, Covington, Alabama",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25119",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-ALALF-000498"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 614.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-10-07T10:45:00Z",
+					"type": "Point", 
+							"coordinates": [ -86.526643, 31.124246 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25063",
+			"title": "Hurricane Isaias",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25063",
+			"closed": null,
+				"categories": [
+					{
+					"id": "severeStorms",
+					"title": "Severe Storms"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "NOAA_NHC",
+					"url": "https://www.nhc.noaa.gov/archive/2026/ISAIAS.shtml"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 35.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-07T09:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -94.1, 22 ]
+							},
+
+							{
+							"magnitudeValue": 40.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-07T15:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -93.6, 22.4 ]
+							},
+
+							{
+							"magnitudeValue": 55.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-07T21:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -92.9, 22.7 ]
+							},
+
+							{
+							"magnitudeValue": 60.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-08T03:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -91.9, 22.9 ]
+							},
+
+							{
+							"magnitudeValue": 70.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-08T09:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -91.2, 23.3 ]
+							},
+
+							{
+							"magnitudeValue": 75.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-08T15:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -90.2, 23.7 ]
+							},
+
+							{
+							"magnitudeValue": 85.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-08T21:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -89.3, 24.4 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-09T03:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -88.4, 25.4 ]
+							},
+
+							{
+							"magnitudeValue": 95.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-09T09:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -88, 26.4 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-09T15:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -87.3, 27.7 ]
+							},
+
+							{
+							"magnitudeValue": 100.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-09T21:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -87, 29.2 ]
+							},
+
+							{
+							"magnitudeValue": 80.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-10T03:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -86.5, 30.8 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-10T09:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -86.5, 32 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-10T15:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -86.8, 32.8 ]
+							},
+
+							{
+							"magnitudeValue": 25.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-10T21:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -86.9, 33.5 ]
+							},
+
+							{
+							"magnitudeValue": 20.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-11T03:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -86.7, 35 ]
+							},
+
+							{
+							"magnitudeValue": 20.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-11T09:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -85.9, 35.4 ]
+							},
+
+							{
+							"magnitudeValue": 20.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-10-11T15:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -84, 37.5 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25240",
+			"title": "Prescribed Fire Bartlett Creek RX, Custer, Idaho",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25240",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-IDSCF-260197"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 2000.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-10-06T11:34:00Z",
+					"type": "Point", 
+							"coordinates": [ -114.2, 43.9 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25117",
+			"title": "Wildfire Jones, Elko, Nevada",
+            "description": "1 Miles S from Deeth, NV",
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25117",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-NVECFX-010656"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 1657.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-10-05T23:14:00Z",
+					"type": "Point", 
+							"coordinates": [ -115.20765, 41.02195 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25239",
+			"title": "Prescribed Fire West Fork RX, Wasatch, Utah",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25239",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-UTUWF-200827"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 730.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-10-05T14:54:00Z",
+					"type": "Point", 
+							"coordinates": [ -111.058383, 40.4646 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25118",
+			"title": "Wildfire BOUQUET, Los Angeles, California",
+            "description": "8 Miles NE from Saugus, CA",
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25118",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-CAANF-264196"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 1048.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-10-03T17:30:00Z",
+					"type": "Point", 
+							"coordinates": [ -118.40183, 34.561835 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25043",
+			"title": "Prescribed Fire D3 Bear RX, Greenlee, Arizona",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25043",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-AZASF-000967"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 5072.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-10-02T17:58:00Z",
+					"type": "Point", 
+							"coordinates": [ -109.401883, 33.447133 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25042",
+			"title": "Wildfire Bull, Washoe, Nevada",
+            "description": "15 Miles W from Reno, NV",
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25042",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-NVTMFX-030869"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 1529.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-10-02T14:26:00Z",
+					"type": "Point", 
+							"coordinates": [ -119.987683, 39.539067 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25236",
+			"title": "Prescribed Fire McCRAKEN RX-WRD CY26, Coconino, Arizona",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25236",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-AZKNF-001070"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 530.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-10-01T17:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -112.266889, 35.116944 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25237",
+			"title": "Prescribed Fire KENDRICK RX-WRD CY26, Coconino, Arizona",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25237",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-AZKNF-001068"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 1190.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-10-01T16:51:00Z",
+					"type": "Point", 
+							"coordinates": [ -111.909179, 35.403321 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_5359",
+			"title": "Iceberg A76C",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_5359",
+			"closed": null,
+				"categories": [
+					{
+					"id": "seaLakeIce",
+					"title": "Sea and Lake Ice"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "NATICE",
+					"url": "https://usicecenter.gov/Products/AntarcIcebergs"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2021-05-28T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -57.04, -75.57 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2021-06-11T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -56.38, -74.98 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2021-07-02T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -56.65, -74.41 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2021-07-23T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -57.29, -73.85 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2021-08-20T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.29, -72.87 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2021-09-17T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -59.30, -72.03 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2021-10-15T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -59.61, -71.14 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2021-11-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -59.88, -70.66 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2022-02-04T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -60.06, -69.93 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2022-03-25T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -59.89, -69.42 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2022-05-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -60.03, -68.97 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2022-06-03T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -59.62, -68.41 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2022-07-08T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -59.56, -67.76 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2022-07-29T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -59.00, -67.18 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2022-08-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -59.15, -66.72 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2022-11-04T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -59.83, -66.27 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-02-03T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.61, -66.41 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-04-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -59.75, -66.08 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-05-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -60.2, -65.64 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-11-24T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.92, -65.38 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-12-08T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -57.76, -65.18 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-01-11T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -56.67, -65.1 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-12-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -56.07, -64.1 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-12-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -55.23, -64.42 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-01-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -54.02, -63.88 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-01-23T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -52.84, -63.79 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-02-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -51.88, -63.45 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-03-06T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -52.19, -62.97 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-03-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.29, -62.3 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-04-04T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -52.11, -61.86 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-04-11T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -50.95, -61.48 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-04-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -49.8, -61.09 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-05-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -48.45, -60.99 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-06-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -49.0, -60.59 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-07-31T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -47.81, -60.05 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-09-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -44.61, -60.08 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-10-16T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -43.29, -60.17 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-10-31T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -42.33, -60.45 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-11-07T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -40.58, -60.59 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-11-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -38.87, -60.37 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-11-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -38.56, -59.78 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-12-05T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -38.71, -59.12 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-12-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -37.46, -59.43 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-01-02T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -37.33, -60.2 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-01-16T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -38.05, -60.53 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-01-30T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -38.1, -59.79 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-03-06T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -37.2, -59.26 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-03-20T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -36.32, -59.0 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-04-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -36.33, -59.5 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-04-24T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -36.19, -58.65 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-08T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -36.61, -57.99 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-15T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -34.17, -58.57 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -34.19, -57.65 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-29T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -32.5, -56.27 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-05T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -32.58, -55.63 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -32.6, -54.25 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-03T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -32.32, -52.65 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-17T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -31.57, -52.27 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-07T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -30.93, -52.83 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-20T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -30.2, -52.99 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-27T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -29.5, -53.73 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-04T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -26.88, -53.29 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -26.43, -53.94 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -26.55, -54.48 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-01T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -25.27, -55.41 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -24.53, -56.33 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_6288",
+			"title": "Iceberg D32",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_6288",
+			"closed": null,
+				"categories": [
+					{
+					"id": "seaLakeIce",
+					"title": "Sea and Lake Ice"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "NATICE",
+					"url": "https://usicecenter.gov/pub/Iceberg_Tabular.csv"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2022-10-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 70.68, -68.36 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2022-11-11T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 70.97, -67.87 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2022-12-16T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 71.07, -67.25 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-01-06T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 70.03, -66.78 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-01-20T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 68.02, -67.02 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-02-03T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 66.44, -66.69 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-03-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 64.91, -66.73 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-04-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 61.47, -66.79 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-04-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 59.41, -66.63 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-04-28T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 57.37, -65.95 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-05-05T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 55.56, -65.65 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-12-08T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 53.8, -65.41 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-02-02T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 52.63, -65.21 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-02-23T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 51.95, -64.71 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-03-15T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 50.88, -64.61 ]
+							},
+
+							{
+							"magnitudeValue": 90.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-03-29T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 50.49, -65.03 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-12-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -2.1, -69.95 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-12-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -4.13, -70.05 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-01-31T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -6.05, -70.14 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-02-06T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -7.56, -70.37 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-02-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -8.92, -70.41 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-02-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -9.94, -70.73 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-04-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -12.58, -71.18 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-04-24T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -16.28, -71.88 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-05-02T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -20.64, -73.06 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-05-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -15.13, -71.95 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-05-16T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -27.02, -74.01 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-05-29T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -28.57, -72.77 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-06-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -28.37, -71.38 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-07-31T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -29.29, -71.86 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-08-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -30.55, -71.56 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-08-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -32.4, -71.17 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-08-28T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -33.47, -70.84 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-09-11T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -34.14, -69.74 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-09-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -33.22, -69.25 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-10-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -33.3, -68.6 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-10-16T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -34.27, -68.9 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-10-31T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -34.42, -68.41 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-11-07T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -35.47, -68.83 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-11-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -37.95, -69.03 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-12-05T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -39.6, -68.65 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-01-02T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -41.1, -68.86 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-01-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -42.29, -68.35 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-01-23T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -43.21, -67.73 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-02-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -44.33, -67.13 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-02-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -45.65, -66.8 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-03-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -46.3, -66.25 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-04-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -47.66, -66.36 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-04-30T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -46.48, -66.16 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-08T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -47.34, -65.5 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -47.22, -64.74 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-29T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -46.87, -64.24 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-05T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -45.99, -63.86 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -44.2, -63.51 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-25T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -43.03, -62.46 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-03T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -41.25, -62.03 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -39.44, -61.65 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-17T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -39.28, -61.03 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-23T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -38.6, -60.68 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-07T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -38.05, -59.36 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -37.62, -58.93 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-20T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -36.95, -58.57 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-04T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -37.39, -57.75 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -39.14, -57.96 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -38.36, -57.62 ]
+							},
+
+							{
+							"magnitudeValue": 54.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-01T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -38.41, -56.49 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_6523",
+			"title": "Iceberg A83",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_6523",
+			"closed": null,
+				"categories": [
+					{
+					"id": "seaLakeIce",
+					"title": "Sea and Lake Ice"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "EO",
+					"url": "https://earthobservatory.nasa.gov/images/152848/antarctic-ice-shelf-spawns-iceberg-a-83"
+				},
+
+							{
+					"id": "NATICE",
+					"url": "https://usicecenter.gov/pub/Iceberg_Tabular.csv"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 140.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-05-24T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -25.55, -75.37 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-12-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -28.6, -76.09 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-01-23T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -30.23, -76.37 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-02-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -33.21, -76.88 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-02-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -34.86, -77.38 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-04-04T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -38.7, -77.4 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-04-24T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -40.37, -76.79 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-05-02T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -41.65, -77.15 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-05-22T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -42.16, -76.2 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-05-29T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -41.21, -75.59 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-06-05T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -40.74, -74.82 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-06-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -40.94, -74.12 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-06-20T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -41.21, -73.63 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-07-31T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -43.33, -73.76 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-08-08T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -43.92, -73.29 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-08-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -45.89, -72.6 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-08-28T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -45.93, -72.1 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-09-11T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -46.02, -71.05 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-09-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -46.21, -70.53 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-10-16T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -48.39, -70.12 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-11-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -50.1, -70.05 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-11-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -50.78, -69.41 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-12-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -51.5, -69.85 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-01-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -52.2, -69.19 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-02-06T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -51.87, -68.55 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-02-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -52.31, -68.11 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-03-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -52.08, -67.48 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-04-17T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.11, -67.13 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-04-30T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.18, -66.53 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-08T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.35, -65.97 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.69, -65.1 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-05T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.92, -64.46 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.03, -64.2 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-25T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -52.58, -63.77 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-03T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -51.39, -63.54 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -50.29, -63.01 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-17T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -50.85, -62.63 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-30T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -50.77, -61.9 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-07T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -50.44, -61.4 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -50.52, -60.95 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -51.39, -61.27 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-01T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -52.12, -60.77 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -51.08, -60.34 ]
+							},
+
+							{
+							"magnitudeValue": 84.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-15T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -49.65, -60.29 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_10212",
+			"title": "Iceberg B22F",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_10212",
+			"closed": null,
+				"categories": [
+					{
+					"id": "seaLakeIce",
+					"title": "Sea and Lake Ice"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "NATICE",
+					"url": "https://usicecenter.gov/pub/Iceberg_Tabular.csv"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 330.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-08-15T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -127.41, -72.61 ]
+							},
+
+							{
+							"magnitudeValue": 330.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-12-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -140.7, -74.12 ]
+							},
+
+							{
+							"magnitudeValue": 330.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-12-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -143.13, -74.37 ]
+							},
+
+							{
+							"magnitudeValue": 330.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-01-02T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -145.92, -74.74 ]
+							},
+
+							{
+							"magnitudeValue": 330.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-01-31T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -148.32, -74.89 ]
+							},
+
+							{
+							"magnitudeValue": 330.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-02-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -150.91, -75.2 ]
+							},
+
+							{
+							"magnitudeValue": 330.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-03-06T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -153.12, -75.24 ]
+							},
+
+							{
+							"magnitudeValue": 330.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-03-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -154.11, -75.65 ]
+							},
+
+							{
+							"magnitudeValue": 330.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-03-27T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -155.71, -75.88 ]
+							},
+
+							{
+							"magnitudeValue": 330.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-04-11T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -157.47, -75.63 ]
+							},
+
+							{
+							"magnitudeValue": 330.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-05-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -160.1, -75.39 ]
+							},
+
+							{
+							"magnitudeValue": 330.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-05-22T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -161.44, -74.93 ]
+							},
+
+							{
+							"magnitudeValue": 330.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-06-05T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -163.27, -74.75 ]
+							},
+
+							{
+							"magnitudeValue": 330.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-06-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -165.79, -74.38 ]
+							},
+
+							{
+							"magnitudeValue": 330.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-06-27T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -167.33, -73.88 ]
+							},
+
+							{
+							"magnitudeValue": 330.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-07-11T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -169.21, -73.67 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-07-31T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -169.59, -73.23 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-08-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -170.96, -72.62 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-09-04T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -171.89, -72.21 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-09-11T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -173.36, -72.3 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-10-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -173.77, -71.31 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-10-16T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -174.64, -70.81 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-10-31T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -177.13, -70.28 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-11-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -177.85, -69.89 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-11-28T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -177.84, -69.24 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-12-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -176.57, -68.86 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-01-02T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -176.74, -68.3 ]
+							},
+
+							{
+							"magnitudeValue": 112.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-02-19T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -177.25, -67.68 ]
+							},
+
+							{
+							"magnitudeValue": 98.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-03-06T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -178.77, -67.31 ]
+							},
+
+							{
+							"magnitudeValue": 98.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-03-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -179.86, -67.09 ]
+							},
+
+							{
+							"magnitudeValue": 98.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-04-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 179.79, -67.58 ]
+							},
+
+							{
+							"magnitudeValue": 98.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-04-24T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 179.83, -67.1 ]
+							},
+
+							{
+							"magnitudeValue": 98.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-08T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 178.33, -67.18 ]
+							},
+
+							{
+							"magnitudeValue": 98.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 177.7, -67.6 ]
+							},
+
+							{
+							"magnitudeValue": 98.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-25T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 178.27, -66.75 ]
+							},
+
+							{
+							"magnitudeValue": 98.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-03T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 179.34, -66.58 ]
+							},
+
+							{
+							"magnitudeValue": 98.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-17T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -178.99, -66.56 ]
+							},
+
+							{
+							"magnitudeValue": 98.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-30T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -176.96, -67.11 ]
+							},
+
+							{
+							"magnitudeValue": 98.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -176.03, -67.52 ]
+							},
+
+							{
+							"magnitudeValue": 98.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-01T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -174.86, -67.65 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25045",
+			"title": "Prescribed Fire Starvation 11A Rx, Wallowa, Oregon",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25045",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-ORWWF-000669"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 719.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-09-30T15:52:00Z",
+					"type": "Point", 
+							"coordinates": [ -117.251676, 45.701354 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_24964",
+			"title": "Wildfire SAN FRANCISCO 2, Starr, Texas",
+            "description": "2 Miles S from LA CASITA, TX",
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_24964",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-TXRGR-000402"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 510.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-09-30T08:56:00Z",
+					"type": "Point", 
+							"coordinates": [ -98.692222, 26.286667 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_24963",
+			"title": "Wildfire Hatch Grade, Walla Walla, Washington",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_24963",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-WAWFS-000664"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 5000.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-09-29T19:50:00Z",
+					"type": "Point", 
+							"coordinates": [ -118.8588, 46.0322 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_24965",
+			"title": "Wildfire 3 ALPHA SIERRA, Broward, Florida",
+            "description": "5 Miles W from WESTON, FL",
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_24965",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-FLFLS-1800153"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 774.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-09-28T21:53:00Z",
+					"type": "Point", 
+							"coordinates": [ -80.5952778, 26.1341667 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_24909",
+			"title": "Tropical Storm Hanna",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_24909",
+			"closed": null,
+				"categories": [
+					{
+					"id": "severeStorms",
+					"title": "Severe Storms"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "NOAA_NHC",
+					"url": "https://www.nhc.noaa.gov/archive/2026/HANNA.shtml"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 40.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-09-28T15:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -50.4, 36.6 ]
+							},
+
+							{
+							"magnitudeValue": 40.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-09-28T21:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -48.7, 36.5 ]
+							},
+
+							{
+							"magnitudeValue": 40.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-09-29T03:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -47.7, 36 ]
+							},
+
+							{
+							"magnitudeValue": 40.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-09-29T09:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -46.2, 35.2 ]
+							},
+
+							{
+							"magnitudeValue": 35.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-09-29T15:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -45.5, 34.6 ]
+							},
+
+							{
+							"magnitudeValue": 35.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-09-29T21:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -44.5, 34 ]
+							},
+
+							{
+							"magnitudeValue": 35.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-09-30T03:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -43.6, 33.7 ]
+							},
+
+							{
+							"magnitudeValue": 35.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-09-30T09:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -43.9, 33.5 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-09-30T15:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -43.6, 33.4 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25041",
+			"title": "Prescribed Fire Walker Hill Piles RX, Coconino, Arizona",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25041",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-AZCOF-001521"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 725.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-09-28T09:55:00Z",
+					"type": "Point", 
+							"coordinates": [ -111.847278, 35.281778 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_24904",
+			"title": "Wildfire Rafter 4B, Schleicher, Texas",
+            "description": "8 Miles SE from Eldorado, TX",
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_24904",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-TXTXS-268989"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 2125.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-09-26T15:18:00Z",
+					"type": "Point", 
+							"coordinates": [ -100.49806, 30.76633 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_24905",
+			"title": "Wildfire SECOND STREET, Benton, Washington",
+            "description": "1 Miles SE from Benton City, WA",
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_24905",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-WAWFS-260847"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 1151.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-09-25T18:57:00Z",
+					"type": "Point", 
+							"coordinates": [ -119.470139, 46.253671 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_24811",
+			"title": "Tropical Storm Gonzalo",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_24811",
+			"closed": null,
+				"categories": [
+					{
+					"id": "severeStorms",
+					"title": "Severe Storms"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "NOAA_NHC",
+					"url": "https://www.nhc.noaa.gov/archive/2026/GONZALO.shtml"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 40.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-09-25T03:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -22.1, 13.2 ]
+							},
+
+							{
+							"magnitudeValue": 40.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-09-25T09:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -22.4, 14.2 ]
+							},
+
+							{
+							"magnitudeValue": 45.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-09-25T15:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -22.7, 15.1 ]
+							},
+
+							{
+							"magnitudeValue": 45.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-09-25T21:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -22.7, 16.2 ]
+							},
+
+							{
+							"magnitudeValue": 40.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-09-26T03:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -22.5, 16.9 ]
+							},
+
+							{
+							"magnitudeValue": 40.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-09-26T09:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -23, 17.6 ]
+							},
+
+							{
+							"magnitudeValue": 35.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-09-26T15:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -23, 18.8 ]
+							},
+
+							{
+							"magnitudeValue": 35.00,
+					"magnitudeUnit": "kts",
+					"date": "2026-09-26T21:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -23.3, 19.3 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_25044",
+			"title": "Prescribed Fire Wolf A RX, Grant, Oregon",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_25044",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-ORMAF-002744"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 1620.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-09-24T14:39:00Z",
+					"type": "Point", 
+							"coordinates": [ -118.7167, 44.1182 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_24908",
+			"title": "Prescribed Fire Bonanza Ridge RX, Broadwater, Montana",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_24908",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-MTHLF-000752"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 550.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-09-24T12:55:00Z",
+					"type": "Point", 
+							"coordinates": [ -111.7702, 46.2447 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_6320",
+			"title": "Iceberg A81",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_6320",
+			"closed": null,
+				"categories": [
+					{
+					"id": "seaLakeIce",
+					"title": "Sea and Lake Ice"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "NATICE",
+					"url": "https://usicecenter.gov/pub/Iceberg_Tabular.csv"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-01-27T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -27.16, -75.66 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-02-24T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -28.83, -76.01 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-03-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -30.79, -76.37 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-03-31T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -33.68, -76.80 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-04-07T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -34.92, -77.18 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-04-28T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -36.06, -77.59 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-05-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -38.53, -77.69 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-06-15T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -40.51, -77.54 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-07-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -42.95, -77.38 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-07-28T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -39.22, -77.69 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-08-04T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -44.49, -77.08 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-09-22T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -45.63, -76.69 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-10-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -48.51, -76.47 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-03-07T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -47.68, -75.98 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-12-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -57.72, -69.42 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-02-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.91, -69.67 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-03-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.84, -69.19 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-04-04T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.84, -68.7 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-05-22T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.15, -68.31 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-07-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.19, -67.72 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-08-08T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.02, -67.14 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-09-04T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.34, -66.69 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-10-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.33, -65.8 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-11-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -57.93, -65.3 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-01-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.32, -64.87 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-04-03T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -57.15, -64.82 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-04-30T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -55.34, -64.4 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -54.54, -63.9 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-29T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.69, -63.61 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.58, -63.0 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-25T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -54.2, -62.4 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-03T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.25, -61.86 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -52.3, -61.23 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-17T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.39, -61.22 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-23T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -52.82, -60.7 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-07T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -50.82, -59.46 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-20T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -51.01, -58.9 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-27T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -49.94, -58.74 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-04T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -47.34, -58.71 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -47.22, -57.36 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -45.89, -57.71 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-24T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -44.39, -56.94 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-01T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -41.79, -55.56 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -40.54, -55.0 ]
+							},
+
+							{
+							"magnitudeValue": 700.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-15T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -38.8, -55.07 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_6424",
+			"title": "Iceberg D33B",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_6424",
+			"closed": null,
+				"categories": [
+					{
+					"id": "seaLakeIce",
+					"title": "Sea and Lake Ice"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "NATICE",
+					"url": "https://usicecenter.gov/pub/Iceberg_Tabular.csv"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-09-08T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 18.3, -69.64 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-09-15T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 16.6, -69.45 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-09-30T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 13.66, -69.3 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-10-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 12.22, -69.47 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-12-08T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 9.8, -69.61 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-12-15T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 8.01, -69.68 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2023-12-28T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 4.38, -69.94 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-01-04T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 1.94, -69.84 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-01-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -2.03, -69.22 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-02-08T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -3.15, -69.6 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-02-23T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -4.61, -70.16 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-03-01T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -7.49, -70.29 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-03-07T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -9.33, -70.4 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-03-22T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -7.49, -70.29 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-03-29T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -12.77, -71.07 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-04-05T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -15.11, -71.47 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-04-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -16.64, -72.06 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-12-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -37.79, -76.49 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-01-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -39.23, -76.86 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-02-06T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -40.28, -77.29 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-03-27T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -42.75, -76.97 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-04-11T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -44.03, -76.53 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-05-16T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -42.8, -76.04 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-05-29T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -41.99, -75.11 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-06-05T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -41.96, -74.43 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-06-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -42.53, -73.98 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-07-11T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -42.2, -73.47 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-08-08T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -44.43, -73.12 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-08-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -46.09, -72.41 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-08-28T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -46.13, -71.89 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-09-11T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -46.21, -70.86 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-09-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -46.34, -70.3 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-10-16T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -48.35, -69.88 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-11-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -49.85, -69.86 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-11-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -50.48, -69.25 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-12-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -51.23, -69.65 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-01-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -51.92, -69.03 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-02-06T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -51.83, -68.41 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-02-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -52.32, -67.97 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-03-20T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -52.33, -67.38 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-04-24T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.44, -66.98 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-08T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.63, -66.06 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.98, -65.16 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-05T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -54.0, -64.14 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -52.45, -63.74 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-25T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -52.27, -63.09 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-03T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.24, -62.79 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.46, -62.28 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-17T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -52.16, -61.77 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-23T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -51.17, -61.27 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-07T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.63, -61.14 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -52.82, -60.8 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-20T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -51.32, -60.02 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-27T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -49.94, -59.81 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-04T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -51.03, -59.08 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -50.29, -58.69 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -47.25, -59.47 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-24T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -45.58, -59.29 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-01T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -47.3, -58.51 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -48.18, -57.75 ]
+							},
+
+							{
+							"magnitudeValue": 252.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-15T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -46.05, -56.98 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_6510",
+			"title": "Iceberg D33C",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_6510",
+			"closed": null,
+				"categories": [
+					{
+					"id": "seaLakeIce",
+					"title": "Sea and Lake Ice"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "NATICE",
+					"url": "https://usicecenter.gov/pub/Iceberg_Tabular.csv"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": null,
+					"magnitudeUnit": null,
+					"date": "2024-04-19T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -20.02, -75.52 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2024-12-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.96, -71.34 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-01-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -55.73, -70.63 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-02-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -57.47, -70.73 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-03-27T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -57.93, -70.13 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-04-24T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.36, -69.66 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-07-04T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.53, -69.18 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-07-31T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.31, -68.5 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-08-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.42, -67.9 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-09-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.3, -67.39 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-10-16T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.34, -66.61 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-11-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.17, -66.14 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-04-17T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -58.13, -65.63 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-04-30T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -57.72, -65.21 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -56.29, -64.84 ]
+							},
+
+							{
+							"magnitudeValue": 105.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -54.73, -64.32 ]
+							},
+
+							{
+							"magnitudeValue": 45.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-25T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -54.21, -63.63 ]
+							},
+
+							{
+							"magnitudeValue": 45.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.2, -63.34 ]
+							},
+
+							{
+							"magnitudeValue": 45.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-07T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -52.35, -61.52 ]
+							},
+
+							{
+							"magnitudeValue": 45.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.75, -61.49 ]
+							},
+
+							{
+							"magnitudeValue": 45.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-20T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -54.41, -61.93 ]
+							},
+
+							{
+							"magnitudeValue": 45.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-27T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.58, -61.54 ]
+							},
+
+							{
+							"magnitudeValue": 45.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-24T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -54.38, -61.95 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_12618",
+			"title": "Iceberg A84",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_12618",
+			"closed": null,
+				"categories": [
+					{
+					"id": "seaLakeIce",
+					"title": "Sea and Lake Ice"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "NATICE",
+					"url": "https://usicecenter.gov/pub/Iceberg_Tabular.csv"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 144.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-01-31T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -75.8, -72.69 ]
+							},
+
+							{
+							"magnitudeValue": 144.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-02-06T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -77.85, -72.19 ]
+							},
+
+							{
+							"magnitudeValue": 144.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-02-14T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -79.81, -72.06 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-02-28T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -81.03, -72.88 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-03-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -82.43, -73.6 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-03-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -84.35, -73.44 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-04-04T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -86.23, -72.86 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-04-11T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -87.79, -72.71 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-04-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -90.64, -72.11 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-04-24T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -91.86, -72.4 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-05-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -93.89, -72.42 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-05-16T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -94.85, -72.04 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-01-02T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -96.27, -71.64 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-01-30T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -100.25, -71.61 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-02-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -103.78, -72.35 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-03-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -103.89, -73.1 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-04-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -104.89, -73.86 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-04-24T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -106.83, -73.24 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-15T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -107.18, -72.78 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -108.28, -72.44 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-17T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -107.7, -72.02 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-23T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -105.76, -71.59 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-30T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -103.67, -71.38 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -102.54, -71.67 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -101.65, -71.19 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -99.09, -70.82 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-24T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -97.68, -70.41 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-01T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -95.49, -69.85 ]
+							},
+
+							{
+							"magnitudeValue": 72.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -93.73, -69.8 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_12716",
+			"title": "Iceberg A85",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_12716",
+			"closed": null,
+				"categories": [
+					{
+					"id": "seaLakeIce",
+					"title": "Sea and Lake Ice"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "NATICE",
+					"url": "https://usicecenter.gov/pub/Iceberg_Tabular.csv"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-02-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -48.54, -77.51 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-03-06T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -49.4, -76.96 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-03-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -51.03, -76.66 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-03-27T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.15, -76.16 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-04-11T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -54.47, -75.8 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-05-22T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -54.83, -75.23 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-06-05T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.83, -74.67 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-06-20T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.52, -74.18 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-07-31T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -54.34, -73.38 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-08-08T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -54.79, -72.84 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-08-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -54.56, -72.37 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-08-28T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -54.06, -71.91 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-09-11T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.84, -71.12 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-09-26T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -54.16, -70.43 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-10-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -54.74, -70.0 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-10-16T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -55.01, -69.44 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-11-07T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -55.23, -68.89 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-11-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -55.04, -68.06 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2025-12-18T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -55.69, -68.44 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-03-20T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -56.94, -68.57 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-04-24T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -57.29, -68.1 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-08T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -57.24, -67.45 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-05-21T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -56.41, -66.87 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-06-12T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -55.1, -66.42 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-03T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -54.3, -66.06 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.69, -65.57 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-17T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.71, -65.12 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-23T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.85, -64.65 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-07-30T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.76, -64.18 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-13T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.47, -63.54 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-08-27T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.38, -62.85 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-04T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.92, -62.41 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-10T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -53.02, -61.72 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-09-24T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -52.52, -60.56 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-01T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -51.14, -59.24 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-09T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -50.95, -58.74 ]
+							},
+
+							{
+							"magnitudeValue": 30.00,
+					"magnitudeUnit": "NM^2",
+					"date": "2026-10-15T00:00:00Z",
+					"type": "Point", 
+							"coordinates": [ -50.23, -58.41 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_24809",
+			"title": "Wildfire Merit Creek, Greene, Mississippi",
+            "description": "4 Miles S from McLain, MS",
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_24809",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-MSMNF-000578"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 828.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-09-23T10:12:00Z",
+					"type": "Point", 
+							"coordinates": [ -88.83785, 31.052583 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_24907",
+			"title": "Prescribed Fire Kelly Gulch RX, Lewis and Clark, Montana",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_24907",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-MTHLF-000746"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 1250.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-09-22T13:20:00Z",
+					"type": "Point", 
+							"coordinates": [ -111.726667, 46.735 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_24710",
+			"title": "Wildfire Round Prarie, Morehouse, Louisiana",
+            "description": "8 Miles NW from Bastrop, LA",
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_24710",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-LALAS-000390"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 738.55,
+					"magnitudeUnit": "acres",
+					"date": "2026-09-20T17:32:00Z",
+					"type": "Point", 
+							"coordinates": [ -91.989455, 32.858241 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_24810",
+			"title": "Prescribed Fire CRAWFORD CORRAL RX, Tulare, California",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_24810",
+			"closed": null,
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "IRWIN",
+					"url": "https://irwin.doi.gov/observer/incidents/2026-CATUU-000092"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 690.00,
+					"magnitudeUnit": "acres",
+					"date": "2026-09-19T13:26:00Z",
+					"type": "Point", 
+							"coordinates": [ -118.9721, 36.601661 ]
+							}
+
+						
+			]
+		}
+
+		]
+}
