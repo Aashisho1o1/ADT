@@ -1,145 +1,134 @@
----
-title: Alumni Disaster Tracker
-emoji: 🌍
-colorFrom: blue
-colorTo: green
-sdk: streamlit
-sdk_version: 1.43.0
-app_file: app.py
-pinned: false
+# 🌍 Alumni Disaster Tracker
+
+[![CI](https://github.com/Aashisho1o1/ADT/actions/workflows/ci.yml/badge.svg)](https://github.com/Aashisho1o1/ADT/actions/workflows/ci.yml)
+
+**When a natural disaster happens, which of our people are near it?**
+
+A small Streamlit app that pulls live natural-disaster events from NASA's EONET feed, plots them on a world map next to alumni locations, and lists every alumnus within a chosen radius of an active event, closest first.
+
+> **All alumni data in this repository is synthetic.** The 200 names, cities and coordinates in `data/alumni.csv` are randomly generated. They describe no real person. This was a deliberate choice to protect personal information and privacy: a public demo should never expose real names, addresses or locations. See [Privacy and data](#privacy-and-data).
+
 ---
 
-# Alumni Disaster Tracker
+## The problem
 
-A Streamlit application that monitors natural disasters around the world and alerts when they occur near alumni locations.
+University alumni offices, NGOs and distributed companies all have the same question after a wildfire, hurricane or volcanic eruption: *who do we need to check on?* Answering it usually means cross-referencing a news map with a spreadsheet by hand.
+
+This app answers it in one screen:
+
+1. Open the app. It loads every open disaster event from the last 30 days.
+2. See events (red) and alumni (blue, clustered) on one map. Each event has a shaded circle showing the alert radius.
+3. Read the list on the right: who is near which event, and how far away.
+4. Adjust the radius or event types in the sidebar. Everything updates instantly.
 
 ## Features
 
-- Real-time disaster monitoring using NASA EONET API
-- Alumni location visualization on interactive maps
-- Proximity alerts for disasters near alumni
-- Filtering by disaster types (wildfires, storms, volcanoes, etc.)
-- PostgreSQL database integration for alumni data management
-- Caching for optimal performance
+- **Live data** from [NASA EONET v3](https://eonet.gsfc.nasa.gov/docs/v3) (no API key needed), cached for 15 minutes.
+- **Works offline.** If EONET is unreachable, the app falls back to a saved snapshot (`data/events.json`) and says so on screen.
+- **Correct positions for moving events.** EONET stores storms as a time series of points; the app uses each event's most recent position.
+- **Event types come from the data**, so new categories (sea and lake ice, floods, and so on) appear automatically.
+- **Fast matching.** Distances are computed as one vectorised NumPy operation: 2,000 alumni × 49 events takes about 10 ms.
+- **Zero setup.** No database, no secrets, no API keys.
 
-## Technology Stack
+## Quick start
 
-- **Frontend**: Streamlit for the user interface
-- **Maps**: Folium for interactive map visualization
-- **Database**: PostgreSQL with SQLAlchemy ORM
-- **APIs**: NASA EONET API for disaster data
-- **Geolocation**: Geopy with Nominatim geocoding
+Requires Python 3.12 or newer.
 
-## Setup Instructions
+```bash
+git clone https://github.com/Aashisho1o1/ADT.git
+cd ADT
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+streamlit run app.py
+```
 
-### Prerequisites
+Then open http://localhost:8501.
 
-- Python 3.8 or higher
-- PostgreSQL database
-- NASA API key (free from https://api.nasa.gov)
+Run the tests:
 
-### Installation
+```bash
+pip install pytest
+python -m pytest
+```
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd ADT
-   ```
+Every push runs CI (`.github/workflows/ci.yml`): lint with ruff, the test suite, and a dependency vulnerability check with pip-audit.
 
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+## Deploy
 
-3. **Configure environment variables**
-   ```bash
-   cp .env.example .env
-   ```
+The app is hosted on [Streamlit Community Cloud](https://share.streamlit.io), which deploys straight from this repository:
 
-   Edit `.env` and add your credentials:
-   ```
-   DATABASE_URL=postgresql://username:password@host:port/database
-   NASA_API_KEY=your_nasa_api_key_here
-   ```
+1. Sign in at share.streamlit.io with GitHub.
+2. Click **Create app**, choose this repo, branch `main`, file `app.py`.
+3. Click **Deploy**. No secrets or settings are needed.
 
-4. **Initialize the database**
-   ```bash
-   python utils/init_db.py
-   ```
+Each push to `main` redeploys automatically.
 
-5. **Load sample data (optional)**
-   ```bash
-   python scripts/load_alumni_data.py
-   ```
+## How it works
 
-6. **Run the application**
-   ```bash
-   streamlit run app.py
-   ```
+```
+NASA EONET API ──► fetch_events() ──► parse_events() ──┐
+  (fallback: data/events.json)        latest position  │
+                                                       ▼
+data/alumni.csv ──► load_alumni() ──────────────► find_nearby(radius) ──► app.py
+                    drops bad coordinates          haversine matrix         map + table
+```
 
-### Deployment
+| File | Lines | What it does |
+|---|---|---|
+| `app.py` | ~70 | The UI only: sidebar filters, three metrics, Folium map, results table. |
+| `core.py` | ~90 | All logic, with no Streamlit imports, so it can be tested on its own. |
+| `tests/test_core.py` | ~115 | 13 offline tests, including a smoke test of the whole app. |
+| `data/alumni.csv` | 200 rows | Synthetic alumni: `name, city, country, lat, lon`. |
+| `data/events.json` | 49 events | Saved EONET response, used as offline fallback and test fixture. |
 
-#### Streamlit Cloud
+### Key functions in `core.py`
 
-1. Push your code to GitHub
-2. Connect your repository to Streamlit Cloud
-3. Add secrets in the Streamlit Cloud dashboard:
-   ```toml
-   [postgres]
-   url = "your_database_url"
+- `fetch_events(days=30)` calls EONET with a 10-second timeout and returns `(events, is_live)`. On any network or parse error it loads the snapshot instead of failing.
+- `parse_events(raw)` turns raw EONET JSON into a table with one row per event. It takes the latest point of each event's track, uses the centre of polygon geometries, and skips malformed events instead of crashing.
+- `load_alumni(path)` reads the CSV and drops rows with missing or out-of-range coordinates.
+- `haversine_km(...)` computes the great-circle distance. It works on single numbers and on whole arrays.
+- `find_nearby(alumni, events, radius_km)` builds an alumni × events distance matrix in one step and returns every pair within the radius, sorted by distance.
 
-   [nasa]
-   api_key = "your_nasa_api_key"
-   ```
+## Privacy and data
 
-#### Hugging Face Spaces
+This project handles exactly the kind of data that must be protected: people's names and where they live.
 
-The repository includes a GitHub Actions workflow (`.github/workflows/sync-to-huggingface.yml`) that automatically syncs to Hugging Face Spaces.
+- **The demo uses synthetic data only.** `data/alumni.csv` was generated with a fixed random seed from lists of common first and last names and 40 world cities, with each point randomly shifted by up to about 30 km. It contains no real names, addresses, emails or phone numbers.
+- **The data model is minimal by design.** The app only needs a name, a city and coordinates. It does not store or display emails, phone numbers or street addresses.
+- **Using real data:** keep the same five columns, keep the file out of version control (add it to `.gitignore`), and run the app privately or behind authentication. Never deploy real personal data to a public URL.
+- **No secrets are needed.** EONET is a public API, so there are no keys or passwords to leak.
 
-## Security
+## Design decisions
 
-**IMPORTANT**: This repository uses sample data for demonstration purposes. If you plan to use real alumni data:
+| Decision | Why | Trade-off |
+|---|---|---|
+| **Streamlit** instead of React plus an API | One language and one process; the fastest route to a working, shareable tool. | Less control over the UI; every interaction reruns the script, so caching matters. |
+| **CSV instead of a database** | The demo runs with zero setup, and nothing secret is needed to start it. | Not suited to many users editing data at once. A database would be the next step for real use. |
+| **NASA EONET** as the data source | Free, global, no API key, covers wildfires, storms, volcanoes and ice. | Event coverage and update speed depend on NASA's feed. |
+| **Saved snapshot fallback** | The demo never shows an empty screen, and tests don't need the network. | The snapshot ages, so the app shows a clear notice when it is in use. |
+| **Streamlit Community Cloud** for hosting | Free, deploys from GitHub, needs no tokens in CI. | The app sleeps after a few days without visitors; the first visit then takes a moment to wake it. |
+| **Haversine on a sphere** | Simple, vectorised and fast. | Up to about 0.5% off compared with ellipsoid distance, which doesn't matter for a radius in kilometres. |
 
-1. Never commit real personal data to version control
-2. Ensure you have proper consent and data protection measures
-3. Review `SECURITY.md` for detailed security guidelines
-4. Use environment variables for all credentials
-5. Implement appropriate access controls
+## Project history
 
-See [SECURITY.md](SECURITY.md) for more information.
+This repository started as a larger prototype: a Postgres database, several data loaders, a geocoding pipeline, and leftover files from experiments with other platforms. It was then audited and cut down on purpose. The full record of what was found and how each issue was resolved is in [`AUDIT.md`](AUDIT.md).
 
-## Data Format
+| | Before | After |
+|---|---|---|
+| Tracked files | 48 | ~13 |
+| Python lines | ~1,430 | ~280 (including tests) |
+| Setup needed | Postgres, secrets, NASA key | `pip install`, then run |
+| Tests | 0 | 13 (offline, a few seconds) |
+| Proximity check (2,000 alumni) | 15.5 s | 10 ms |
+| Known dependency vulnerabilities | 9 | 0 |
 
-Alumni data should be in CSV format with the following columns:
-- ID, Name, Address, City, State, Country, Postal Code
-- Latitude and Longitude (for mapping)
-- Email and Phone (for contact information)
+## What I'd build next
 
-See `example_format.csv` for the expected structure.
+1. **Notifications:** email or Slack digest when someone new falls inside the radius.
+2. **Event history:** show how close each event came over its lifetime, not just now.
+3. **Private data mode:** load a real alumni file behind sign-in, with nothing stored server-side.
+4. **More sources:** USGS earthquakes and GDACS alerts, to cover what EONET doesn't.
 
-## Usage
+## Tech stack
 
-1. **View Alumni Locations**: The main map shows all alumni locations with markers
-2. **Monitor Disasters**: Active disasters are displayed with their type and location
-3. **Check Proximity**: The app automatically calculates which alumni are near active disasters
-4. **Filter by Type**: Use the sidebar to filter disasters by type
-5. **Refresh Data**: Disaster data is cached for 1 hour and refreshes automatically
-
-## Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## License
-
-See LICENSE file for details.
-
-## Acknowledgments
-
-- NASA EONET API for providing real-time disaster data
-- Streamlit for the excellent web framework
-- OpenStreetMap and Nominatim for geocoding services
+Python · Streamlit · pandas · NumPy · Folium · NASA EONET API · pytest
