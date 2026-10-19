@@ -1,66 +1,26 @@
-# Security Policy
+# Security and privacy
 
-## Reporting a Vulnerability
+## Data
 
-If you discover a security vulnerability in this project, please report it by opening an issue or contacting the maintainers directly. We take security seriously and will respond promptly.
+All alumni data in this repository (`data/alumni.csv`) is **synthetic**: randomly generated names and coordinates that describe no real person. Real personal data must never be committed here or deployed to a public URL.
 
-## Security Considerations
+If you run the app with a real alumni list:
 
-### Credentials Management
+- keep the file outside the repository, or add it to `.gitignore`
+- keep only the columns the app needs: `name, city, country, lat, lon` (no emails, phone numbers or street addresses)
+- run it privately or behind authentication
 
-This application requires the following credentials to function:
+## Secrets
 
-1. **PostgreSQL Database URL** - Connection string for the alumni database
-2. **NASA EONET API Key** - For accessing natural disaster data
+The app needs no secrets. NASA EONET is a public API with no key, and there is no database. If you add a secret later, put it in `.streamlit/secrets.toml` (already in `.gitignore`) or in your host's secrets settings, never in code.
 
-**IMPORTANT**: Never commit credentials to the repository. Use environment variables or Streamlit secrets management.
+## What the app does to stay safe
 
-### Setup Instructions
+- Text from the data and from the EONET API is HTML-escaped before it is shown on the map.
+- Error details are hidden from visitors (`showErrorDetails = false`).
+- External requests have a timeout, and failures fall back to a local snapshot.
+- CI checks dependencies for known vulnerabilities on every push (`pip-audit`).
 
-1. Copy `.env.example` to `.env` and fill in your credentials:
-   ```bash
-   cp .env.example .env
-   ```
+## Reporting a problem
 
-2. For Streamlit Cloud deployment, use Streamlit Secrets:
-   - Go to your app settings in Streamlit Cloud
-   - Add secrets in TOML format:
-     ```toml
-     [postgres]
-     url = "your_database_url_here"
-
-     [nasa]
-     api_key = "your_nasa_api_key_here"
-     ```
-
-3. Never commit `.env` or `.streamlit/secrets.toml` files
-
-### Getting API Keys
-
-- **NASA API Key**: Free API key available at https://api.nasa.gov
-- **PostgreSQL Database**: Set up a database with your preferred provider (e.g., Neon, Supabase, AWS RDS)
-
-### Data Privacy
-
-This application processes location data for alumni tracking during natural disasters. If you're deploying this for production use:
-
-1. Ensure you have proper consent from individuals whose data you're tracking
-2. Implement appropriate access controls
-3. Use HTTPS for all connections
-4. Regularly audit access logs
-5. Comply with applicable data protection regulations (GDPR, CCPA, etc.)
-
-### Known Security Considerations
-
-- The sample data in `assets/combo.csv` is fictional and safe for public use
-- Real alumni data should never be committed to version control
-- Always use parameterized queries (SQLAlchemy ORM handles this)
-- Input validation is performed on user-submitted data
-
-## Security Best Practices for Contributors
-
-1. Never hardcode credentials in source code
-2. Use environment variables for all sensitive configuration
-3. Review changes carefully before committing
-4. Use `.gitignore` to prevent accidental commits of sensitive files
-5. Enable two-factor authentication on your GitHub account
+Please open a private [security advisory](https://github.com/Aashisho1o1/ADT/security/advisories/new) on GitHub, or contact the maintainer directly. Please don't open a public issue for security problems.
