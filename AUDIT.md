@@ -63,8 +63,8 @@ Severity: CRITICAL / HIGH / MEDIUM / LOW
 | # | Sev | Where | Issue | Status |
 |---|---|---|---|---|
 | A1 | CRITICAL | `CREDENTIALS_ROTATION_REQUIRED.md:13-24` | Plaintext Neon DB host/user/password and NASA API key committed at HEAD in a **public** repo. VERIFIED | FIXED at HEAD (step 1); still in history → A2 |
-| A2 | CRITICAL | git history | Same DB password, `.env` and `.streamlit/secrets.toml` exist in older commits. Removing files from HEAD does not remove them from history. VERIFIED | OPEN |
-| A3 | CRITICAL | git history | Older commits still contain alumni CSV files with personal data. Paths kept out of this file on purpose. VERIFIED | OPEN |
+| A2 | CRITICAL | git history | Same DB password, `.env` and `.streamlit/secrets.toml` exist in older commits. Removing files from HEAD does not remove them from history. VERIFIED | FIXED (history purged with git filter-repo, 2026-10-19) |
+| A3 | CRITICAL | git history | Older commits still contain alumni CSV files with personal data. Paths kept out of this file on purpose. VERIFIED | FIXED (history purged with git filter-repo, 2026-10-19) |
 | A4 | HIGH | `app.py:57,133-136`, `utils/disaster_monitor.py:60-63` | Raw exceptions and full tracebacks shown to end users (can leak DB host, paths). INFERRED | FIXED (step 4) |
 | A5 | HIGH | `env_debug.py` | Second Streamlit app that dumps all env vars; redaction is keyword-based, anything not matching leaks. INFERRED | FIXED (step 1) |
 | A6 | MEDIUM | `app.py` safe mode, `utils/helpers.py:47-99` | Debug panel / DB diagnosis / sample data table exposed to every visitor of the public demo. VERIFIED | FIXED (step 4) |
@@ -130,7 +130,7 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 | E4 | README setup step `python utils/init_db.py` crashes (see B4). | FIXED (README) |
 | E5 | No tests. `test_csv_reader.py` is not a test. | FIXED (step 9) |
 | E6 | No working CI (lint/test). | FIXED (step 9) |
-| E7 | `~/CLAUDE.md` describes a different project ("Ripple") — misleads AI sessions in this repo. | OPEN |
+| E7 | `~/CLAUDE.md` describes a different project ("Ripple") — misleads AI sessions in this repo. | FIXED (duplicate of the Ripple repo copy; moved to Trash) |
 
 ### F. Product / demo
 
@@ -227,8 +227,8 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 
 | # | Sev | Issue | Status |
 |---|---|---|---|
-| K1 | MEDIUM | 53 commits; messages like `a`, `b`, `c`, `good`, `ready` ×2, 6× `Update sync-to-huggingface.yml`, 8× auto-generated `Agent query: ...`. | OPEN |
-| K2 | INFO | History purge for A1–A3 rewrites history anyway → good moment to squash to one clean "initial commit" and build forward with clear commits. Owner decision. | OPEN |
+| K1 | MEDIUM | 53 commits; messages like `a`, `b`, `c`, `good`, `ready` ×2, 6× `Update sync-to-huggingface.yml`, 8× auto-generated `Agent query: ...`. | OPEN (old messages kept; optional reword) |
+| K2 | INFO | History purge for A1–A3 rewrites history anyway → good moment to squash to one clean "initial commit" and build forward with clear commits. Owner decision. | DONE (purged; commits kept, not squashed) |
 
 ---
 
@@ -338,7 +338,7 @@ Postgres (`database.py`, `sqlalchemy`, `psycopg2`) kept only if the owner wants 
 | 7 | **Dependencies** — DONE: `streamlit`, `pandas`, `numpy`, `folium`, `streamlit-folium`, `requests` — current versions, no known vulns; pin Python 3.12 | `requirements.txt`, `runtime.txt` | B2, A12, I2 | fresh venv install + `pip-audit` clean |
 | 8 | **CI** — DONE: one workflow — ruff, pytest, pip-audit; pinned actions; `contents: read`. Delete old workflows. | `.github/workflows/ci.yml` | A10, J3, A7, C8 | green check on push |
 | 9 | **Docs** — DONE: README (pitch, demo link, screenshot, 3-line quickstart, how it works, decisions D-1..D-5, what's next); MIT LICENSE; short SECURITY.md (synthetic data only, no secrets needed) | `README.md`, `LICENSE`, `SECURITY.md` | E1–E6, C9, F (story) | read it as a recruiter |
-| 10 | **Later / optional**: history purge with `git filter-repo`; move `~/CLAUDE.md` (Ripple) out of the way | — | A2, A3, K1, K2, E7 | `git log --all -p` grep clean |
+| 10 | **Later / optional** — DONE (purge + CLAUDE.md): history purge with `git filter-repo`; move `~/CLAUDE.md` (Ripple) out of the way | — | A2, A3, K1, K2, E7 | `git log --all -p` grep clean |
 
 ### Final layout
 
