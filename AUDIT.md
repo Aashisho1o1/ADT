@@ -80,7 +80,7 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 | # | Sev | Where | Issue | Status |
 |---|---|---|---|---|
 | B1 | HIGH | `utils/disaster_monitor.py:16` | Reads `st.secrets` at import time → full app crashes on any fresh clone without `secrets.toml`. VERIFIED | FIXED (step 4) |
-| B2 | HIGH | `requirements.txt`, `runtime.txt` | Pinned deps don't install on current Python; `runtime.txt` is empty so Python version is undefined. VERIFIED | OPEN |
+| B2 | HIGH | `requirements.txt`, `runtime.txt` | Pinned deps don't install on current Python; `runtime.txt` is empty so Python version is undefined. VERIFIED | FIXED (step 7) |
 | B3 | HIGH | `scripts/load_alumni_data.py:11,13,19` | Imports `backoff`, `ratelimit` (not in requirements) and `init_db` (does not exist). Script cannot run. VERIFIED | FIXED (step 2) |
 | B4 | HIGH | `utils/import_csv_data.py:3`, `utils/init_db.py:1`, `utils/load_sample_data.py:2` | Import module-level `engine`, which is always `None` (lazy init) → `create_all(bind=None)` fails. INFERRED | FIXED (step 2) |
 | B5 | MEDIUM | `utils/map_handler.py:50,96` | Only `geometry[0]` used. EONET geometry is chronological → distance uses the *oldest* position. VERIFIED: Tropical Cyclone Wati moved from (-163.3, -10.8) to (-156.8, -20.7), ~1,250 km, between first and last point. Polygons would be silently skipped. | FIXED (step 4) |
@@ -177,7 +177,7 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 | # | Sev | Where | Issue | Status |
 |---|---|---|---|---|
 | A11 | MEDIUM | `utils/map_handler.py:37,59` | HTML injection: alumni name/location (CSV/DB) and disaster title (external API) go raw into Folium popup HTML. Runs inside the map iframe. Fix: `html.escape()`. VERIFIED | FIXED (step 4) |
-| A12 | MEDIUM | `requirements.txt` | 9 known vulnerabilities in pinned versions (streamlit, python-dotenv, geopy, requests). VERIFIED | OPEN |
+| A12 | MEDIUM | `requirements.txt` | 9 known vulnerabilities in pinned versions (streamlit, python-dotenv, geopy, requests). VERIFIED | FIXED (step 7) |
 | A13 | MEDIUM | `app.py:124-128` | Alert list publicly shows each alumnus's name + location on a public URL. Real data must never be deployed publicly without auth; demo must use synthetic data only. INFERRED | FIXED (step 4) |
 | A14 | LOW | `utils/helpers.py:16-17` | Bare `except: pass` hides config errors. VERIFIED (ruff S110) | FIXED (step 4) |
 
@@ -208,7 +208,7 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 | # | Sev | Where | Issue | Status |
 |---|---|---|---|---|
 | I1 | MEDIUM | 22 places (ruff F401) | Unused imports, incl. `numpy` in `map_handler.py:3`. VERIFIED | FIXED (step 4) |
-| I2 | MEDIUM | `requirements.txt` | `python-dotenv` never imported. `chardet`, `numpy` only used by dead scripts. `backoff`, `ratelimit` used but missing. VERIFIED | OPEN |
+| I2 | MEDIUM | `requirements.txt` | `python-dotenv` never imported. `chardet`, `numpy` only used by dead scripts. `backoff`, `ratelimit` used but missing. VERIFIED | FIXED (step 7) |
 | I3 | MEDIUM | `map_handler.py`, `disaster_monitor.py`, `helpers.py` | UI calls (`st.error`/`st.warning`) mixed into logic functions. Logic can't be tested or reused. INFERRED | FIXED (step 4) |
 | I4 | LOW | `app.py` | Two "modes" with session-state flags (`app_loaded`, `show_debugging`) — complexity that only exists to hide B1. INFERRED | FIXED (step 4) |
 | I5 | LOW | whole codebase | Column names in 3 casings (`Latitude`/`lat`/`latitude`), dicts with ad-hoc keys passed between modules. One schema needed. INFERRED | FIXED (step 4) |
@@ -335,7 +335,7 @@ Postgres (`database.py`, `sqlalchemy`, `psycopg2`) kept only if the owner wants 
 | 4 | **Rewrite `app.py`** — DONE: one screen — sidebar (categories, radius) + map + nearby list. No modes, no debug, generic error message. `st_folium(..., returned_objects=[])`. Cluster alumni markers. | `app.py` | A4, A6, A13 (synthetic only), F1, F3, H2, H3, H4, I4 | `streamlit run app.py` on fresh clone; AppTest smoke test |
 | 5 | **Synthetic data** — DONE: ~200 fake alumni (`name,city,country,lat,lon`) spread over cities that often have events (California, Australia, Japan, Philippines, Caribbean…), so the demo shows alerts | `data/alumni.csv` (replaces `assets/combo.csv`) | F2, F4, C10, G5 | demo shows ≥1 alert with default radius |
 | 6 | **Tests** — DONE: haversine known distances; threshold edge; `latest_point` picks last geometry; event with missing categories skipped; CSV loads with one schema | `tests/test_core.py` | J1, J2, G2 | `pytest` green, no network |
-| 7 | **Dependencies**: `streamlit`, `pandas`, `numpy`, `folium`, `streamlit-folium`, `requests` — current versions, no known vulns; pin Python 3.12 | `requirements.txt`, `runtime.txt` | B2, A12, I2 | fresh venv install + `pip-audit` clean |
+| 7 | **Dependencies** — DONE: `streamlit`, `pandas`, `numpy`, `folium`, `streamlit-folium`, `requests` — current versions, no known vulns; pin Python 3.12 | `requirements.txt`, `runtime.txt` | B2, A12, I2 | fresh venv install + `pip-audit` clean |
 | 8 | **CI**: one workflow — ruff, pytest, pip-audit; pinned actions; `contents: read`. Delete old workflows. | `.github/workflows/ci.yml` | A10, J3, A7, C8 | green check on push |
 | 9 | **Docs**: README (pitch, demo link, screenshot, 3-line quickstart, how it works, decisions D-1..D-5, what's next); MIT LICENSE; short SECURITY.md (synthetic data only, no secrets needed) | `README.md`, `LICENSE`, `SECURITY.md` | E1–E6, C9, F (story) | read it as a recruiter |
 | 10 | **Later / optional**: history purge with `git filter-repo`; move `~/CLAUDE.md` (Ripple) out of the way | — | A2, A3, K1, K2, E7 | `git log --all -p` grep clean |
