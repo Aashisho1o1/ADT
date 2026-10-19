@@ -1,5 +1,7 @@
 # 🌍 Alumni Disaster Tracker
 
+[![CI](https://github.com/Aashisho1o1/ADT/actions/workflows/ci.yml/badge.svg)](https://github.com/Aashisho1o1/ADT/actions/workflows/ci.yml)
+
 **When a natural disaster happens, which of our people are near it?**
 
 A small Streamlit app that pulls live natural-disaster events from NASA's EONET feed, plots them on a world map next to alumni locations, and lists every alumnus within a chosen radius of an active event, closest first.
@@ -49,6 +51,18 @@ pip install pytest
 python -m pytest
 ```
 
+Every push runs CI (`.github/workflows/ci.yml`): lint with ruff, the test suite, and a dependency vulnerability check with pip-audit.
+
+## Deploy
+
+The app is hosted on [Streamlit Community Cloud](https://share.streamlit.io), which deploys straight from this repository:
+
+1. Sign in at share.streamlit.io with GitHub.
+2. Click **Create app**, choose this repo, branch `main`, file `app.py`.
+3. Click **Deploy**. No secrets or settings are needed.
+
+Each push to `main` redeploys automatically.
+
 ## How it works
 
 ```
@@ -92,6 +106,7 @@ This project handles exactly the kind of data that must be protected: people's n
 | **CSV instead of a database** | The demo runs with zero setup, and nothing secret is needed to start it. | Not suited to many users editing data at once. A database would be the next step for real use. |
 | **NASA EONET** as the data source | Free, global, no API key, covers wildfires, storms, volcanoes and ice. | Event coverage and update speed depend on NASA's feed. |
 | **Saved snapshot fallback** | The demo never shows an empty screen, and tests don't need the network. | The snapshot ages, so the app shows a clear notice when it is in use. |
+| **Streamlit Community Cloud** for hosting | Free, deploys from GitHub, needs no tokens in CI. | The app sleeps after a few days without visitors; the first visit then takes a moment to wake it. |
 | **Haversine on a sphere** | Simple, vectorised and fast. | Up to about 0.5% off compared with ellipsoid distance, which doesn't matter for a radius in kilometres. |
 
 ## Project history
