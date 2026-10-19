@@ -139,7 +139,7 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 | F1 | First screen is a debug "safe mode", not the product. A recruiter sees buttons, not a map. | FIXED (step 4) |
 | F2 | With live data (3 days, open events) there are usually **0 alerts** — the core feature is invisible. | FIXED (step 4) |
 | F3 | Demo depends on secrets/DB that a fresh clone doesn't have (B1). Should run with zero setup. | FIXED (step 4) |
-| F4 | Alumni data is 15 fake US rows with a junk `combo` header row and ~40 empty columns. | OPEN |
+| F4 | Alumni data is 15 fake US rows with a junk `combo` header row and ~40 empty columns. | FIXED (step 5) |
 
 ---
 
@@ -333,7 +333,7 @@ Postgres (`database.py`, `sqlalchemy`, `psycopg2`) kept only if the owner wants 
 | 2 | **Delete dead files** | delete `src/`, `ADT/`, `utils/__pycache__/`, `attached_assets/`, `.replit`, `replit.nix`, `generated-icon.png`, `.cursor/`, `test_csv_reader.py`, `create_sample_data.py`, `scripts/`, `utils/{secrets_handler,japan_locations,import_csv_data,init_db,load_sample_data}.py`, `example_format.csv` | D1–D9, B3, B4, B8, C5, A8 | app still boots |
 | 3 | **Write `core.py`** — DONE (replaces `utils/`): `fetch_events()` with timeout + fallback to `data/events.json`; `latest_point()`; `load_alumni()` with one schema; `find_nearby()` with numpy haversine; `html.escape` for popup text; categories read from data | new `core.py`, `data/events.json`; delete `utils/` | B5, B6, B7, B9, G1–G7, H1, A11, A14, I1, I3, I5, I7, C1–C4 | unit tests (step 6) |
 | 4 | **Rewrite `app.py`** — DONE: one screen — sidebar (categories, radius) + map + nearby list. No modes, no debug, generic error message. `st_folium(..., returned_objects=[])`. Cluster alumni markers. | `app.py` | A4, A6, A13 (synthetic only), F1, F3, H2, H3, H4, I4 | `streamlit run app.py` on fresh clone; AppTest smoke test |
-| 5 | **Synthetic data**: ~200 fake alumni (`name,city,country,lat,lon`) spread over cities that often have events (California, Australia, Japan, Philippines, Caribbean…), so the demo shows alerts | `data/alumni.csv` (replaces `assets/combo.csv`) | F2, F4, C10, G5 | demo shows ≥1 alert with default radius |
+| 5 | **Synthetic data** — DONE: ~200 fake alumni (`name,city,country,lat,lon`) spread over cities that often have events (California, Australia, Japan, Philippines, Caribbean…), so the demo shows alerts | `data/alumni.csv` (replaces `assets/combo.csv`) | F2, F4, C10, G5 | demo shows ≥1 alert with default radius |
 | 6 | **Tests**: haversine known distances; threshold edge; `latest_point` picks last geometry; event with missing categories skipped; CSV loads with one schema | `tests/test_core.py` | J1, J2, G2 | `pytest` green, no network |
 | 7 | **Dependencies**: `streamlit`, `pandas`, `numpy`, `folium`, `streamlit-folium`, `requests` — current versions, no known vulns; pin Python 3.12 | `requirements.txt`, `runtime.txt` | B2, A12, I2 | fresh venv install + `pip-audit` clean |
 | 8 | **CI**: one workflow — ruff, pytest, pip-audit; pinned actions; `contents: read`. Delete old workflows. | `.github/workflows/ci.yml` | A10, J3, A7, C8 | green check on push |
