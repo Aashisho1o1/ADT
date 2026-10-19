@@ -104,7 +104,7 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 | C7 | NASA key lookup in `disaster_monitor.py` (2 secret shapes) and `secrets_handler.get_nasa_api_key` | Duplicated — and EONET doesn't need a key at all. | FIXED (step 4) |
 | C8 | `.github/workflows/main.yml`, `sync-to-huggingface.yml`, `.replit`, Streamlit Cloud (README) | 3–4 deploy targets. Pick one. | OPEN |
 | C9 | `SECURITY.md` + `CREDENTIALS_ROTATION_REQUIRED.md` + README security section | Security docs in 3 places. | OPEN |
-| C10 | `assets/combo.csv`, `example_format.csv`, README "Data Format" | 3 different alumni schemas documented. | OPEN |
+| C10 | `assets/combo.csv`, `example_format.csv`, README "Data Format" | 3 different alumni schemas documented. | FIXED (README) |
 
 ### D. Dead files / folders (not reachable from the app)
 
@@ -124,10 +124,10 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 
 | # | Issue | Status |
 |---|---|---|
-| E1 | README says NASA API key required — EONET needs none. | OPEN |
-| E2 | README says Postgres is core — app actually runs off the CSV fallback. | OPEN |
-| E3 | README references a LICENSE file that doesn't exist. | OPEN |
-| E4 | README setup step `python utils/init_db.py` crashes (see B4). | OPEN |
+| E1 | README says NASA API key required — EONET needs none. | FIXED (README) |
+| E2 | README says Postgres is core — app actually runs off the CSV fallback. | FIXED (README) |
+| E3 | README references a LICENSE file that doesn't exist. | FIXED (README) |
+| E4 | README setup step `python utils/init_db.py` crashes (see B4). | FIXED (README) |
 | E5 | No tests. `test_csv_reader.py` is not a test. | OPEN |
 | E6 | No working CI (lint/test). | OPEN |
 | E7 | `~/CLAUDE.md` describes a different project ("Ripple") — misleads AI sessions in this repo. | OPEN |
