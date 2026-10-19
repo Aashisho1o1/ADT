@@ -219,8 +219,8 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 
 | # | Sev | Issue | Status |
 |---|---|---|---|
-| J1 | HIGH | Zero tests. Logic that most needs them: distance/threshold, EONET parsing (latest point, missing fields), CSV loading. | OPEN |
-| J2 | MEDIUM | No offline fixture for EONET → demo and tests depend on live API. | OPEN |
+| J1 | HIGH | Zero tests. Logic that most needs them: distance/threshold, EONET parsing (latest point, missing fields), CSV loading. | FIXED (step 6) |
+| J2 | MEDIUM | No offline fixture for EONET → demo and tests depend on live API. | FIXED (step 6) |
 | J3 | MEDIUM | CI does nothing (A10). Needs: ruff + pytest + pip-audit. | OPEN |
 
 #### K. Git history (what a recruiter will see)
@@ -334,7 +334,7 @@ Postgres (`database.py`, `sqlalchemy`, `psycopg2`) kept only if the owner wants 
 | 3 | **Write `core.py`** — DONE (replaces `utils/`): `fetch_events()` with timeout + fallback to `data/events.json`; `latest_point()`; `load_alumni()` with one schema; `find_nearby()` with numpy haversine; `html.escape` for popup text; categories read from data | new `core.py`, `data/events.json`; delete `utils/` | B5, B6, B7, B9, G1–G7, H1, A11, A14, I1, I3, I5, I7, C1–C4 | unit tests (step 6) |
 | 4 | **Rewrite `app.py`** — DONE: one screen — sidebar (categories, radius) + map + nearby list. No modes, no debug, generic error message. `st_folium(..., returned_objects=[])`. Cluster alumni markers. | `app.py` | A4, A6, A13 (synthetic only), F1, F3, H2, H3, H4, I4 | `streamlit run app.py` on fresh clone; AppTest smoke test |
 | 5 | **Synthetic data** — DONE: ~200 fake alumni (`name,city,country,lat,lon`) spread over cities that often have events (California, Australia, Japan, Philippines, Caribbean…), so the demo shows alerts | `data/alumni.csv` (replaces `assets/combo.csv`) | F2, F4, C10, G5 | demo shows ≥1 alert with default radius |
-| 6 | **Tests**: haversine known distances; threshold edge; `latest_point` picks last geometry; event with missing categories skipped; CSV loads with one schema | `tests/test_core.py` | J1, J2, G2 | `pytest` green, no network |
+| 6 | **Tests** — DONE: haversine known distances; threshold edge; `latest_point` picks last geometry; event with missing categories skipped; CSV loads with one schema | `tests/test_core.py` | J1, J2, G2 | `pytest` green, no network |
 | 7 | **Dependencies**: `streamlit`, `pandas`, `numpy`, `folium`, `streamlit-folium`, `requests` — current versions, no known vulns; pin Python 3.12 | `requirements.txt`, `runtime.txt` | B2, A12, I2 | fresh venv install + `pip-audit` clean |
 | 8 | **CI**: one workflow — ruff, pytest, pip-audit; pinned actions; `contents: read`. Delete old workflows. | `.github/workflows/ci.yml` | A10, J3, A7, C8 | green check on push |
 | 9 | **Docs**: README (pitch, demo link, screenshot, 3-line quickstart, how it works, decisions D-1..D-5, what's next); MIT LICENSE; short SECURITY.md (synthetic data only, no secrets needed) | `README.md`, `LICENSE`, `SECURITY.md` | E1–E6, C9, F (story) | read it as a recruiter |
