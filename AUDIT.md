@@ -68,10 +68,10 @@ Severity: CRITICAL / HIGH / MEDIUM / LOW
 | A4 | HIGH | `app.py:57,133-136`, `utils/disaster_monitor.py:60-63` | Raw exceptions and full tracebacks shown to end users (can leak DB host, paths). INFERRED | FIXED (step 4) |
 | A5 | HIGH | `env_debug.py` | Second Streamlit app that dumps all env vars; redaction is keyword-based, anything not matching leaks. INFERRED | FIXED (step 1) |
 | A6 | MEDIUM | `app.py` safe mode, `utils/helpers.py:47-99` | Debug panel / DB diagnosis / sample data table exposed to every visitor of the public demo. VERIFIED | FIXED (step 4) |
-| A7 | MEDIUM | `.github/workflows/sync-to-huggingface.yml` | HF token embedded in git remote URL, `git push --force`, echoes token length. Username hardcoded. INFERRED | OPEN |
+| A7 | MEDIUM | `.github/workflows/sync-to-huggingface.yml` | HF token embedded in git remote URL, `git push --force`, echoes token length. Username hardcoded. INFERRED | FIXED (step 8) |
 | A8 | MEDIUM | `scripts/load_alumni_data.py:22,42` | Nominatim used with generic user agent at 60 req/min — violates Nominatim's 1 req/sec policy. INFERRED | FIXED (step 2) |
 | A9 | LOW | `utils/disaster_monitor.py:48` | `requests.get` with no timeout — app can hang. INFERRED | FIXED (step 4) |
-| A10 | LOW | `.github/workflows/main.yml` | Outdated `actions/checkout@v2`; workflow does nothing. INFERRED | OPEN |
+| A10 | LOW | `.github/workflows/main.yml` | Outdated `actions/checkout@v2`; workflow does nothing. INFERRED | FIXED (step 8) |
 
 Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optional, later) purge history with `git filter-repo` → force-push.
 
@@ -102,7 +102,7 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 | C5 | `import_csv_data.py`, `load_sample_data.py`, `scripts/load_alumni_data.py`, `scripts/simplify_csv.py`, `create_sample_data.py`, `test_csv_reader.py` | **6 data load/seed/convert scripts**, each expecting a different CSV schema. Need exactly one `seed` script. | FIXED (step 2) |
 | C6 | `app.py` vs `env_debug.py` | 2 Streamlit apps. | FIXED (step 1) |
 | C7 | NASA key lookup in `disaster_monitor.py` (2 secret shapes) and `secrets_handler.get_nasa_api_key` | Duplicated — and EONET doesn't need a key at all. | FIXED (step 4) |
-| C8 | `.github/workflows/main.yml`, `sync-to-huggingface.yml`, `.replit`, Streamlit Cloud (README) | 3–4 deploy targets. Pick one. | OPEN |
+| C8 | `.github/workflows/main.yml`, `sync-to-huggingface.yml`, `.replit`, Streamlit Cloud (README) | 3–4 deploy targets. Pick one. | FIXED (step 8) |
 | C9 | `SECURITY.md` + `CREDENTIALS_ROTATION_REQUIRED.md` + README security section | Security docs in 3 places. | OPEN |
 | C10 | `assets/combo.csv`, `example_format.csv`, README "Data Format" | 3 different alumni schemas documented. | FIXED (README) |
 
@@ -221,7 +221,7 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 |---|---|---|---|
 | J1 | HIGH | Zero tests. Logic that most needs them: distance/threshold, EONET parsing (latest point, missing fields), CSV loading. | FIXED (step 6) |
 | J2 | MEDIUM | No offline fixture for EONET → demo and tests depend on live API. | FIXED (step 6) |
-| J3 | MEDIUM | CI does nothing (A10). Needs: ruff + pytest + pip-audit. | OPEN |
+| J3 | MEDIUM | CI does nothing (A10). Needs: ruff + pytest + pip-audit. | FIXED (step 8) |
 
 #### K. Git history (what a recruiter will see)
 
@@ -316,7 +316,7 @@ Postgres (`database.py`, `sqlalchemy`, `psycopg2`) kept only if the owner wants 
 | D-1 | **Drop Postgres.** Alumni come from one bundled synthetic CSV. | Zero-setup demo; removes `database.py`, `helpers.py`, sqlalchemy, psycopg2, all secrets handling. Closes C1–C4, B1, B4, A4–A6 by deletion. |
 | D-2 | **Keep git history as-is for now.** History purge (A2, A3) stays OPEN and optional. | Owner choice. Rotating/deleting the credentials makes the leaked secrets useless; purge can be done later with `git filter-repo`. |
 | D-3 | **No API key.** EONET is public. | Removes C7 and the NASA key from secrets entirely. |
-| D-4 | **One deploy target: Streamlit Community Cloud.** Delete HF sync + Replit. | Free, deploys from GitHub, no token in CI. Closes A7, C8, D5. (Owner can override: keep HF instead.) |
+| D-4 | **One deploy target: Streamlit Community Cloud** (confirmed by owner). Delete HF sync + Replit. | Free, deploys from GitHub, no token in CI. Closes A7, C8, D5. (Owner can override: keep HF instead.) |
 | D-5 | **Offline fallback:** saved EONET snapshot used when the API fails, and as test fixture. | Demo never shows "no data"; tests don't hit the network. Closes G3, J2. |
 
 ### Owner actions (only you can do these)
@@ -336,7 +336,7 @@ Postgres (`database.py`, `sqlalchemy`, `psycopg2`) kept only if the owner wants 
 | 5 | **Synthetic data** — DONE: ~200 fake alumni (`name,city,country,lat,lon`) spread over cities that often have events (California, Australia, Japan, Philippines, Caribbean…), so the demo shows alerts | `data/alumni.csv` (replaces `assets/combo.csv`) | F2, F4, C10, G5 | demo shows ≥1 alert with default radius |
 | 6 | **Tests** — DONE: haversine known distances; threshold edge; `latest_point` picks last geometry; event with missing categories skipped; CSV loads with one schema | `tests/test_core.py` | J1, J2, G2 | `pytest` green, no network |
 | 7 | **Dependencies** — DONE: `streamlit`, `pandas`, `numpy`, `folium`, `streamlit-folium`, `requests` — current versions, no known vulns; pin Python 3.12 | `requirements.txt`, `runtime.txt` | B2, A12, I2 | fresh venv install + `pip-audit` clean |
-| 8 | **CI**: one workflow — ruff, pytest, pip-audit; pinned actions; `contents: read`. Delete old workflows. | `.github/workflows/ci.yml` | A10, J3, A7, C8 | green check on push |
+| 8 | **CI** — DONE: one workflow — ruff, pytest, pip-audit; pinned actions; `contents: read`. Delete old workflows. | `.github/workflows/ci.yml` | A10, J3, A7, C8 | green check on push |
 | 9 | **Docs**: README (pitch, demo link, screenshot, 3-line quickstart, how it works, decisions D-1..D-5, what's next); MIT LICENSE; short SECURITY.md (synthetic data only, no secrets needed) | `README.md`, `LICENSE`, `SECURITY.md` | E1–E6, C9, F (story) | read it as a recruiter |
 | 10 | **Later / optional**: history purge with `git filter-repo`; move `~/CLAUDE.md` (Ripple) out of the way | — | A2, A3, K1, K2, E7 | `git log --all -p` grep clean |
 
