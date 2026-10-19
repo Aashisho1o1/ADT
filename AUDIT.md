@@ -62,11 +62,11 @@ Severity: CRITICAL / HIGH / MEDIUM / LOW
 
 | # | Sev | Where | Issue | Status |
 |---|---|---|---|---|
-| A1 | CRITICAL | `CREDENTIALS_ROTATION_REQUIRED.md:13-24` | Plaintext Neon DB host/user/password and NASA API key committed at HEAD in a **public** repo. VERIFIED | OPEN |
+| A1 | CRITICAL | `CREDENTIALS_ROTATION_REQUIRED.md:13-24` | Plaintext Neon DB host/user/password and NASA API key committed at HEAD in a **public** repo. VERIFIED | FIXED at HEAD (step 1); still in history → A2 |
 | A2 | CRITICAL | git history | Same DB password, `.env` and `.streamlit/secrets.toml` exist in older commits. Removing files from HEAD does not remove them from history. VERIFIED | OPEN |
 | A3 | CRITICAL | git history | Older commits still contain alumni CSV files with personal data. Paths kept out of this file on purpose. VERIFIED | OPEN |
 | A4 | HIGH | `app.py:57,133-136`, `utils/disaster_monitor.py:60-63` | Raw exceptions and full tracebacks shown to end users (can leak DB host, paths). INFERRED | OPEN |
-| A5 | HIGH | `env_debug.py` | Second Streamlit app that dumps all env vars; redaction is keyword-based, anything not matching leaks. INFERRED | OPEN |
+| A5 | HIGH | `env_debug.py` | Second Streamlit app that dumps all env vars; redaction is keyword-based, anything not matching leaks. INFERRED | FIXED (step 1) |
 | A6 | MEDIUM | `app.py` safe mode, `utils/helpers.py:47-99` | Debug panel / DB diagnosis / sample data table exposed to every visitor of the public demo. VERIFIED | OPEN |
 | A7 | MEDIUM | `.github/workflows/sync-to-huggingface.yml` | HF token embedded in git remote URL, `git push --force`, echoes token length. Username hardcoded. INFERRED | OPEN |
 | A8 | MEDIUM | `scripts/load_alumni_data.py:22,42` | Nominatim used with generic user agent at 60 req/min — violates Nominatim's 1 req/sec policy. INFERRED | OPEN |
@@ -100,7 +100,7 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 | C3 | `database.get_db_session` vs `database.get_db` | 2 session helpers; `get_db` unused. | OPEN |
 | C4 | `database.init_database` vs `utils/init_db.py` | Same function twice. | OPEN |
 | C5 | `import_csv_data.py`, `load_sample_data.py`, `scripts/load_alumni_data.py`, `scripts/simplify_csv.py`, `create_sample_data.py`, `test_csv_reader.py` | **6 data load/seed/convert scripts**, each expecting a different CSV schema. Need exactly one `seed` script. | OPEN |
-| C6 | `app.py` vs `env_debug.py` | 2 Streamlit apps. | OPEN |
+| C6 | `app.py` vs `env_debug.py` | 2 Streamlit apps. | FIXED (step 1) |
 | C7 | NASA key lookup in `disaster_monitor.py` (2 secret shapes) and `secrets_handler.get_nasa_api_key` | Duplicated — and EONET doesn't need a key at all. | OPEN |
 | C8 | `.github/workflows/main.yml`, `sync-to-huggingface.yml`, `.replit`, Streamlit Cloud (README) | 3–4 deploy targets. Pick one. | OPEN |
 | C9 | `SECURITY.md` + `CREDENTIALS_ROTATION_REQUIRED.md` + README security section | Security docs in 3 places. | OPEN |
