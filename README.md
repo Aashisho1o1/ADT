@@ -6,6 +6,10 @@
 
 A small Streamlit app that pulls live natural-disaster events from NASA's EONET feed, plots them on a world map next to alumni locations, and lists every alumnus within a chosen radius of an active event, closest first.
 
+**[Try the live demo →](https://8gkea33ouexurck54ybeah.streamlit.app/)**
+
+<sub>Hosted on Streamlit Community Cloud. If the app has been idle, the first visit takes about 30 seconds to wake it up.</sub>
+
 > **All alumni data in this repository is synthetic.** The 200 names, cities and coordinates in `data/alumni.csv` are randomly generated. They describe no real person. This was a deliberate choice to protect personal information and privacy: a public demo should never expose real names, addresses or locations. See [Privacy and data](#privacy-and-data).
 
 ---
@@ -55,7 +59,7 @@ Every push runs CI (`.github/workflows/ci.yml`): lint with ruff, the test suite,
 
 ## Deploy
 
-The app is hosted on [Streamlit Community Cloud](https://share.streamlit.io), which deploys straight from this repository:
+The app is [live here](https://8gkea33ouexurck54ybeah.streamlit.app/), hosted on [Streamlit Community Cloud](https://share.streamlit.io), which deploys straight from this repository:
 
 1. Sign in at share.streamlit.io with GitHub.
 2. Click **Create app**, choose this repo, branch `main`, file `app.py`.
