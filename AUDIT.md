@@ -69,7 +69,7 @@ Severity: CRITICAL / HIGH / MEDIUM / LOW
 | A5 | HIGH | `env_debug.py` | Second Streamlit app that dumps all env vars; redaction is keyword-based, anything not matching leaks. INFERRED | FIXED (step 1) |
 | A6 | MEDIUM | `app.py` safe mode, `utils/helpers.py:47-99` | Debug panel / DB diagnosis / sample data table exposed to every visitor of the public demo. VERIFIED | OPEN |
 | A7 | MEDIUM | `.github/workflows/sync-to-huggingface.yml` | HF token embedded in git remote URL, `git push --force`, echoes token length. Username hardcoded. INFERRED | OPEN |
-| A8 | MEDIUM | `scripts/load_alumni_data.py:22,42` | Nominatim used with generic user agent at 60 req/min — violates Nominatim's 1 req/sec policy. INFERRED | OPEN |
+| A8 | MEDIUM | `scripts/load_alumni_data.py:22,42` | Nominatim used with generic user agent at 60 req/min — violates Nominatim's 1 req/sec policy. INFERRED | FIXED (step 2) |
 | A9 | LOW | `utils/disaster_monitor.py:48` | `requests.get` with no timeout — app can hang. INFERRED | OPEN |
 | A10 | LOW | `.github/workflows/main.yml` | Outdated `actions/checkout@v2`; workflow does nothing. INFERRED | OPEN |
 
@@ -81,12 +81,12 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 |---|---|---|---|---|
 | B1 | HIGH | `utils/disaster_monitor.py:16` | Reads `st.secrets` at import time → full app crashes on any fresh clone without `secrets.toml`. VERIFIED | OPEN |
 | B2 | HIGH | `requirements.txt`, `runtime.txt` | Pinned deps don't install on current Python; `runtime.txt` is empty so Python version is undefined. VERIFIED | OPEN |
-| B3 | HIGH | `scripts/load_alumni_data.py:11,13,19` | Imports `backoff`, `ratelimit` (not in requirements) and `init_db` (does not exist). Script cannot run. VERIFIED | OPEN |
-| B4 | HIGH | `utils/import_csv_data.py:3`, `utils/init_db.py:1`, `utils/load_sample_data.py:2` | Import module-level `engine`, which is always `None` (lazy init) → `create_all(bind=None)` fails. INFERRED | OPEN |
+| B3 | HIGH | `scripts/load_alumni_data.py:11,13,19` | Imports `backoff`, `ratelimit` (not in requirements) and `init_db` (does not exist). Script cannot run. VERIFIED | FIXED (step 2) |
+| B4 | HIGH | `utils/import_csv_data.py:3`, `utils/init_db.py:1`, `utils/load_sample_data.py:2` | Import module-level `engine`, which is always `None` (lazy init) → `create_all(bind=None)` fails. INFERRED | FIXED (step 2) |
 | B5 | MEDIUM | `utils/map_handler.py:50,96` | Only `geometry[0]` used. EONET geometry is chronological → distance uses the *oldest* position. VERIFIED: Tropical Cyclone Wati moved from (-163.3, -10.8) to (-156.8, -20.7), ~1,250 km, between first and last point. Polygons would be silently skipped. | OPEN |
 | B6 | MEDIUM | `utils/data_loader.py:84` | CSV fallback path `attached_assets/combo3.csv` no longer exists. VERIFIED | OPEN |
 | B7 | MEDIUM | `utils/data_loader.py` (3 branches) | Loader handles 3 different CSV schemas; `0,0` used as "invalid coord" sentinel; on error returns a fake "Sample User" at 0,0. INFERRED | OPEN |
-| B8 | LOW | `.replit` | Runs `simple_app.py`, which does not exist. VERIFIED | OPEN |
+| B8 | LOW | `.replit` | Runs `simple_app.py`, which does not exist. VERIFIED | FIXED (step 2) |
 | B9 | LOW | `utils/map_handler.py:45,80,123` | Business logic calls `st.warning`/`st.error` — couples math to UI, untestable. INFERRED | OPEN |
 | B10 | LOW | `utils/database.py:6` | Deprecated `sqlalchemy.ext.declarative.declarative_base`. INFERRED | OPEN |
 | B11 | LOW | `utils/disaster_monitor.py:1-10`, `utils/database.py:11` | Unused imports (`timedelta`, `time`, `Session`, `db`, `create_engine`); `logging.basicConfig` called in 3 modules. INFERRED | OPEN |
@@ -98,8 +98,8 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 | C1 | `helpers.get_db_url` (reads `POSTGRES_URL`), `secrets_handler.get_db_url`, `database.get_connection_string` (reads `DATABASE_URL`), `disaster_monitor` (reads `st.secrets["DATABASE_URL"]`) | **4 ways to get the DB URL, using 3 different keys.** Pick one. | OPEN |
 | C2 | `helpers.create_db_engine`, `database.get_engine`, `disaster_monitor.get_db_connection` | 3 ways to create a DB engine. | OPEN |
 | C3 | `database.get_db_session` vs `database.get_db` | 2 session helpers; `get_db` unused. | OPEN |
-| C4 | `database.init_database` vs `utils/init_db.py` | Same function twice. | OPEN |
-| C5 | `import_csv_data.py`, `load_sample_data.py`, `scripts/load_alumni_data.py`, `scripts/simplify_csv.py`, `create_sample_data.py`, `test_csv_reader.py` | **6 data load/seed/convert scripts**, each expecting a different CSV schema. Need exactly one `seed` script. | OPEN |
+| C4 | `database.init_database` vs `utils/init_db.py` | Same function twice. | FIXED (step 2) |
+| C5 | `import_csv_data.py`, `load_sample_data.py`, `scripts/load_alumni_data.py`, `scripts/simplify_csv.py`, `create_sample_data.py`, `test_csv_reader.py` | **6 data load/seed/convert scripts**, each expecting a different CSV schema. Need exactly one `seed` script. | FIXED (step 2) |
 | C6 | `app.py` vs `env_debug.py` | 2 Streamlit apps. | FIXED (step 1) |
 | C7 | NASA key lookup in `disaster_monitor.py` (2 secret shapes) and `secrets_handler.get_nasa_api_key` | Duplicated — and EONET doesn't need a key at all. | OPEN |
 | C8 | `.github/workflows/main.yml`, `sync-to-huggingface.yml`, `.replit`, Streamlit Cloud (README) | 3–4 deploy targets. Pick one. | OPEN |
@@ -110,15 +110,15 @@ Fix order for A1–A3 (needs owner action): rotate/delete credentials → (optio
 
 | # | Path | Why dead | Status |
 |---|---|---|---|
-| D1 | `src/` (8 JS files, 47 LOC) | Express/React/Mongoose fragments in a Python app. None run, none complete. | OPEN |
-| D2 | `ADT/` | Empty directory. | OPEN |
-| D3 | `utils/__pycache__/*.pyc` | Build artifacts committed despite `.gitignore`. | OPEN |
-| D4 | `attached_assets/*.txt` | Pasted React code. | OPEN |
-| D5 | `.replit`, `replit.nix`, `generated-icon.png` (337 KB) | Replit leftovers. | OPEN |
-| D6 | `.cursor/rules/learner.mdc` | Empty template. | OPEN |
-| D7 | `utils/japan_locations.py`, `utils/secrets_handler.py` | Not imported by the app. | OPEN |
+| D1 | `src/` (8 JS files, 47 LOC) | Express/React/Mongoose fragments in a Python app. None run, none complete. | FIXED (step 2) |
+| D2 | `ADT/` | Empty directory. | FIXED (step 2) |
+| D3 | `utils/__pycache__/*.pyc` | Build artifacts committed despite `.gitignore`. | FIXED (step 2) |
+| D4 | `attached_assets/*.txt` | Pasted React code. | FIXED (step 2) |
+| D5 | `.replit`, `replit.nix`, `generated-icon.png` (337 KB) | Replit leftovers. | FIXED (step 2) |
+| D6 | `.cursor/rules/learner.mdc` | Empty template. | FIXED (step 2) |
+| D7 | `utils/japan_locations.py`, `utils/secrets_handler.py` | Not imported by the app. | FIXED (step 2) |
 | D8 | `database.DisasterEvent`, `database.get_db`, `disaster_monitor.get_db_connection`, `disaster_monitor.db_url` | Defined, never used. | OPEN |
-| D9 | `env_debug.py`, `test_csv_reader.py`, `create_sample_data.py` | Root-level one-off scripts. | OPEN |
+| D9 | `env_debug.py`, `test_csv_reader.py`, `create_sample_data.py` | Root-level one-off scripts. | FIXED (step 2) |
 
 ### E. Docs & repo hygiene
 
